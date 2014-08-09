@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DroidBeard</string>
+    <string name="title_shows">Shows</string>
+    <string name="title_coming_episodes">Coming Episodes</string>
+    <string name="title_history">History</string>
+    <string name="title_logs">Logs &amp; Errors</string>
+    <string name="title_restart">Restart</string>
+    <string name="title_shutdown">Shutdown</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
