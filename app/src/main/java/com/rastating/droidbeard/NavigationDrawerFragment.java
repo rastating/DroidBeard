@@ -1,16 +1,15 @@
 package com.rastating.droidbeard;
 
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Color;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -55,11 +52,27 @@ public class NavigationDrawerFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private NavigationActionAdapter mAdapter;
+
     public NavigationDrawerFragment() {
+    }
+
+    private void setSelectedPosition(int position) {
+        if (mAdapter != null) {
+            mAdapter.setSelectedPosition(position);
+        }
+    }
+
+    private int getSelectedPosition() {
+        if (mAdapter != null) {
+            return mAdapter.getSelectedPosition();
+        }
+        else {
+            return 0;
+        }
     }
 
     @Override
@@ -72,12 +85,12 @@ public class NavigationDrawerFragment extends Fragment {
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
         if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            setSelectedPosition(savedInstanceState.getInt(STATE_SELECTED_POSITION));
             mFromSavedInstanceState = true;
         }
 
         // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
+        selectItem(getSelectedPosition());
     }
 
     @Override
@@ -85,6 +98,17 @@ public class NavigationDrawerFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
+    }
+
+    private NavigationAction[] createNavigationActions() {
+        return new NavigationAction[] {
+            new NavigationAction(R.drawable.glyph_video, getString(R.string.title_shows)),
+            new NavigationAction(R.drawable.glyph_clock, getString(R.string.title_coming_episodes)),
+            new NavigationAction(R.drawable.glyph_history, getString(R.string.title_history)),
+            new NavigationAction(R.drawable.glyph_list, getString(R.string.title_logs)),
+            new NavigationAction(R.drawable.glyph_restart, getString(R.string.title_restart)),
+            new NavigationAction(R.drawable.glyph_power, getString(R.string.title_shutdown)),
+        };
     }
 
     @Override
@@ -97,37 +121,15 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        mAdapter = new NavigationActionAdapter(
             getActionBar().getThemedContext(),
-            android.R.layout.simple_list_item_1,
-            android.R.id.text1,
-            new String[]{
-                    getString(R.string.title_shows),
-                    getString(R.string.title_coming_episodes),
-                    getString(R.string.title_history),
-                    getString(R.string.title_logs),
-                    getString(R.string.title_restart),
-                    getString(R.string.title_shutdown)
-            }) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    View view = super.getView(position, convertView, parent);
-                    TextView text = (TextView) view.findViewById(android.R.id.text1);
-                    text.setTextColor(Color.BLACK);
+            getActivity().getLayoutInflater(),
+            R.layout.navigation_list_item,
+            createNavigationActions()
+        );
 
-                    if (position == NavigationDrawerFragment.this.mCurrentSelectedPosition) {
-                        view.setBackgroundColor(getResources().getColor(R.color.navigation_list_item_selected));
-                    }
-                    else {
-                        view.setBackgroundColor(Color.TRANSPARENT);
-                    }
-
-                    return view;
-                }
-            };
-
-        mDrawerListView.setAdapter(adapter);
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        mDrawerListView.setAdapter(mAdapter);
+        mDrawerListView.setItemChecked(getSelectedPosition(), true);
         return mDrawerListView;
     }
 
@@ -183,8 +185,7 @@ public class NavigationDrawerFragment extends Fragment {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
                     // the navigation drawer automatically in the future.
                     mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
 
@@ -210,7 +211,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void selectItem(int position) {
-        mCurrentSelectedPosition = position;
+        setSelectedPosition(position);
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
@@ -241,7 +242,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putInt(STATE_SELECTED_POSITION, getSelectedPosition());
     }
 
     @Override
