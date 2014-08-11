@@ -4,6 +4,7 @@
     <style name="SickBeardTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/SickBeardActionBar</item>
         <item name="android:listViewStyle">@style/SickBeardListViewStyle</item>
+        <item name="android:actionBarItemBackground">@drawable/action_bar_background</item>
     </style>
 
     <style name="SickBeardListViewStyle" parent="@android:style/Widget.ListView">
@@ -11,7 +12,7 @@
     </style>
 
     <style name="SickBeardActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/brown_gradient</item>
+        <item name="android:background">@drawable/action_bar_background</item>
         <item name="android:icon">@drawable/sickbeard_icon</item>
     </style>
 
