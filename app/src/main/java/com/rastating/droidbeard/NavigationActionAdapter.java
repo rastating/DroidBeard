@@ -16,6 +16,8 @@ public class NavigationActionAdapter extends ArrayAdapter<NavigationAction> {
     private NavigationAction[] mObjects;
     private int mSelectedPosition;
     private LayoutInflater mInflater;
+    private int mInactiveTextColor;
+    private int mActiveTextColor;
 
     public NavigationActionAdapter(Context context, LayoutInflater inflater, int layoutResourceId, NavigationAction[] objects) {
         super(context, layoutResourceId, objects);
@@ -25,6 +27,8 @@ public class NavigationActionAdapter extends ArrayAdapter<NavigationAction> {
         mObjects = objects;
         mSelectedPosition = 0;
         mInflater = inflater;
+        mInactiveTextColor = Color.parseColor("#838383");
+        mActiveTextColor = Color.parseColor("#333333");
     }
 
     public void setSelectedPosition(int position) {
@@ -53,16 +57,19 @@ public class NavigationActionAdapter extends ArrayAdapter<NavigationAction> {
             holder = (NavigationActionHolder) row.getTag();
         }
 
+        NavigationAction action = mObjects[position];
+        holder.text.setText(action.getText());
+
         if (position == mSelectedPosition) {
             row.setBackgroundColor(mContext.getResources().getColor(R.color.navigation_list_item_selected));
+            holder.text.setTextColor(mActiveTextColor);
+            holder.icon.setImageResource(action.getActiveIconResourceId());
         }
         else {
             row.setBackgroundColor(Color.TRANSPARENT);
+            holder.text.setTextColor(mInactiveTextColor);
+            holder.icon.setImageResource(action.getInactiveIconResourceId());
         }
-
-        NavigationAction action = mObjects[position];
-        holder.icon.setImageResource(action.getIconResourceId());
-        holder.text.setText(action.getText());
 
         return row;
     }

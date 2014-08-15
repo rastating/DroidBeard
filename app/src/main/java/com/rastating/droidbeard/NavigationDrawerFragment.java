@@ -102,12 +102,12 @@ public class NavigationDrawerFragment extends Fragment {
 
     private NavigationAction[] createNavigationActions() {
         return new NavigationAction[] {
-            new NavigationAction(R.drawable.glyph_video, getString(R.string.title_shows)),
-            new NavigationAction(R.drawable.glyph_clock, getString(R.string.title_coming_episodes)),
-            new NavigationAction(R.drawable.glyph_history, getString(R.string.title_history)),
-            new NavigationAction(R.drawable.glyph_list, getString(R.string.title_logs)),
-            new NavigationAction(R.drawable.glyph_restart, getString(R.string.title_restart)),
-            new NavigationAction(R.drawable.glyph_power, getString(R.string.title_shutdown)),
+            new NavigationAction(R.drawable.glyph_video_camera_333333_64, R.drawable.glyph_video_camera_838383_64, getString(R.string.title_shows)),
+            new NavigationAction(R.drawable.glyph_calendar_333333_64, R.drawable.glyph_calendar_838383_64, getString(R.string.title_coming_episodes)),
+            new NavigationAction(R.drawable.glyph_history_333333_64, R.drawable.glyph_history_838383_64, getString(R.string.title_history)),
+            new NavigationAction(R.drawable.glyph_file_text_o_333333_64, R.drawable.glyph_file_text_o_838383_64, getString(R.string.title_logs)),
+            new NavigationAction(R.drawable.glyph_recycle_333333_64, R.drawable.glyph_recycle_838383_64, getString(R.string.title_restart)),
+            new NavigationAction(R.drawable.glyph_power_off_333333_64, R.drawable.glyph_power_off_838383_64, getString(R.string.title_shutdown)),
         };
     }
 

@@ -1,10 +1,9 @@
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:choiceMode="singleChoice"
-    android:divider="#dfdacf"
-    android:dividerHeight="1dp"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0dp"
     android:background="#f5f1e4"
-    android:listSelector="#dfdacf"
-    tools:context=".NavigationDrawerFragment" />
+    android:listSelector="#cfcfcf"
+    android:id="@+id/show_list_view" />

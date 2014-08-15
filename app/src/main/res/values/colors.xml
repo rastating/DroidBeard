@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="navigation_list_item_selected">#dfdacf</color>
+    <color name="selected_list_item">#cfcfcf</color>
 </resources>

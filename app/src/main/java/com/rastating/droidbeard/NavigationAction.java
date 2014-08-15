@@ -1,16 +1,22 @@
 package com.rastating.droidbeard;
 
 public class NavigationAction {
-    private int mIconResourceId;
+    private int mActiveIconResourceId;
+    private int mInactiveIconResourceId;
     private String mText;
 
-    public NavigationAction(int iconResourceId, String text) {
-        mIconResourceId = iconResourceId;
+    public NavigationAction(int activeIconResourceId, int inactiveIconResourceId, String text) {
+        mActiveIconResourceId = activeIconResourceId;
+        mInactiveIconResourceId = inactiveIconResourceId;
         mText = text;
     }
 
-    public int getIconResourceId() {
-        return mIconResourceId;
+    public int getActiveIconResourceId() {
+        return mActiveIconResourceId;
+    }
+
+    public int getInactiveIconResourceId() {
+        return mInactiveIconResourceId;
     }
 
     public String getText() {
