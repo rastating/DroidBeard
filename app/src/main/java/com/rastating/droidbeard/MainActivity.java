@@ -44,17 +44,18 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment = null;
 
         if (position == 0) {
-            FragmentManager manager = this.getFragmentManager();
-            manager.beginTransaction().replace(R.id.container, new ShowsFragment()).commit();
+            fragment = new ShowsFragment();
         }
-        else {
-            // update the main content by replacing fragments
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                    .commit();
+        else if (position == 4) {
+            fragment = new PreferencesFragment();
+        }
+
+        if (fragment != null) {
+            FragmentManager manager = this.getFragmentManager();
+            manager.beginTransaction().replace(R.id.container, fragment).commit();
         }
     }
 

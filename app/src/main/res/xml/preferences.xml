@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="droidbeard_settings">
+
+    <EditTextPreference
+        android:key="sickbeard_url"
+        android:summary="The URL where Sickbeard is located."
+        android:title="Sickbeard URL" />
+
+    <EditTextPreference
+        android:key="api_key"
+        android:summary="Your API key (found in Sickbeard 'General' settings)."
+        android:title="API Key" />
+
+</PreferenceScreen>

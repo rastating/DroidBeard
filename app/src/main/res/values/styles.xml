@@ -5,6 +5,8 @@
         <item name="android:actionBarStyle">@style/SickBeardActionBar</item>
         <item name="android:listViewStyle">@style/SickBeardListViewStyle</item>
         <item name="android:actionBarItemBackground">@drawable/action_bar_background</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:textColorSecondary">@color/secondary_color</item>
     </style>
 
     <style name="SickBeardListViewStyle" parent="@android:style/Widget.ListView">

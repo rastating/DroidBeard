@@ -2,4 +2,6 @@
 <resources>
     <color name="navigation_list_item_selected">#dfdacf</color>
     <color name="selected_list_item">#cfcfcf</color>
+    <color name="secondary_color">#838383</color>
+    <color name="primary_text_color">#333333</color>
 </resources>
