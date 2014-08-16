@@ -42,6 +42,5 @@ public class ShowsFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         view.setSelected(true);
-        //view.setBackgroundColor(Color.TRANSPARENT);
     }
 }

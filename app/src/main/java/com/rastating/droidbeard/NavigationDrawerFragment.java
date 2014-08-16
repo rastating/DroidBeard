@@ -106,6 +106,7 @@ public class NavigationDrawerFragment extends Fragment {
             new NavigationAction(R.drawable.glyph_calendar_333333_64, R.drawable.glyph_calendar_838383_64, getString(R.string.title_coming_episodes)),
             new NavigationAction(R.drawable.glyph_history_333333_64, R.drawable.glyph_history_838383_64, getString(R.string.title_history)),
             new NavigationAction(R.drawable.glyph_file_text_o_333333_64, R.drawable.glyph_file_text_o_838383_64, getString(R.string.title_logs)),
+            new NavigationAction(R.drawable.glyph_cog_333333_64, R.drawable.glyph_cog_838383_64, "Settings"),
             new NavigationAction(R.drawable.glyph_recycle_333333_64, R.drawable.glyph_recycle_838383_64, getString(R.string.title_restart)),
             new NavigationAction(R.drawable.glyph_power_off_333333_64, R.drawable.glyph_power_off_838383_64, getString(R.string.title_shutdown)),
         };
