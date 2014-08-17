@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ShowsFragment extends Fragment implements AdapterView.OnItemClickListener {
+import com.rastating.droidbeard.net.ShowsRequestTask;
+
+public class ShowsFragment extends Fragment implements AdapterView.OnItemClickListener, ApiResponseListener<TVShow> {
     private ListView mListView;
     private TVShowAdapter mAdapter;
 
@@ -24,11 +26,11 @@ public class ShowsFragment extends Fragment implements AdapterView.OnItemClickLi
         View root = inflater.inflate(R.layout.fragment_show_list, container, false);
         mListView = (ListView) root.findViewById(R.id.show_list_view);
 
-        TVShow[] shows = new TVShow[] { new TVShow("Breaking Bad"), new TVShow("Rectify"), new TVShow("American Horror Story") };
-        mAdapter = new TVShowAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, shows);
-        mListView.setAdapter(mAdapter);
+        //TVShow[] shows = new TVShow[] { new TVShow("Breaking Bad"), new TVShow("Rectify"), new TVShow("American Horror Story") };
 
-        mListView.setOnItemClickListener(this);
+        ShowsRequestTask task = new ShowsRequestTask(getActivity());
+        task.addResponseListener(this);
+        task.execute();
 
         return root;
     }
@@ -42,5 +44,15 @@ public class ShowsFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         view.setSelected(true);
+    }
+
+    @Override
+    public void onApiRequestFinished(TVShow[] objects) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        mAdapter = new TVShowAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
+        mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(this);
+
     }
 }

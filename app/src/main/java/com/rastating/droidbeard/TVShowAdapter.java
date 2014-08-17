@@ -32,6 +32,7 @@ public class TVShowAdapter extends ArrayAdapter<TVShow> {
             row = mInflater.inflate(mLayoutResourceId, parent, false);
             holder = new TVShowHolder();
             holder.showName = (TextView) row.findViewById(R.id.show_name);
+            holder.airs = (TextView) row.findViewById(R.id.airs);
             row.setTag(holder);
         }
         else {
@@ -47,11 +48,18 @@ public class TVShowAdapter extends ArrayAdapter<TVShow> {
 
         TVShow show = mObjects[position];
         holder.showName.setText(show.getName());
+        if (show.getNextAirDate() != null) {
+            holder.airs.setText(String.format("Next episode on %tB %te, %tY on %s", show.getNextAirDate(), show.getNextAirDate(), show.getNextAirDate(), show.getNetwork()));
+        }
+        else {
+            holder.airs.setText("No upcoming episodes scheduled");
+        }
 
         return row;
     }
 
     private class TVShowHolder {
         public TextView showName;
+        public TextView airs;
     }
 }

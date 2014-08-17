@@ -10,7 +10,7 @@
 
     <EditTextPreference
         android:key="api_key"
-        android:summary="Your API key (found in Sickbeard 'General' settings)."
+        android:summary="Your Sickbeard API key (found in general settings)."
         android:title="API Key" />
 
 </PreferenceScreen>

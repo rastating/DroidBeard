@@ -22,6 +22,12 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         if (value != null) {
             preference.setSummary(value);
         }
+
+        preference = (EditTextPreference) findPreference("api_key");
+        value = preferences.getString("api_key", null);
+        if (value != null) {
+            preference.setSummary(value);
+        }
     }
 
     @Override
