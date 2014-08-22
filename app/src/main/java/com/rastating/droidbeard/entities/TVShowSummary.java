@@ -1,19 +1,20 @@
-package com.rastating.droidbeard;
+package com.rastating.droidbeard.entities;
 
 import java.util.Date;
 
-public class TVShow {
+public class TVShowSummary {
     private String mAirs;
     private String mName;
     private String mNetwork;
     private Date mNextAirDate;
+    private int mTvDbId;
 
-    public TVShow(String name) {
+    public TVShowSummary(String name) {
         mName = name;
         mNextAirDate = null;
     }
 
-    public TVShow() {
+    public TVShowSummary() {
         mName = "";
         mNextAirDate = null;
     }
@@ -34,6 +35,10 @@ public class TVShow {
         return mNextAirDate;
     }
 
+    public int getTvDbId() {
+        return mTvDbId;
+    }
+
     public void setAirs(String value) {
         mAirs = value;
     }
@@ -44,5 +49,9 @@ public class TVShow {
 
     public void setNextAirDate(Date value) {
         mNextAirDate = value;
+    }
+
+    public void setTvDbId(int value) {
+        mTvDbId = value;
     }
 }

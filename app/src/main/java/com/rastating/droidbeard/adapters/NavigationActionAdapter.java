@@ -1,4 +1,4 @@
-package com.rastating.droidbeard;
+package com.rastating.droidbeard.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.rastating.droidbeard.NavigationAction;
+import com.rastating.droidbeard.R;
 
 public class NavigationActionAdapter extends ArrayAdapter<NavigationAction> {
     private Context mContext;

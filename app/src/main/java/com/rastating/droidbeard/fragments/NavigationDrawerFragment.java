@@ -1,4 +1,4 @@
-package com.rastating.droidbeard;
+package com.rastating.droidbeard.fragments;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -19,6 +19,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.rastating.droidbeard.NavigationAction;
+import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.adapters.NavigationActionAdapter;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

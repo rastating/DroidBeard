@@ -1,4 +1,4 @@
-package com.rastating.droidbeard;
+package com.rastating.droidbeard.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,19 +8,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class TVShowAdapter extends ArrayAdapter<TVShow> {
+import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.entities.TVShowSummary;
+
+public class TVShowSummaryAdapter extends ArrayAdapter<TVShowSummary> {
     private Context mContext;
     private int mLayoutResourceId;
-    private TVShow[] mObjects;
+    private TVShowSummary[] mObjects;
     private LayoutInflater mInflater;
 
-    public TVShowAdapter(Context context, LayoutInflater inflater, int layoutResourceId, TVShow[] objects) {
+    public TVShowSummaryAdapter(Context context, LayoutInflater inflater, int layoutResourceId, TVShowSummary[] objects) {
         super(context, layoutResourceId, objects);
 
         mContext = context;
         mLayoutResourceId = layoutResourceId;
         mObjects = objects;
         mInflater = inflater;
+    }
+
+    @Override
+    public TVShowSummary getItem(int position) {
+        return mObjects[position];
     }
 
     @Override
@@ -46,7 +54,7 @@ public class TVShowAdapter extends ArrayAdapter<TVShow> {
             row.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        TVShow show = mObjects[position];
+        TVShowSummary show = mObjects[position];
         holder.showName.setText(show.getName());
         if (show.getNextAirDate() != null) {
             holder.airs.setText(String.format("Next episode on %tB %te, %tY on %s", show.getNextAirDate(), show.getNextAirDate(), show.getNextAirDate(), show.getNetwork()));
