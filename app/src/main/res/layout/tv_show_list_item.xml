@@ -16,15 +16,13 @@
             android:gravity="center_vertical"
             android:textSize="20sp"
             android:textColor="#333333"
-            android:text="Breaking Bad"
             />
 
         <TextView android:id="@+id/airs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:textColor="#838383"
-            android:text="Airs Thursday 9:00 PM on SundanceTV">
+            android:textColor="#838383">
         </TextView>
 
     </LinearLayout>
