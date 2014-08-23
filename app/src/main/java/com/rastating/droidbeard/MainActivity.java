@@ -13,21 +13,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import com.rastating.droidbeard.fragments.DroidbeardFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
+import com.rastating.droidbeard.fragments.ShowFragment;
 import com.rastating.droidbeard.fragments.ShowsFragment;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+    private Fragment mCurrentFragment;
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+    private ShowsFragment mShowsFragment;
     private CharSequence mTitle;
+
+    private Fragment getCurrentFragment() {
+        return mCurrentFragment;
+    }
+
+    public void setCurrentFragment(Fragment value) {
+        mCurrentFragment = value;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getCurrentFragment() == null) {
+            super.onBackPressed();
+        }
+        else {
+            DroidbeardFragment fragment = (DroidbeardFragment) getCurrentFragment();
+            if (fragment.onBackPressed()) {
+                if (fragment instanceof ShowFragment) {
+                    onNavigationDrawerItemSelected(0);
+                }
+                else {
+                    super.onBackPressed();
+                }
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +69,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         Fragment fragment = null;
 
         if (position == 0) {
-            fragment = new ShowsFragment();
+            if (mShowsFragment == null) {
+                mShowsFragment = new ShowsFragment();
+            }
+
+            fragment = mShowsFragment;
         }
         else if (position == 4) {
             fragment = new PreferencesFragment();
@@ -55,29 +82,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         if (fragment != null) {
             FragmentManager manager = this.getFragmentManager();
             manager.beginTransaction().replace(R.id.container, fragment).commit();
-        }
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_shows);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_coming_episodes);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_history);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_logs);
-                break;
-            case 5:
-                mTitle = getString(R.string.title_restart);
-                break;
-            case 6:
-                mTitle = getString(R.string.title_shutdown);
-                break;
+            setCurrentFragment(fragment);
         }
     }
 
@@ -85,7 +90,15 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+
+        if (mTitle != null) {
+            actionBar.setTitle(mTitle);
+        }
+    }
+
+    public void setTitle(String value) {
+        mTitle = value;
+        restoreActionBar();
     }
 
     @Override
@@ -112,44 +125,4 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
 }

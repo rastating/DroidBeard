@@ -14,7 +14,7 @@ import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowTask;
 
-public class ShowFragment extends Fragment implements ApiResponseListener<TVShow> {
+public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow> {
     private TVShowSummary mShow;
     private ImageView mBanner;
 
@@ -24,6 +24,7 @@ public class ShowFragment extends Fragment implements ApiResponseListener<TVShow
 
     public ShowFragment(TVShowSummary show) {
         mShow = show;
+        setTitle(show.getName());
     }
 
     @Override

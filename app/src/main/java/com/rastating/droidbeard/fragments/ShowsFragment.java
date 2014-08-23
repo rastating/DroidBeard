@@ -1,7 +1,5 @@
 package com.rastating.droidbeard.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,20 +8,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.rastating.droidbeard.MainActivity;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.adapters.TVShowSummaryAdapter;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowSummariesTask;
 
-public class ShowsFragment extends Fragment implements AdapterView.OnItemClickListener, ApiResponseListener<TVShowSummary[]> {
+public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnItemClickListener, ApiResponseListener<TVShowSummary[]> {
     private ListView mListView;
     private View mErrorContainer;
     private TVShowSummaryAdapter mAdapter;
 
     public ShowsFragment() {
-
+        setTitle(R.string.title_shows);
     }
 
     @Override
@@ -32,17 +29,19 @@ public class ShowsFragment extends Fragment implements AdapterView.OnItemClickLi
         mListView = (ListView) root.findViewById(R.id.show_list_view);
         mErrorContainer = root.findViewById(R.id.error_container);
 
-        FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
-        task.addResponseListener(this);
-        task.execute();
+        if (mAdapter == null) {
+            FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
+            task.addResponseListener(this);
+            task.execute();
+        }
+        else {
+            mListView.setAdapter(mAdapter);
+            mListView.setOnItemClickListener(this);
+            mListView.setVisibility(View.VISIBLE);
+            mErrorContainer.setVisibility(View.GONE);
+        }
 
         return root;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(1);
     }
 
     @Override
