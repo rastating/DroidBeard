@@ -103,13 +103,8 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
                 throw new IOException(status.getReasonPhrase());
             }
         }
-        catch (ClientProtocolException ex) {
-            // TODO: handle exception
-            System.out.println(ex.getMessage());
-        }
-        catch (IOException ex) {
-            // TODO: handle exception
-            System.out.println(ex.getMessage());
+        catch (Exception e) {
+            return null;
         }
 
         return body;

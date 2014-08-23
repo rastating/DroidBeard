@@ -1,9 +1,46 @@
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    android:background="#f5f1e4"
-    android:listSelector="#cfcfcf"
-    android:id="@+id/show_list_view" />
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1.0"
+        android:id="@+id/error_container"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="@string/error_uh_oh"
+            android:textColor="@color/secondary_color"
+            android:textSize="@dimen/uh_oh_caption_size"
+            android:gravity="center|bottom"
+            android:layout_weight="0.5"
+            android:paddingBottom="10dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:text="@string/error_fetching_show_list"
+            android:gravity="center|top"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/secondary_color" />
+
+    </LinearLayout>
+
+    <ListView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#f5f1e4"
+        android:listSelector="#cfcfcf"
+        android:id="@+id/show_list_view" />
+
+</LinearLayout>

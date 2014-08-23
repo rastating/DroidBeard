@@ -19,6 +19,7 @@ import com.rastating.droidbeard.net.FetchShowSummariesTask;
 
 public class ShowsFragment extends Fragment implements AdapterView.OnItemClickListener, ApiResponseListener<TVShowSummary[]> {
     private ListView mListView;
+    private View mErrorContainer;
     private TVShowSummaryAdapter mAdapter;
 
     public ShowsFragment() {
@@ -29,6 +30,7 @@ public class ShowsFragment extends Fragment implements AdapterView.OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_show_list, container, false);
         mListView = (ListView) root.findViewById(R.id.show_list_view);
+        mErrorContainer = root.findViewById(R.id.error_container);
 
         FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
         task.addResponseListener(this);
@@ -54,10 +56,18 @@ public class ShowsFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onApiRequestFinished(TVShowSummary[] objects) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
-        mListView.setAdapter(mAdapter);
+        if (objects != null) {
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
+            mListView.setAdapter(mAdapter);
 
-        mListView.setOnItemClickListener(this);
+            mListView.setOnItemClickListener(this);
+            mListView.setVisibility(View.VISIBLE);
+            mErrorContainer.setVisibility(View.GONE);
+        }
+        else {
+            mListView.setVisibility(View.GONE);
+            mErrorContainer.setVisibility(View.VISIBLE);
+        }
     }
 }
