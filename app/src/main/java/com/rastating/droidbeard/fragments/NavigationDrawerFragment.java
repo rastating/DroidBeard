@@ -59,24 +59,21 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private int mCurrentPosition;
     private NavigationActionAdapter mAdapter;
 
     public NavigationDrawerFragment() {
     }
 
     private void setSelectedPosition(int position) {
+        mCurrentPosition = position;
         if (mAdapter != null) {
             mAdapter.setSelectedPosition(position);
         }
     }
 
     private int getSelectedPosition() {
-        if (mAdapter != null) {
-            return mAdapter.getSelectedPosition();
-        }
-        else {
-            return 0;
-        }
+        return mCurrentPosition;
     }
 
     @Override
@@ -91,10 +88,12 @@ public class NavigationDrawerFragment extends Fragment {
         if (savedInstanceState != null) {
             setSelectedPosition(savedInstanceState.getInt(STATE_SELECTED_POSITION));
             mFromSavedInstanceState = true;
+            selectItem(getSelectedPosition(), false);
         }
-
-        // Select either the default item (0) or the last selected item.
-        selectItem(getSelectedPosition());
+        else {
+            // Select either the default item (0) or the last selected item.
+            selectItem(getSelectedPosition(), true);
+        }
     }
 
     @Override
@@ -122,7 +121,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                selectItem(position, true);
             }
         });
 
@@ -135,6 +134,11 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerListView.setAdapter(mAdapter);
         mDrawerListView.setItemChecked(getSelectedPosition(), true);
+
+        if (savedInstanceState != null) {
+            selectItem(getSelectedPosition(), false);
+        }
+
         return mDrawerListView;
     }
 
@@ -215,7 +219,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
+    private void selectItem(int position, boolean triggerCallback) {
         setSelectedPosition(position);
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
@@ -223,7 +227,7 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null) {
+        if (mCallbacks != null && triggerCallback) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }

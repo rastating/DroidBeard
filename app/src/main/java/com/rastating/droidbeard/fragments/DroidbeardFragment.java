@@ -2,12 +2,19 @@ package com.rastating.droidbeard.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.Bundle;
 
 import com.rastating.droidbeard.MainActivity;
 
 public abstract class DroidbeardFragment extends Fragment {
     private int mTitleResId;
     private String mTitle;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Override
     public void onAttach(Activity activity) {
