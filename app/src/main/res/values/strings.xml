@@ -15,5 +15,12 @@
     <string name="action_settings">Settings</string>
     <string name="error_uh_oh">Uh oh...</string>
     <string name="error_fetching_show_list">Something went wrong whilst fetching the show list.</string>
-
+    <string name="airs">Airs:</string>
+    <string name="status">Status:</string>
+    <string name="location">Location:</string>
+    <string name="quality">Quality:</string>
+    <string name="language">Language:</string>
+    <string name="flatten_folders">Flatten Folders:</string>
+    <string name="paused">Paused:</string>
+    <string name="air_by_date">Air-by-Date:</string>
 </resources>

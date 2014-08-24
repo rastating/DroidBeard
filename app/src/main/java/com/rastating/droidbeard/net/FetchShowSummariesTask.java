@@ -47,8 +47,7 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                         tvShowSummary.setNextAirDate(date);
                     }
                 } catch (ParseException e) {
-                    e.printStackTrace();
-                    return null;
+                    tvShowSummary.setNextAirDate(null);
                 }
 
                 shows.add(tvShowSummary);
