@@ -68,6 +68,7 @@ public class EpisodeItem {
                 color = resources.getColor(R.color.unaired_episode_background);
                 break;
 
+            case IGNORED:
             case SKIPPED:
                 color = resources.getColor(R.color.skipped_episode_background);
                 break;

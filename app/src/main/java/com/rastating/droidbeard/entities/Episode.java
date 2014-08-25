@@ -10,7 +10,8 @@ public class Episode {
         UNAIRED,
         WANTED,
         DOWNLOADED,
-        SNATCHED
+        SNATCHED,
+        IGNORED
     }
 
     private int mEpisodeNumber;
@@ -55,6 +56,9 @@ public class Episode {
 
             case SNATCHED:
                 return "Snatched";
+
+            case IGNORED:
+                return "Ignored";
         }
 
         return "";
@@ -108,6 +112,12 @@ public class Episode {
         }
         else if (value.equalsIgnoreCase("snatched")) {
             mStatus = EpisodeStatus.SNATCHED;
+        }
+        else if (value.equalsIgnoreCase("ignored")) {
+            mStatus = EpisodeStatus.IGNORED;
+        }
+        else {
+            mStatus = EpisodeStatus.IGNORED;
         }
     }
 }

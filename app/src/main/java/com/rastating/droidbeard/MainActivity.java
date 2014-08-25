@@ -58,7 +58,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        if (mTitle == null) {
+            mTitle = getTitle();
+        }
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
