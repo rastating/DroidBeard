@@ -1,21 +1,25 @@
 package com.rastating.droidbeard.fragments;
 
-import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.rastating.droidbeard.comparators.EpisodeComparator;
 import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.entities.Episode;
+import com.rastating.droidbeard.entities.Season;
 import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowTask;
+import com.rastating.droidbeard.ui.SeasonTable;
 
-import org.w3c.dom.Text;
+import java.util.Collections;
+import java.util.List;
 
 public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow> {
     private TVShowSummary mShowSummary;
@@ -57,6 +61,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         ImageView flattenFolders = (ImageView) mRootView.findViewById(R.id.flatten_folders);
         ImageView paused = (ImageView) mRootView.findViewById(R.id.paused);
         ImageView airByDate = (ImageView) mRootView.findViewById(R.id.air_by_date);
+        LinearLayout seasonContainer = (LinearLayout) mRootView.findViewById(R.id.season_container);
 
         airs.setText(result.getAirs() + " on " + result.getNetwork());
         status.setText(result.getStatus());
@@ -67,5 +72,20 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         flattenFolders.setImageResource(result.getFlattenFolders() ? R.drawable.yes16 : R.drawable.no16);
         paused.setImageResource(result.getPaused() ? R.drawable.yes16 : R.drawable.no16);
         airByDate.setImageResource(result.getAirByDate() ? R.drawable.yes16 : R.drawable.no16);
+
+        for (Season season : result.getSeasons()) {
+            SeasonTable table = new SeasonTable(getActivity());
+            table.setTitle(season.getTitle());
+
+            List<Episode> episodes = season.getEpisodes();
+            Collections.sort(episodes, new EpisodeComparator());
+            Collections.reverse(episodes);
+
+            for (Episode episode : episodes) {
+                table.addEpisode(episode);
+            }
+
+            seasonContainer.addView(table);
+        }
     }
 }

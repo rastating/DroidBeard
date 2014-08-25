@@ -3,6 +3,7 @@ package com.rastating.droidbeard.entities;
 import android.graphics.Bitmap;
 
 import java.util.Date;
+import java.util.List;
 
 public class TVShow {
     private boolean mAirByDate;
@@ -16,6 +17,7 @@ public class TVShow {
     private Date mNextAirdate;
     private boolean mPaused;
     private String mQuality;
+    private List<Season> mSeasons;
     private String mShowName;
     private String mStatus;
 
@@ -61,6 +63,10 @@ public class TVShow {
 
     public String getQuality() {
         return mQuality;
+    }
+
+    public List<Season> getSeasons() {
+        return mSeasons;
     }
 
     public String getShowName() {
@@ -113,6 +119,10 @@ public class TVShow {
 
     public void setQuality(String value) {
         mQuality = value;
+    }
+
+    public void setSeasons(List<Season> value) {
+        mSeasons = value;
     }
 
     public void setShowName(String value) {

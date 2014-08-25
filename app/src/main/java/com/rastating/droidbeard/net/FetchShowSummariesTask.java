@@ -1,11 +1,10 @@
 package com.rastating.droidbeard.net;
 
 import com.rastating.droidbeard.entities.TVShowSummary;
-import com.rastating.droidbeard.TVShowSummaryComparator;
+import com.rastating.droidbeard.comparators.TVShowSummaryComparator;
 
 import android.content.Context;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;

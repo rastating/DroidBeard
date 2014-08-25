@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Pair;
 
+import com.rastating.droidbeard.comparators.SeasonComparator;
+import com.rastating.droidbeard.entities.Episode;
+import com.rastating.droidbeard.entities.Season;
 import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.Language;
 
@@ -13,7 +16,9 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
@@ -26,6 +31,50 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
         return getBitmap("show.getbanner", params);
+    }
+
+    private List<Season> getSeasons(int tvdbid) {
+        ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
+        params.add(new Pair<String, Object>("tvdbid", tvdbid));
+        String json = getJson("show.seasons", params);
+
+        if (json != null && !json.equals("")) {
+            try {
+                JSONObject data = new JSONObject(json).getJSONObject("data");
+                List<Season> seasons = new ArrayList<Season>();
+                Iterator<String> seasonKeys = data.keys();
+                while (seasonKeys.hasNext()) {
+                    String seasonKey = (String) seasonKeys.next();
+                    JSONObject seasonData = data.getJSONObject(seasonKey);
+                    Iterator<String> episodeKeys = seasonData.keys();
+                    Season season = new Season();
+                    season.setSeasonNumber(Integer.valueOf(seasonKey));
+
+                    while (episodeKeys.hasNext()) {
+                        String episodeKey = (String) episodeKeys.next();
+                        JSONObject episodeData = seasonData.getJSONObject(episodeKey);
+                        Episode episode = new Episode();
+                        episode.setEpisodeNumber(Integer.valueOf(episodeKey));
+                        episode.setAirdate(episodeData.getString("airdate"));
+                        episode.setName(episodeData.getString("name"));
+                        episode.setQuality(episodeData.getString("quality"));
+                        episode.setStatus(episodeData.getString("status"));
+                        season.addEpisode(episode);
+                    }
+
+                    seasons.add(season);
+                }
+
+                return seasons;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     private TVShow getTVShow(int tvdbid) {
@@ -88,6 +137,14 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
         if (show != null) {
             Bitmap banner = getBanner(tvdbid);
             show.setBanner(banner);
+
+            List<Season> seasons = getSeasons(tvdbid);
+
+            // Sort the seasons in reverse order.
+            Collections.sort(seasons, new SeasonComparator());
+            Collections.reverse(seasons);
+
+            show.setSeasons(seasons);
         }
 
         return show;

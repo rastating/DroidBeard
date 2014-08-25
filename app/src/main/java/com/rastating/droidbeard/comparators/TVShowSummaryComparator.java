@@ -1,4 +1,4 @@
-package com.rastating.droidbeard;
+package com.rastating.droidbeard.comparators;
 
 import com.rastating.droidbeard.entities.TVShowSummary;
 
