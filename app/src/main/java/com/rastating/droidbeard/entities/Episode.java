@@ -11,7 +11,8 @@ public class Episode {
         WANTED,
         DOWNLOADED,
         SNATCHED,
-        IGNORED
+        IGNORED,
+        ARCHIVED
     }
 
     private int mEpisodeNumber;
@@ -59,6 +60,9 @@ public class Episode {
 
             case IGNORED:
                 return "Ignored";
+
+            case ARCHIVED:
+                return "Archived";
         }
 
         return "";
@@ -115,6 +119,9 @@ public class Episode {
         }
         else if (value.equalsIgnoreCase("ignored")) {
             mStatus = EpisodeStatus.IGNORED;
+        }
+        else if (value.equalsIgnoreCase("archived")) {
+            mStatus = EpisodeStatus.ARCHIVED;
         }
         else {
             mStatus = EpisodeStatus.IGNORED;

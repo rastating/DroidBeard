@@ -73,6 +73,7 @@ public class EpisodeItem {
                 color = resources.getColor(R.color.skipped_episode_background);
                 break;
 
+            case ARCHIVED:
             case DOWNLOADED:
                 color = resources.getColor(R.color.downloaded_episode_background);
                 break;
