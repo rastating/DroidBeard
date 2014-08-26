@@ -1,13 +1,10 @@
 package com.rastating.droidbeard.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -20,6 +17,8 @@ import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.adapters.TVShowSummaryAdapter;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowSummariesTask;
+import com.rastating.droidbeard.ui.CrossFader;
+import com.rastating.droidbeard.ui.LoadingAnimation;
 
 public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnItemClickListener, ApiResponseListener<TVShowSummary[]> {
     private ListView mListView;
@@ -40,11 +39,7 @@ public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnI
 
         if (mAdapter == null) {
             mListView.setVisibility(View.GONE);
-            Animation a = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            a.setInterpolator(new LinearInterpolator());
-            a.setRepeatCount(-1);
-            a.setDuration(1000);
-            mLoadingImage.startAnimation(a);
+            mLoadingImage.startAnimation(new LoadingAnimation());
 
             FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
             task.addResponseListener(this);
@@ -77,26 +72,9 @@ public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnI
             LayoutInflater inflater = getActivity().getLayoutInflater();
             mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
             mListView.setAdapter(mAdapter);
-
             mListView.setOnItemClickListener(this);
-
-            mListView.setAlpha(0f);
-            mListView.setVisibility(View.VISIBLE);
-            mLoadingImage.animate()
-                .alpha(0f)
-                .setDuration(500)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mLoadingImage.setVisibility(View.GONE);
-                        mListView.animate()
-                                .alpha(1f)
-                                .setDuration(500)
-                                .setListener(null);
-                    }
-                });
-
             mErrorContainer.setVisibility(View.GONE);
+            new CrossFader(mLoadingImage, mListView, 500).start();
         }
         else {
             mListView.setVisibility(View.GONE);
