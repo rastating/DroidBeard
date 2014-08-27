@@ -16,6 +16,8 @@ import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowTask;
+import com.rastating.droidbeard.ui.CrossFader;
+import com.rastating.droidbeard.ui.LoadingAnimation;
 import com.rastating.droidbeard.ui.SeasonTable;
 
 import java.util.Collections;
@@ -24,7 +26,19 @@ import java.util.List;
 public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow> {
     private TVShowSummary mShowSummary;
     private ImageView mBanner;
-    private View mRootView;
+    private ImageView mLoadingImage;
+    private View mDataContainer;
+    private TVShow mShow;
+    private TextView mAirs;
+    private TextView mStatus;
+    private TextView mLocation;
+    private TextView mQuality;
+    private TextView mLanguage;
+    private ImageView mLanguageIcon;
+    private ImageView mFlattenFolders;
+    private ImageView mPaused;
+    private ImageView mAirByDate;
+    private LinearLayout mSeasonContainer;
 
     public ShowFragment() {
         mShowSummary = null;
@@ -38,42 +52,53 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_show, container, false);
-        mBanner = (ImageView) root.findViewById(R.id.banner);
 
+        // Get references to all required views.
+        mBanner = (ImageView) root.findViewById(R.id.banner);
+        mLoadingImage = (ImageView) root.findViewById(R.id.loading);
+        mDataContainer = root.findViewById(R.id.data);
+        mAirs = (TextView) root.findViewById(R.id.airs);
+        mStatus = (TextView) root.findViewById(R.id.status);
+        mLocation = (TextView) root.findViewById(R.id.location);
+        mQuality = (TextView) root.findViewById(R.id.quality);
+        mLanguage = (TextView) root.findViewById(R.id.language);
+        mLanguageIcon = (ImageView) root.findViewById(R.id.language_icon);
+        mFlattenFolders = (ImageView) root.findViewById(R.id.flatten_folders);
+        mPaused = (ImageView) root.findViewById(R.id.paused);
+        mAirByDate = (ImageView) root.findViewById(R.id.air_by_date);
+        mSeasonContainer = (LinearLayout) root.findViewById(R.id.season_container);
+
+        // Start loading animation.
+        mLoadingImage.startAnimation(new LoadingAnimation());
+
+        // Start fetching the show information.
         FetchShowTask task = new FetchShowTask(getActivity());
         task.addResponseListener(this);
         task.execute(mShowSummary.getTvDbId());
 
-        mRootView = root;
         return root;
     }
 
     @Override
     public void onApiRequestFinished(TVShow result) {
-        mBanner.setImageBitmap(result.getBanner());
+        mShow = result;
+        populateViews();
+        new CrossFader(mLoadingImage, mDataContainer, 500).start();
+    }
 
-        TextView airs = (TextView) mRootView.findViewById(R.id.airs);
-        TextView status = (TextView) mRootView.findViewById(R.id.status);
-        TextView location = (TextView) mRootView.findViewById(R.id.location);
-        TextView quality = (TextView) mRootView.findViewById(R.id.quality);
-        TextView language = (TextView) mRootView.findViewById(R.id.language);
-        ImageView languageIcon = (ImageView) mRootView.findViewById(R.id.language_icon);
-        ImageView flattenFolders = (ImageView) mRootView.findViewById(R.id.flatten_folders);
-        ImageView paused = (ImageView) mRootView.findViewById(R.id.paused);
-        ImageView airByDate = (ImageView) mRootView.findViewById(R.id.air_by_date);
-        LinearLayout seasonContainer = (LinearLayout) mRootView.findViewById(R.id.season_container);
+    private void populateViews() {
+        mBanner.setImageBitmap(mShow.getBanner());
+        mAirs.setText(mShow.getAirs() + " on " + mShow.getNetwork());
+        mStatus.setText(mShow.getStatus());
+        mLocation.setText(mShow.getLocation());
+        mQuality.setText(mShow.getQuality());
+        mLanguage.setText(mShow.getLanguage().getCode());
+        mLanguageIcon.setImageResource(mShow.getLanguage().getIconResId());
+        mFlattenFolders.setImageResource(mShow.getFlattenFolders() ? R.drawable.yes16 : R.drawable.no16);
+        mPaused.setImageResource(mShow.getPaused() ? R.drawable.yes16 : R.drawable.no16);
+        mAirByDate.setImageResource(mShow.getAirByDate() ? R.drawable.yes16 : R.drawable.no16);
 
-        airs.setText(result.getAirs() + " on " + result.getNetwork());
-        status.setText(result.getStatus());
-        location.setText(result.getLocation());
-        quality.setText(result.getQuality());
-        language.setText(result.getLanguage().getCode());
-        languageIcon.setImageResource(result.getLanguage().getIconResId());
-        flattenFolders.setImageResource(result.getFlattenFolders() ? R.drawable.yes16 : R.drawable.no16);
-        paused.setImageResource(result.getPaused() ? R.drawable.yes16 : R.drawable.no16);
-        airByDate.setImageResource(result.getAirByDate() ? R.drawable.yes16 : R.drawable.no16);
-
-        for (Season season : result.getSeasons()) {
+        for (Season season : mShow.getSeasons()) {
             SeasonTable table = new SeasonTable(getActivity());
             table.setTitle(season.getTitle());
 
@@ -85,7 +110,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
                 table.addEpisode(episode);
             }
 
-            seasonContainer.addView(table);
+            mSeasonContainer.addView(table);
         }
     }
 }
