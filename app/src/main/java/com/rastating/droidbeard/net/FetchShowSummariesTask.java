@@ -60,12 +60,4 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
         Collections.sort(shows, new TVShowSummaryComparator());
         return shows.toArray(new TVShowSummary[shows.size()]);
     }
-
-    @Override
-    protected void onPostExecute(TVShowSummary[] shows) {
-        List<ApiResponseListener<TVShowSummary[]>> listeners = getResponseListeners();
-        for (ApiResponseListener<TVShowSummary[]> listener : listeners) {
-            listener.onApiRequestFinished(shows);
-        }
-    }
 }

@@ -113,4 +113,12 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
     protected List<ApiResponseListener<Result>> getResponseListeners() {
         return mResponseListeners;
     }
+
+    @Override
+    protected void onPostExecute(Result result) {
+        List<ApiResponseListener<Result>> listeners = getResponseListeners();
+        for (ApiResponseListener<Result> listener : listeners) {
+            listener.onApiRequestFinished(result);
+        }
+    }
 }

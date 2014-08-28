@@ -5,26 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.adapters.TVShowSummaryAdapter;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowSummariesTask;
-import com.rastating.droidbeard.ui.CrossFader;
-import com.rastating.droidbeard.ui.LoadingAnimation;
 
-public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnItemClickListener, ApiResponseListener<TVShowSummary[]> {
-    private ListView mListView;
-    private View mErrorContainer;
+public class ShowsFragment extends ListViewFragment implements ApiResponseListener<TVShowSummary[]> {
     private TVShowSummaryAdapter mAdapter;
-    private ImageView mLoadingImage;
 
     public ShowsFragment() {
         setTitle(R.string.title_shows);
@@ -32,27 +22,12 @@ public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnI
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_show_list, container, false);
-        mListView = (ListView) root.findViewById(R.id.show_list_view);
-        mErrorContainer = root.findViewById(R.id.error_container);
-        mLoadingImage = (ImageView) root.findViewById(R.id.loading);
+        View root = super.onCreateView(inflater, container, savedInstanceState);
 
-        if (mAdapter == null) {
-            mListView.setVisibility(View.GONE);
-            mLoadingImage.startAnimation(new LoadingAnimation());
-
-            FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
-            task.addResponseListener(this);
-            task.execute();
-        }
-        else {
-            mListView.setVisibility(View.VISIBLE);
-            mLoadingImage.setVisibility(View.GONE);
-            mListView.setAdapter(mAdapter);
-            mListView.setOnItemClickListener(this);
-            mListView.setVisibility(View.VISIBLE);
-            mErrorContainer.setVisibility(View.GONE);
-        }
+        showLoadingAnimation();
+        FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
+        task.addResponseListener(this);
+        task.execute();
 
         return root;
     }
@@ -71,14 +46,11 @@ public class ShowsFragment extends DroidbeardFragment implements AdapterView.OnI
         if (objects != null) {
             LayoutInflater inflater = getActivity().getLayoutInflater();
             mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
-            mListView.setAdapter(mAdapter);
-            mListView.setOnItemClickListener(this);
-            mErrorContainer.setVisibility(View.GONE);
-            new CrossFader(mLoadingImage, mListView, 500).start();
+            setAdapter(mAdapter);
+            showListView();
         }
         else {
-            mListView.setVisibility(View.GONE);
-            mErrorContainer.setVisibility(View.VISIBLE);
+            showError(getString(R.string.error_fetching_show_list));
         }
     }
 }

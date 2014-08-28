@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
+import com.rastating.droidbeard.fragments.HistoryFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
@@ -76,6 +77,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             }
 
             fragment = mShowsFragment;
+        }
+        else if (position == 2) {
+            fragment = new HistoryFragment();
         }
         else if (position == 4) {
             fragment = new PreferencesFragment();

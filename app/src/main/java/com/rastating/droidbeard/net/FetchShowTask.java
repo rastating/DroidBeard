@@ -149,12 +149,4 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
 
         return show;
     }
-
-    @Override
-    protected void onPostExecute(TVShow show) {
-        List<ApiResponseListener<TVShow>> listeners = getResponseListeners();
-        for (ApiResponseListener<TVShow> listener : listeners) {
-            listener.onApiRequestFinished(show);
-        }
-    }
 }

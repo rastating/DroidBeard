@@ -32,10 +32,10 @@
             />
 
         <TextView
+            android:id="@+id/error_message"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
-            android:text="@string/error_fetching_show_list"
             android:gravity="center|top"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -50,7 +50,7 @@
         android:dividerHeight="0dp"
         android:background="#f5f1e4"
         android:listSelector="#cfcfcf"
-        android:id="@+id/show_list_view"
+        android:id="@+id/list_view"
         android:visibility="gone" />
 
 </LinearLayout>
