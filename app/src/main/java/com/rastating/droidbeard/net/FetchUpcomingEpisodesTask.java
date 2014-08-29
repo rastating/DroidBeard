@@ -2,6 +2,7 @@ package com.rastating.droidbeard.net;
 
 import android.content.Context;
 
+import com.rastating.droidbeard.comparators.UpcomingEpisodeComparator;
 import com.rastating.droidbeard.entities.UpcomingEpisode;
 
 import org.json.JSONArray;
@@ -9,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, UpcomingEpisode[]> {
@@ -38,6 +40,7 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
             return null;
         }
 
+        Collections.sort(episodes, new UpcomingEpisodeComparator());
         return episodes.toArray(new UpcomingEpisode[episodes.size()]);
     }
 
