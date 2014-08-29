@@ -9,4 +9,8 @@
     <color name="unaired_episode_background">#f5f1e4</color>
     <color name="wanted_episode_background">#ffb0b0</color>
     <color name="snatched_episode_background">#ebc1ea</color>
+    <color name="upcoming_episode_past">#fdd</color>
+    <color name="upcoming_episode_current">#dfd</color>
+    <color name="upcoming_episode_future">#f5f1e4</color>
+    <color name="upcoming_episode_distant">#ddf</color>
 </resources>

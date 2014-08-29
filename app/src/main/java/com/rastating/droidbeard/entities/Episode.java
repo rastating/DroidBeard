@@ -25,6 +25,10 @@ public class Episode {
         return mAirdate;
     }
 
+    public String getAirdateString(String format) {
+        return new SimpleDateFormat(format).format(mAirdate);
+    }
+
     public String getName() {
         return mName;
     }

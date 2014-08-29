@@ -16,6 +16,7 @@
     <string name="error_uh_oh">Uh oh...</string>
     <string name="error_fetching_history">Something went wrong whilst fetching the history.</string>
     <string name="error_fetching_show_list">Something went wrong whilst fetching the show list.</string>
+    <string name="error_fetching_coming_episodes">Something went wrong whilst fetching the upcoming episodes.</string>
     <string name="airs">Airs:</string>
     <string name="status">Status:</string>
     <string name="location">Location:</string>

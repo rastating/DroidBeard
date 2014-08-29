@@ -1,5 +1,6 @@
 package com.rastating.droidbeard.fragments;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,8 +37,17 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
         mListView.setOnItemClickListener(this);
     }
 
+    protected void setBackgroundColor(int color) {
+        mListView.setBackgroundColor(color);
+    }
+
     protected void setChoiceMode(int choiceMode) {
         mListView.setChoiceMode(choiceMode);
+    }
+
+    protected void setDivider(int resId, int height) {
+        mListView.setDivider(new ColorDrawable(getResources().getColor(resId)));
+        mListView.setDividerHeight(height);
     }
 
     protected void setListSelector(int resId) {

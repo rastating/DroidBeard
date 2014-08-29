@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
 import com.rastating.droidbeard.fragments.HistoryFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
@@ -77,6 +78,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             }
 
             fragment = mShowsFragment;
+        }
+        else if (position == 1) {
+            fragment = new ComingEpisodesFragment();
         }
         else if (position == 2) {
             fragment = new HistoryFragment();
