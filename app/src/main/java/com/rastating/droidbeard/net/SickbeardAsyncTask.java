@@ -74,6 +74,12 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         return mContext;
     }
 
+    protected String getJson(String cmd, String paramKey, Object paramValue) {
+        List<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
+        params.add(new Pair<String, Object>(paramKey, paramValue));
+        return getJson(cmd, params);
+    }
+
     protected String getJson(String cmd, List<Pair<String, Object>> params) {
         String uri = null;
         String body = null;

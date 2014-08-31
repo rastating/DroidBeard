@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
 import com.rastating.droidbeard.fragments.HistoryFragment;
+import com.rastating.droidbeard.fragments.LogFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
@@ -84,6 +85,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
         else if (position == 2) {
             fragment = new HistoryFragment();
+        }
+        else if (position == 3) {
+            fragment = new LogFragment();
         }
         else if (position == 4) {
             fragment = new PreferencesFragment();
