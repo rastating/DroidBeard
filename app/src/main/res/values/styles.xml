@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="SickBeardTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="SickBeardTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/SickBeardActionBar</item>
         <item name="android:listViewStyle">@style/SickBeardListViewStyle</item>
         <item name="android:actionBarItemBackground">@drawable/action_bar_background</item>
