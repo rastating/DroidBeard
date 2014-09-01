@@ -10,6 +10,10 @@ public abstract class DroidbeardFragment extends Fragment {
     private int mTitleResId;
     private String mTitle;
 
+    protected boolean activityStillExists() {
+        return getActivity() != null;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

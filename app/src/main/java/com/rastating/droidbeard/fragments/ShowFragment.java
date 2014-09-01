@@ -81,9 +81,11 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
     @Override
     public void onApiRequestFinished(TVShow result) {
-        mShow = result;
-        populateViews();
-        new CrossFader(mLoadingImage, mDataContainer, 500).start();
+        if (activityStillExists()) {
+            mShow = result;
+            populateViews();
+            new CrossFader(mLoadingImage, mDataContainer, 500).start();
+        }
     }
 
     private void populateViews() {

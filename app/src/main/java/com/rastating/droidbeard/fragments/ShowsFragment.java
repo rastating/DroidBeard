@@ -44,10 +44,12 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     @Override
     public void onApiRequestFinished(TVShowSummary[] objects) {
         if (objects != null) {
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
-            setAdapter(mAdapter);
-            showListView();
+            if (activityStillExists()) {
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
+                setAdapter(mAdapter);
+                showListView();
+            }
         }
         else {
             showError(getString(R.string.error_fetching_show_list));

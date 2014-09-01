@@ -41,38 +41,39 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
     @Override
     public void onApiRequestFinished(HistoricalEvent[] result) {
         if (result != null) {
-            ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>(result.length);
-            for (HistoricalEvent event : result) {
-                HashMap<String, String> item = new HashMap<String, String>();
-                item.put("name", String.format("%s %dx%d", event.getShowName(), event.getSeason(), event.getEpisodeNumber()));
-                item.put("desc", String.format("%s (%s) on %s", event.getStatus(), event.getQuality(), event.getDate()));
-                data.add(item);
+            if (activityStillExists()) {
+                ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>(result.length);
+                for (HistoricalEvent event : result) {
+                    HashMap<String, String> item = new HashMap<String, String>();
+                    item.put("name", String.format("%s %dx%d", event.getShowName(), event.getSeason(), event.getEpisodeNumber()));
+                    item.put("desc", String.format("%s (%s) on %s", event.getStatus(), event.getQuality(), event.getDate()));
+                    data.add(item);
+                }
+
+                String[] from = new String[]{"name", "desc"};
+                int[] to = new int[]{R.id.episode, R.id.event_details};
+                SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.historical_event_item, from, to) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        if (position % 2 == 0) {
+                            view.setBackgroundResource(R.drawable.alternate_list_item_bg);
+                        } else {
+                            view.setBackgroundColor(Color.TRANSPARENT);
+                        }
+
+                        return view;
+                    }
+
+                    @Override
+                    public boolean isEnabled(int position) {
+                        return false;
+                    }
+                };
+                setAdapter(adapter);
+
+                showListView();
             }
-
-            String[] from = new String[] { "name", "desc" };
-            int[] to = new int[] { R.id.episode, R.id.event_details };
-            SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.historical_event_item, from, to) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    View view = super.getView(position, convertView, parent);
-                    if (position % 2 == 0) {
-                        view.setBackgroundResource(R.drawable.alternate_list_item_bg);
-                    }
-                    else {
-                        view.setBackgroundColor(Color.TRANSPARENT);
-                    }
-
-                    return view;
-                }
-
-                @Override
-                public boolean isEnabled(int position) {
-                    return false;
-                }
-            };
-            setAdapter(adapter);
-
-            showListView();
         }
         else {
             showError(getString(R.string.error_fetching_history));

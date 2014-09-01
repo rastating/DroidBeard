@@ -46,50 +46,52 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
     @Override
     public void onApiRequestFinished(UpcomingEpisode[] result) {
         if (result != null) {
-            ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
-            for (UpcomingEpisode episode : result) {
-                HashMap<String, String> item = new HashMap<String, String>();
-                item.put("name", episode.getName());
-                item.put("desc", String.format("%s - %dx%d - %s", episode.getShowName(), episode.getSeasonNumber(), episode.getEpisodeNumber(), episode.getAirdateString("yyyy-MM-dd")));
-                data.add(item);
-            }
+            if (activityStillExists()) {
+                ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
+                for (UpcomingEpisode episode : result) {
+                    HashMap<String, String> item = new HashMap<String, String>();
+                    item.put("name", episode.getName());
+                    item.put("desc", String.format("%s - %dx%d - %s", episode.getShowName(), episode.getSeasonNumber(), episode.getEpisodeNumber(), episode.getAirdateString("yyyy-MM-dd")));
+                    data.add(item);
+                }
 
-            String[] from = new String[] { "name", "desc" };
-            int[] to = new int[] { R.id.episode, R.id.event_details };
-            final UpcomingEpisode[] episodes = result;
-            SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.historical_event_item, from, to) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    View view = super.getView(position, convertView, parent);
-                    switch (episodes[position].getUpcomingStatus()) {
-                        case CURRENT:
-                            view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_current));
-                            break;
+                String[] from = new String[]{"name", "desc"};
+                int[] to = new int[]{R.id.episode, R.id.event_details};
+                final UpcomingEpisode[] episodes = result;
+                SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.historical_event_item, from, to) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+                        switch (episodes[position].getUpcomingStatus()) {
+                            case CURRENT:
+                                view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_current));
+                                break;
 
-                        case DISTANT:
-                            view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_distant));
-                            break;
+                            case DISTANT:
+                                view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_distant));
+                                break;
 
-                        case FUTURE:
-                            view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_future));
-                            break;
+                            case FUTURE:
+                                view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_future));
+                                break;
 
-                        case PAST:
-                            view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_past));
-                            break;
+                            case PAST:
+                                view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_past));
+                                break;
+                        }
+
+                        return view;
                     }
 
-                    return view;
-                }
+                    @Override
+                    public boolean isEnabled(int position) {
+                        return false;
+                    }
+                };
 
-                @Override
-                public boolean isEnabled(int position) {
-                    return false;
-                }
-            };
-
-            setAdapter(adapter);
-            showListView();
+                setAdapter(adapter);
+                showListView();
+            }
         }
         else {
             showError(getString(R.string.error_fetching_coming_episodes));
