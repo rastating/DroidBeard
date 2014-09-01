@@ -18,9 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.rastating.droidbeard.NavigationAction;
+import com.rastating.droidbeard.entities.NavigationAction;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.adapters.NavigationActionAdapter;
 

@@ -135,8 +135,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            onNavigationDrawerItemSelected(4);
+            setTitle(getString(R.string.action_settings));
         }
+
         return super.onOptionsItemSelected(item);
     }
 }

@@ -1,4 +1,4 @@
-package com.rastating.droidbeard;
+package com.rastating.droidbeard.entities;
 
 public class NavigationAction {
     private int mActiveIconResourceId;

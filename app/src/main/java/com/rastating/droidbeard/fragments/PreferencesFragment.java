@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.rastating.droidbeard.R;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
