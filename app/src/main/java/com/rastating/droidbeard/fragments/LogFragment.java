@@ -44,26 +44,28 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
 
     @Override
     public void onApiRequestFinished(String[] result) {
-        if (result != null) {
-            String entries = "";
-            for (String entry : result) {
-                entries += entry + "<br>";
-            }
+        if (activityStillExists()) {
+            if (result != null) {
+                String entries = "";
+                for (String entry : result) {
+                    entries += entry + "<br>";
+                }
 
-            try {
-                InputStream stream = getResources().openRawResource(R.raw.log_template);
-                byte[] b = new byte[stream.available()];
-                stream.read(b);
-                String html = new String(b);
-                mWebView.loadData(html.replace("{{logs}}", entries), "text/html", null);
-                stream.close();
-                showWebView();
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    InputStream stream = getResources().openRawResource(R.raw.log_template);
+                    byte[] b = new byte[stream.available()];
+                    stream.read(b);
+                    String html = new String(b);
+                    mWebView.loadData(html.replace("{{logs}}", entries), "text/html", null);
+                    stream.close();
+                    showWebView();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        else {
-            showError(getString(R.string.error_fetching_logs));
+            else {
+                showError(getString(R.string.error_fetching_logs));
+            }
         }
     }
 

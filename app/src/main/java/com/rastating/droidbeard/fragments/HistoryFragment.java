@@ -40,8 +40,8 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
 
     @Override
     public void onApiRequestFinished(HistoricalEvent[] result) {
-        if (result != null) {
-            if (activityStillExists()) {
+        if (activityStillExists()) {
+            if (result != null) {
                 ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>(result.length);
                 for (HistoricalEvent event : result) {
                     HashMap<String, String> item = new HashMap<String, String>();
@@ -73,10 +73,9 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
                 setAdapter(adapter);
 
                 showListView();
+            } else {
+                showError(getString(R.string.error_fetching_history));
             }
-        }
-        else {
-            showError(getString(R.string.error_fetching_history));
         }
     }
 

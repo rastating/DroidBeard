@@ -45,8 +45,8 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
 
     @Override
     public void onApiRequestFinished(UpcomingEpisode[] result) {
-        if (result != null) {
-            if (activityStillExists()) {
+        if (activityStillExists()) {
+            if (result != null) {
                 ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
                 for (UpcomingEpisode episode : result) {
                     HashMap<String, String> item = new HashMap<String, String>();
@@ -91,10 +91,9 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
 
                 setAdapter(adapter);
                 showListView();
+            } else {
+                showError(getString(R.string.error_fetching_coming_episodes));
             }
-        }
-        else {
-            showError(getString(R.string.error_fetching_coming_episodes));
         }
     }
 }
