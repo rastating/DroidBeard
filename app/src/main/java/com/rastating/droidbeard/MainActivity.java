@@ -3,8 +3,11 @@ package com.rastating.droidbeard;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +24,9 @@ import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
 import com.rastating.droidbeard.fragments.ShowsFragment;
+import com.rastating.droidbeard.net.ApiResponseListener;
+import com.rastating.droidbeard.net.RestartTask;
+import com.rastating.droidbeard.net.ShutdownTask;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -128,6 +134,83 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         return super.onCreateOptionsMenu(menu);
     }
 
+    private void shutdownSickbeard() {
+        shutdownSickbeard(true);
+    }
+
+    private void shutdownSickbeard(boolean prompt) {
+        if (prompt) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation")
+                .setMessage("Are you sure you want to shutdown Sickbeard?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        shutdownSickbeard(false);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create()
+                .show();
+        }
+        else {
+            ShutdownTask task = new ShutdownTask(this);
+            task.addResponseListener(new ApiResponseListener<Boolean>() {
+                @Override
+                public void onApiRequestFinished(Boolean result) {
+                    finish();
+                }
+            });
+            task.execute();
+        }
+    }
+
+    private void restartSickbeard(boolean prompt) {
+        if (prompt) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation")
+                .setMessage("Are you sure you want to restart Sickbeard?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        restartSickbeard(false);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .create()
+                .show();
+        }
+        else {
+            final ProgressDialog dialog = new ProgressDialog(this);
+            dialog.setTitle("Restarting");
+            dialog.setMessage("Please wait...");
+            dialog.setCancelable(false);
+            dialog.setIndeterminate(true);
+            dialog.show();
+
+            RestartTask task = new RestartTask(this);
+            task.addResponseListener(new ApiResponseListener<Boolean>() {
+                @Override
+                public void onApiRequestFinished(Boolean result) {
+                    dialog.dismiss();
+                }
+            });
+            task.execute();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -137,6 +220,12 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         if (id == R.id.action_settings) {
             onNavigationDrawerItemSelected(4);
             setTitle(getString(R.string.action_settings));
+        }
+        else if (id == R.id.action_power) {
+            shutdownSickbeard();
+        }
+        else if (id == R.id.action_restart) {
+            restartSickbeard(true);
         }
 
         return super.onOptionsItemSelected(item);
