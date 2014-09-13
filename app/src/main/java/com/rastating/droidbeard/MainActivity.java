@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -226,6 +227,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
         else if (id == R.id.action_restart) {
             restartSickbeard(true);
+        }
+        else if (id == R.id.action_new) {
+            startActivity(new Intent(this, ShowSearch.class));
         }
 
         return super.onOptionsItemSelected(item);

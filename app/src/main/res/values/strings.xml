@@ -26,4 +26,6 @@
     <string name="flatten_folders">Flatten Folders:</string>
     <string name="paused">Paused:</string>
     <string name="air_by_date">Air-by-Date:</string>
+    <string name="search">Search</string>
+    <string name="first_aired">First Aired: </string>
 </resources>

@@ -21,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ShowSearch" android:label="New Show" android:configChanges="orientation|screenSize|keyboardHidden" />
+
     </application>
 
 </manifest>
