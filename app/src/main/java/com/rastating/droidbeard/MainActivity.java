@@ -23,6 +23,7 @@ import com.rastating.droidbeard.fragments.HistoryFragment;
 import com.rastating.droidbeard.fragments.LogFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
+import com.rastating.droidbeard.fragments.SetupFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
 import com.rastating.droidbeard.fragments.ShowsFragment;
 import com.rastating.droidbeard.net.ApiResponseListener;
@@ -46,8 +47,13 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public void onBackPressed() {
-        if (getCurrentFragment() == null) {
-            super.onBackPressed();
+        if (getCurrentFragment() == null || !(getCurrentFragment() instanceof DroidbeardFragment)) {
+            if (getCurrentFragment() instanceof PreferencesFragment) {
+                onNavigationDrawerItemSelected(0);
+            }
+            else {
+                super.onBackPressed();
+            }
         }
         else {
             DroidbeardFragment fragment = (DroidbeardFragment) getCurrentFragment();
@@ -79,8 +85,15 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
+        Preferences preferences = new Preferences(this);
 
-        if (position == 0) {
+        boolean hasUrl = preferences.getSickbeardUrl() != null && preferences.getSickbeardUrl().length() > 0;
+        boolean hasApiKey = preferences.getApiKey() != null && preferences.getApiKey().length() > 0;
+
+        if ((!hasUrl || !hasApiKey) && position != 4) {
+            fragment = new SetupFragment();
+        }
+        else if (position == 0) {
             if (mShowsFragment == null) {
                 mShowsFragment = new ShowsFragment();
             }

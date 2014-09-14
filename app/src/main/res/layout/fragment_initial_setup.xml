@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/welcome"
+        android:textColor="@color/secondary_color"
+        android:textSize="@dimen/uh_oh_caption_size"
+        android:gravity="center|bottom"
+        android:layout_weight="0.4"
+        android:paddingBottom="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/secondary_color"
+            android:text="Thank you for installing Droidbeard!\n\nBefore you start, you need to provide your Sickbeard address and API key (API keys can be found in the general settings in Sickbeard itself)." />
+
+        <Button android:id="@+id/setup"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Setup Now"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

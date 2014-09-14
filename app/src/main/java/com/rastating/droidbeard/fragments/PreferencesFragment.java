@@ -1,5 +1,6 @@
 package com.rastating.droidbeard.fragments;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.rastating.droidbeard.MainActivity;
 import com.rastating.droidbeard.R;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -55,6 +57,16 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         if (preference instanceof EditTextPreference) {
             EditTextPreference editTextPreference = (EditTextPreference) preference;
             preference.setSummary(editTextPreference.getText());
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        if (activity instanceof MainActivity) {
+            MainActivity mainActivity = (MainActivity) activity;
+            mainActivity.setCurrentFragment(this);
         }
     }
 }
