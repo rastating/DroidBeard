@@ -244,6 +244,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         else if (id == R.id.action_new) {
             startActivity(new Intent(this, ShowSearch.class));
         }
+        else if (id == R.id.action_refresh) {
+            if (mCurrentFragment instanceof DroidbeardFragment) {
+                ((DroidbeardFragment) mCurrentFragment).onRefreshButtonPressed();
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }

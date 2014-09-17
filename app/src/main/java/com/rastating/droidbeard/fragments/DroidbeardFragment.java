@@ -39,6 +39,9 @@ public abstract class DroidbeardFragment extends Fragment {
         return true;
     }
 
+    public void onRefreshButtonPressed() {
+    }
+
     protected void setTitle(int value) {
         mTitleResId = value;
     }

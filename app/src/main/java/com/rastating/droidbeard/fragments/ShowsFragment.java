@@ -15,6 +15,7 @@ import com.rastating.droidbeard.net.FetchShowSummariesTask;
 
 public class ShowsFragment extends ListViewFragment implements ApiResponseListener<TVShowSummary[]> {
     private TVShowSummaryAdapter mAdapter;
+    private boolean mLoading;
 
     public ShowsFragment() {
         setTitle(R.string.title_shows);
@@ -23,12 +24,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
-
-        showLoadingAnimation();
-        FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
-        task.addResponseListener(this);
-        task.execute();
-
+        onRefreshButtonPressed();
         return root;
     }
 
@@ -44,6 +40,8 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     @Override
     public void onApiRequestFinished(TVShowSummary[] objects) {
         if (activityStillExists()) {
+            mLoading = false;
+
             if (objects != null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
@@ -52,6 +50,17 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             } else {
                 showError(getString(R.string.error_fetching_show_list));
             }
+        }
+    }
+
+    @Override
+    public void onRefreshButtonPressed() {
+        if (!mLoading) {
+            mLoading = true;
+            showLoadingAnimation();
+            FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
+            task.addResponseListener(this);
+            task.execute();
         }
     }
 }

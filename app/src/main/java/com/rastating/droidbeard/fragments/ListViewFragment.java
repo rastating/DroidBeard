@@ -74,6 +74,7 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
     protected void showLoadingAnimation() {
         mErrorContainer.setVisibility(View.GONE);
         mListView.setVisibility(View.GONE);
+        mLoadingImage.setAlpha(1f);
         mLoadingImage.setVisibility(View.VISIBLE);
         mLoadingImage.startAnimation(new LoadingAnimation());
     }
