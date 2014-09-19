@@ -30,10 +30,7 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
         setChoiceMode(ListView.CHOICE_MODE_NONE);
         setListSelector(android.R.color.transparent);
 
-        showLoadingAnimation();
-        FetchHistoryTask task = new FetchHistoryTask(getActivity());
-        task.addResponseListener(this);
-        task.execute();
+        onRefreshButtonPressed();
 
         return root;
     }
@@ -81,5 +78,13 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    }
+
+    @Override
+    public void onRefreshButtonPressed() {
+        showLoadingAnimation();
+        FetchHistoryTask task = new FetchHistoryTask(getActivity());
+        task.addResponseListener(this);
+        task.execute();
     }
 }
