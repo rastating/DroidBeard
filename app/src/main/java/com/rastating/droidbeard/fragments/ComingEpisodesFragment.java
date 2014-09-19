@@ -31,10 +31,7 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
         setBackgroundColor(getResources().getColor(android.R.color.white));
         setDivider(android.R.color.white, 3);
 
-        showLoadingAnimation();
-        FetchUpcomingEpisodesTask task = new FetchUpcomingEpisodesTask(getActivity());
-        task.addResponseListener(this);
-        task.execute();
+        onRefreshButtonPressed();
 
         return root;
     }
@@ -95,5 +92,13 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                 showError(getString(R.string.error_fetching_coming_episodes));
             }
         }
+    }
+
+    @Override
+    public void onRefreshButtonPressed() {
+        showLoadingAnimation();
+        FetchUpcomingEpisodesTask task = new FetchUpcomingEpisodesTask(getActivity());
+        task.addResponseListener(this);
+        task.execute();
     }
 }
