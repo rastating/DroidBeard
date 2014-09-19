@@ -68,13 +68,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mAirByDate = (ImageView) root.findViewById(R.id.air_by_date);
         mSeasonContainer = (LinearLayout) root.findViewById(R.id.season_container);
 
-        // Start loading animation.
-        mLoadingImage.startAnimation(new LoadingAnimation());
-
-        // Start fetching the show information.
-        FetchShowTask task = new FetchShowTask(getActivity());
-        task.addResponseListener(this);
-        task.execute(mShowSummary.getTvDbId());
+        onRefreshButtonPressed();
 
         return root;
     }
@@ -86,6 +80,19 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             populateViews();
             new CrossFader(mLoadingImage, mDataContainer, 500).start();
         }
+    }
+
+    @Override
+    public void onRefreshButtonPressed() {
+        // Start loading animation.
+        mDataContainer.setAlpha(0.0f);
+        mLoadingImage.setAlpha(1.0f);
+        mLoadingImage.startAnimation(new LoadingAnimation());
+
+        // Start fetching the show information.
+        FetchShowTask task = new FetchShowTask(getActivity());
+        task.addResponseListener(this);
+        task.execute(mShowSummary.getTvDbId());
     }
 
     private void populateViews() {
