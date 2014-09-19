@@ -34,10 +34,7 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
         mLoadingImage = (ImageView) root.findViewById(R.id.loading);
         mErrorMessage = (TextView) root.findViewById(R.id.error_message);
 
-        showLoadingAnimation();
-        FetchLogsTask task = new FetchLogsTask(getActivity());
-        task.addResponseListener(this);
-        task.execute();
+        onRefreshButtonPressed();
 
         return root;
     }
@@ -69,6 +66,14 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
         }
     }
 
+    @Override
+    public void onRefreshButtonPressed() {
+        showLoadingAnimation();
+        FetchLogsTask task = new FetchLogsTask(getActivity());
+        task.addResponseListener(this);
+        task.execute();
+    }
+
     protected void showError(String message) {
         mErrorMessage.setText(message);
         mErrorContainer.setVisibility(View.VISIBLE);
@@ -80,6 +85,7 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
     protected void showLoadingAnimation() {
         mErrorContainer.setVisibility(View.GONE);
         mWebView.setVisibility(View.GONE);
+        mLoadingImage.setAlpha(1.0f);
         mLoadingImage.setVisibility(View.VISIBLE);
         mLoadingImage.startAnimation(new LoadingAnimation());
     }
