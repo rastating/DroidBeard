@@ -16,16 +16,22 @@ public class Preferences {
 
     public String getApiKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return preferences.getString(API_KEY, null);
+        String key = preferences.getString(API_KEY, null);
+        return key != null ? key.trim() : null;
     }
 
     public String getSickbeardUrl() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String url = preferences.getString(SICKBEARD_URL, null);
+
+        if (url != null && !url.toLowerCase().startsWith("http://")) {
+            url = "http://" + url;
+        }
+
         if (url != null && !url.endsWith("/")) {
             url += "/";
         }
 
-        return url;
+        return url != null ? url.trim() : null;
     }
 }
