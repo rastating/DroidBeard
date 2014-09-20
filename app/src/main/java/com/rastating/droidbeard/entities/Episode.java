@@ -19,6 +19,7 @@ public class Episode {
     private Date mAirdate;
     private String mName;
     private String mQuality;
+    private int mSeasonNumber;
     private EpisodeStatus mStatus;
 
     public Date getAirdate() {
@@ -39,6 +40,10 @@ public class Episode {
 
     public String getQuality() {
         return mQuality;
+    }
+
+    public int getSeasonNumber() {
+        return mSeasonNumber;
     }
 
     public EpisodeStatus getStatus() {
@@ -99,6 +104,10 @@ public class Episode {
 
     public void setQuality(String value) {
         mQuality = value;
+    }
+
+    public void setSeasonNumber(int value) {
+        mSeasonNumber = value;
     }
 
     public void setStatus(EpisodeStatus value) {

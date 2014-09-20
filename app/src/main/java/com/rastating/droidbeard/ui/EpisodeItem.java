@@ -3,7 +3,9 @@ package com.rastating.droidbeard.ui;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -15,12 +17,14 @@ import com.rastating.droidbeard.entities.Episode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EpisodeItem {
+public class EpisodeItem implements View.OnClickListener {
     private Context mContext;
     private View mView;
     private TextView mEpisodeNumber;
     private TextView mName;
     private TextView mAirdate;
+    private int mSeasonNumber;
+    private EpisodeItemClickListener mItemClickListener;
 
     public EpisodeItem(Context context) {
         mContext = context;
@@ -29,6 +33,8 @@ public class EpisodeItem {
         mEpisodeNumber = (TextView) mView.findViewById(R.id.episode_number);
         mName = (TextView) mView.findViewById(R.id.name);
         mAirdate = (TextView) mView.findViewById(R.id.airdate);
+
+        mView.setOnClickListener(this);
     }
 
     public void addToTable(TableLayout table) {
@@ -49,6 +55,33 @@ public class EpisodeItem {
         }
         else {
             mAirdate.setText(new SimpleDateFormat("yyyy-MM-dd").format(value));
+        }
+    }
+
+    public void setStatus(String value) {
+        if (value.equalsIgnoreCase("skipped")) {
+            setStatus(Episode.EpisodeStatus.SKIPPED);
+        }
+        else if (value.equalsIgnoreCase("unaired")) {
+            setStatus(Episode.EpisodeStatus.UNAIRED);
+        }
+        else if (value.equalsIgnoreCase("wanted")) {
+            setStatus(Episode.EpisodeStatus.WANTED);
+        }
+        else if (value.equalsIgnoreCase("downloaded")) {
+            setStatus(Episode.EpisodeStatus.DOWNLOADED);
+        }
+        else if (value.equalsIgnoreCase("snatched")) {
+            setStatus(Episode.EpisodeStatus.SNATCHED);
+        }
+        else if (value.equalsIgnoreCase("ignored")) {
+            setStatus(Episode.EpisodeStatus.IGNORED);
+        }
+        else if (value.equalsIgnoreCase("archived")) {
+            setStatus(Episode.EpisodeStatus.ARCHIVED);
+        }
+        else {
+            setStatus(Episode.EpisodeStatus.IGNORED);
         }
     }
 
@@ -82,5 +115,20 @@ public class EpisodeItem {
         mEpisodeNumber.setBackgroundColor(color);
         mName.setBackgroundColor(color);
         mAirdate.setBackgroundColor(color);
+    }
+
+    public void setSeasonNumber(int value) {
+        mSeasonNumber = value;
+    }
+
+    public void setOnItemClickListener(EpisodeItemClickListener listener) {
+        mItemClickListener = listener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (mItemClickListener != null) {
+            mItemClickListener.onItemClick(this, mSeasonNumber, Integer.valueOf(mEpisodeNumber.getText().toString()), mName.getText().toString());
+        }
     }
 }

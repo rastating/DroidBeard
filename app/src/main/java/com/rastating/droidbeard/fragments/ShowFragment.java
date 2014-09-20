@@ -1,12 +1,16 @@
 package com.rastating.droidbeard.fragments;
 
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rastating.droidbeard.comparators.EpisodeComparator;
 import com.rastating.droidbeard.R;
@@ -16,14 +20,17 @@ import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowTask;
+import com.rastating.droidbeard.net.SetEpisodeStatusTask;
 import com.rastating.droidbeard.ui.CrossFader;
+import com.rastating.droidbeard.ui.EpisodeItem;
+import com.rastating.droidbeard.ui.EpisodeItemClickListener;
 import com.rastating.droidbeard.ui.LoadingAnimation;
 import com.rastating.droidbeard.ui.SeasonTable;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow> {
+public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow>,EpisodeItemClickListener {
     private TVShowSummary mShowSummary;
     private ImageView mBanner;
     private ImageView mLoadingImage;
@@ -39,6 +46,11 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     private ImageView mPaused;
     private ImageView mAirByDate;
     private LinearLayout mSeasonContainer;
+
+    private int mSelectedSeasonNumber;
+    private int mSelectedEpisodeNumber;
+    private String mSelectedEpisodeName;
+    private EpisodeItem mSelectedEpisode;
 
     public ShowFragment() {
         mShowSummary = null;
@@ -67,6 +79,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mPaused = (ImageView) root.findViewById(R.id.paused);
         mAirByDate = (ImageView) root.findViewById(R.id.air_by_date);
         mSeasonContainer = (LinearLayout) root.findViewById(R.id.season_container);
+        mSeasonContainer.setOnCreateContextMenuListener(this);
 
         onRefreshButtonPressed();
 
@@ -80,6 +93,11 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             populateViews();
             new CrossFader(mLoadingImage, mDataContainer, 500).start();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -116,10 +134,58 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             Collections.reverse(episodes);
 
             for (Episode episode : episodes) {
-                table.addEpisode(episode);
+                table.addEpisode(episode).setOnItemClickListener(this);
             }
 
             mSeasonContainer.addView(table);
+        }
+    }
+
+    @Override
+    public void onItemClick(EpisodeItem item, int seasonNumber, int episodeNumber, String name) {
+        mSelectedEpisodeName = name;
+        mSelectedSeasonNumber = seasonNumber;
+        mSelectedEpisodeNumber = episodeNumber;
+        mSelectedEpisode = item;
+
+        mSeasonContainer.showContextMenu();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.episode_context_menu, menu);
+        menu.setHeaderTitle(String.format("%dx%d - %s", mSelectedSeasonNumber, mSelectedEpisodeNumber, mSelectedEpisodeName));
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.set_archived:
+            case R.id.set_ignored:
+            case R.id.set_skipped:
+            case R.id.set_wanted:
+                SetEpisodeStatusTask task = new SetEpisodeStatusTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber);
+                String status = "";
+                if (item.getItemId() == R.id.set_wanted) {
+                    status = "wanted";
+                }
+                else if (item.getItemId() == R.id.set_skipped) {
+                    status = "skipped";
+                }
+                else if (item.getItemId() == R.id.set_ignored) {
+                    status = "ignored";
+                }
+                else {
+                    status = "archived";
+                }
+
+                task.execute(status);
+                mSelectedEpisode.setStatus(status);
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 }

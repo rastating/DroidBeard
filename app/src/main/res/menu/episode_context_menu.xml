@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/search" android:title="Search for Episode" />
+    <item android:id="@+id/set_status" android:title="Set Status">
+        <menu>
+            <item android:id="@+id/set_archived" android:title="Archived"></item>
+            <item android:id="@+id/set_ignored" android:title="Ignored"></item>
+            <item android:id="@+id/set_skipped" android:title="Skipped"></item>
+            <item android:id="@+id/set_wanted" android:title="Wanted"></item>
+        </menu>
+    </item>
+</menu>

@@ -24,13 +24,16 @@ public class SeasonTable extends LinearLayout {
         mTable = (TableLayout) this.findViewById(R.id.table);
     }
 
-    public void addEpisode(Episode episode) {
+    public EpisodeItem addEpisode(Episode episode) {
         EpisodeItem item = new EpisodeItem(mContext);
         item.setEpisodeNumber(episode.getEpisodeNumber());
         item.setName(episode.getName());
         item.setAirdate(episode.getAirdate());
         item.setStatus(episode.getStatus());
+        item.setSeasonNumber(episode.getSeasonNumber());
         item.addToTable(mTable);
+
+        return item;
     }
 
     public void setTitle(String value) {

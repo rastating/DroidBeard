@@ -59,6 +59,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
                         episode.setName(episodeData.getString("name"));
                         episode.setQuality(episodeData.getString("quality"));
                         episode.setStatus(episodeData.getString("status"));
+                        episode.setSeasonNumber(Integer.valueOf(seasonKey));
                         season.addEpisode(episode);
                     }
 
