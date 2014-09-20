@@ -19,6 +19,7 @@ import com.rastating.droidbeard.entities.Season;
 import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.net.ApiResponseListener;
+import com.rastating.droidbeard.net.EpisodeSearchTask;
 import com.rastating.droidbeard.net.FetchShowTask;
 import com.rastating.droidbeard.net.SetEpisodeStatusTask;
 import com.rastating.droidbeard.ui.CrossFader;
@@ -125,6 +126,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mPaused.setImageResource(mShow.getPaused() ? R.drawable.yes16 : R.drawable.no16);
         mAirByDate.setImageResource(mShow.getAirByDate() ? R.drawable.yes16 : R.drawable.no16);
 
+        mSeasonContainer.removeAllViews();
         for (Season season : mShow.getSeasons()) {
             SeasonTable table = new SeasonTable(getActivity());
             table.setTitle(season.getTitle());
@@ -158,6 +160,26 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         menu.setHeaderTitle(String.format("%dx%d - %s", mSelectedSeasonNumber, mSelectedEpisodeNumber, mSelectedEpisodeName));
     }
 
+    private void onSetStatusItemSelected(MenuItem item) {
+        SetEpisodeStatusTask task = new SetEpisodeStatusTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber);
+        String status = "";
+        if (item.getItemId() == R.id.set_wanted) {
+            status = "wanted";
+        }
+        else if (item.getItemId() == R.id.set_skipped) {
+            status = "skipped";
+        }
+        else if (item.getItemId() == R.id.set_ignored) {
+            status = "ignored";
+        }
+        else {
+            status = "archived";
+        }
+
+        task.execute(status);
+        mSelectedEpisode.setStatus(status);
+    }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -165,23 +187,12 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             case R.id.set_ignored:
             case R.id.set_skipped:
             case R.id.set_wanted:
-                SetEpisodeStatusTask task = new SetEpisodeStatusTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber);
-                String status = "";
-                if (item.getItemId() == R.id.set_wanted) {
-                    status = "wanted";
-                }
-                else if (item.getItemId() == R.id.set_skipped) {
-                    status = "skipped";
-                }
-                else if (item.getItemId() == R.id.set_ignored) {
-                    status = "ignored";
-                }
-                else {
-                    status = "archived";
-                }
+                onSetStatusItemSelected(item);
+                return true;
 
-                task.execute(status);
-                mSelectedEpisode.setStatus(status);
+            case R.id.search:
+                new EpisodeSearchTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber).execute();
+                Toast.makeText(getActivity(), mSelectedEpisodeName + " is being searched for.", Toast.LENGTH_LONG).show();
                 return true;
 
             default:
