@@ -33,7 +33,8 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
         view.setSelected(true);
         TVShowSummary show = mAdapter.getItem(position);
         FragmentManager manager = this.getFragmentManager();
-        ShowFragment fragment = new ShowFragment(show);
+        ShowFragment fragment = new ShowFragment();
+        fragment.setTvShowSummary(show);
         manager.beginTransaction().replace(R.id.container, fragment).commit();
     }
 

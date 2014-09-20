@@ -57,7 +57,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mShowSummary = null;
     }
 
-    public ShowFragment(TVShowSummary show) {
+    public void setTvShowSummary(TVShowSummary show) {
         mShowSummary = show;
         setTitle(show.getName());
     }
