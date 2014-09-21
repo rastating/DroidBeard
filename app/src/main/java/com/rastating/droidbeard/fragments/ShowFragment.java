@@ -1,5 +1,8 @@
 package com.rastating.droidbeard.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -7,11 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.comparators.EpisodeComparator;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.Episode;
@@ -83,6 +88,11 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mSeasonContainer.setOnCreateContextMenuListener(this);
 
         onRefreshButtonPressed();
+
+        Preferences preferences = new Preferences(getActivity());
+        if (!preferences.hasAcknowledgedEpisodeHelp()) {
+            showToolTip();
+        }
 
         return root;
     }
@@ -198,5 +208,25 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void showToolTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.tooltip_dialog, null);
+        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.do_not_show_again);
+        builder.setView(view);
+        builder.setTitle("DroidBeard Tip");
+        builder.setMessage("Tapping an episode in the episode list opens a menu that will allow you to manually search for the episode or change its status.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (checkBox.isChecked()) {
+                    Preferences preferences = new Preferences(ShowFragment.this.getActivity());
+                    preferences.putBoolean(Preferences.ACKNOWLEDGED_EPISODE_HELP, true);
+                }
+            }
+        });
+        builder.show();
     }
 }

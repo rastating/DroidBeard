@@ -29,7 +29,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/secondary_color"
-            android:text="Thank you for installing Droidbeard!\n\nBefore you start, you need to provide your Sickbeard address and API key (API keys can be found in the general settings in Sickbeard itself)." />
+            android:text="Thank you for installing DroidBeard!\n\nBefore you start, you need to provide your SickBeard address and API key (API keys can be found in the general settings in SickBeard itself)." />
 
         <Button android:id="@+id/setup"
             android:layout_height="wrap_content"

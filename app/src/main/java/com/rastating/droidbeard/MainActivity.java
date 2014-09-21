@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         if (prompt) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to shutdown Sickbeard?")
+                .setMessage("Are you sure you want to shutdown SickBeard?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -189,7 +189,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         if (prompt) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to restart Sickbeard?")
+                .setMessage("Are you sure you want to restart SickBeard?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override

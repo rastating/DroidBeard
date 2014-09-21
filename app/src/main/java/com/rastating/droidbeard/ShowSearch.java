@@ -8,10 +8,12 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -82,6 +84,11 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
                 task.execute(id);
             }
         });
+
+        Preferences preferences = new Preferences(this);
+        if (!preferences.hasAcknowledgedShowAddingHelp()) {
+            showToolTip();
+        }
     }
 
     @Override
@@ -138,5 +145,25 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
         mDialog.setCancelable(false);
         mDialog.setIndeterminate(true);
         mDialog.show();
+    }
+
+    private void showToolTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.tooltip_dialog, null);
+        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.do_not_show_again);
+        builder.setView(view);
+        builder.setTitle("DroidBeard Tip");
+        builder.setMessage("Before adding a show through DroidBeard, you must first ensure you have setup your default options in SickBeard; such as the storage location and quality settings. This can be done in the 'Add Shows' page in SickBeard itself.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (checkBox.isChecked()) {
+                    Preferences preferences = new Preferences(ShowSearch.this);
+                    preferences.putBoolean(Preferences.ACKNOWLEDGED_SHOW_ADDING_HELP, true);
+                }
+            }
+        });
+        builder.show();
     }
 }

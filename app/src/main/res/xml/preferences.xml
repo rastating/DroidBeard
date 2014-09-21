@@ -5,12 +5,12 @@
 
     <EditTextPreference
         android:key="sickbeard_url"
-        android:summary="The URL where Sickbeard is located."
-        android:title="Sickbeard URL" />
+        android:summary="The URL where SickBeard is located."
+        android:title="SickBeard URL" />
 
     <EditTextPreference
         android:key="api_key"
-        android:summary="Your Sickbeard API key (found in general settings)."
+        android:summary="Your SickBeard API key (found in general settings)."
         android:title="API Key" />
 
 </PreferenceScreen>
