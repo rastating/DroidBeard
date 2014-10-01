@@ -125,7 +125,10 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     }
 
     private void populateViews() {
-        mBanner.setImageBitmap(mShow.getBanner());
+        if (mShow.getBanner() != null) {
+            mBanner.setImageBitmap(mShow.getBanner());
+        }
+
         mAirs.setText(mShow.getAirs() + " on " + mShow.getNetwork());
         mStatus.setText(mShow.getStatus());
         mLocation.setText(mShow.getLocation());
