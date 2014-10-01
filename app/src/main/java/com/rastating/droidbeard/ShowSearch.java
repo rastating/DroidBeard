@@ -51,7 +51,7 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
                 showProgressDialog("Searching The TVDB", "Please wait...");
                 mTask = new SearchTvDBTask(ShowSearch.this);
                 mTask.addResponseListener(ShowSearch.this);
-                mTask.execute(mCriteria.getText().toString());
+                mTask.start(mCriteria.getText().toString());
             }
         });
 
@@ -81,7 +81,7 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
                     }
                 });
 
-                task.execute(id);
+                task.start(id);
             }
         });
 

@@ -181,7 +181,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
                     finish();
                 }
             });
-            task.execute();
+            task.start();
         }
     }
 
@@ -221,7 +221,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
                     dialog.dismiss();
                 }
             });
-            task.execute();
+            task.start();
         }
     }
 

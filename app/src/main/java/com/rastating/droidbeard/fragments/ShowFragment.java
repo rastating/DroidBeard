@@ -121,7 +121,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         // Start fetching the show information.
         FetchShowTask task = new FetchShowTask(getActivity());
         task.addResponseListener(this);
-        task.execute(mShowSummary.getTvDbId());
+        task.start(mShowSummary.getTvDbId());
     }
 
     private void populateViews() {
@@ -189,7 +189,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             status = "archived";
         }
 
-        task.execute(status);
+        task.start(status);
         mSelectedEpisode.setStatus(status);
     }
 
@@ -204,7 +204,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
                 return true;
 
             case R.id.search:
-                new EpisodeSearchTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber).execute();
+                new EpisodeSearchTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber).start();
                 Toast.makeText(getActivity(), mSelectedEpisodeName + " is being searched for.", Toast.LENGTH_LONG).show();
                 return true;
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Pair;
 
 import com.rastating.droidbeard.Preferences;
@@ -23,6 +24,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class SickbeardAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
     private Context mContext;
@@ -130,5 +133,18 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         for (ApiResponseListener<Result> listener : listeners) {
             listener.onApiRequestFinished(result);
         }
+    }
+
+    public void start(Executor executor, Params... args) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, args);
+        }
+        else {
+            this.execute(args);
+        }
+    }
+
+    public void start(Params... args) {
+        this.start(AsyncTask.THREAD_POOL_EXECUTOR, args);
     }
 }

@@ -85,6 +85,6 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
         showLoadingAnimation();
         FetchHistoryTask task = new FetchHistoryTask(getActivity());
         task.addResponseListener(this);
-        task.execute();
+        task.start();
     }
 }

@@ -99,6 +99,6 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
         showLoadingAnimation();
         FetchUpcomingEpisodesTask task = new FetchUpcomingEpisodesTask(getActivity());
         task.addResponseListener(this);
-        task.execute();
+        task.start();
     }
 }
