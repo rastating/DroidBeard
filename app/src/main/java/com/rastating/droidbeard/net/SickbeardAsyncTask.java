@@ -92,7 +92,7 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         String body = null;
         String format = "%sapi/%s/?cmd=%s";
         Preferences preferences = new Preferences(mContext);
-        HttpClient client = new DefaultHttpClient();
+        HttpClient client = HttpClientManager.INSTANCE.getClient();
 
         uri = String.format(format, preferences.getSickbeardUrl(), preferences.getApiKey(), cmd);
         if (params != null) {

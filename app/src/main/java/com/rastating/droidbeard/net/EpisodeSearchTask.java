@@ -32,7 +32,14 @@ public class EpisodeSearchTask extends SickbeardAsyncTask<Void, Void, Boolean> {
         params.add(new Pair<String, Object>("tvdbid", mTvDBId));
         params.add(new Pair<String, Object>("season", mSeason));
         params.add(new Pair<String, Object>("episode", mEpisode));
-        return getJson("episode.search", params).contains("success");
+
+        String json = getJson("episode.search", params);
+        if (json != null) {
+            return json.contains("success");
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
