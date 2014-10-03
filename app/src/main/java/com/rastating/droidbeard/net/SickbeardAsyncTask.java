@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Pair;
 
 import com.rastating.droidbeard.Preferences;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -23,6 +25,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class SickbeardAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
     private Context mContext;
@@ -89,7 +93,7 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         String body = null;
         String format = "%sapi/%s/?cmd=%s";
         Preferences preferences = new Preferences(mContext);
-        HttpClient client = new DefaultHttpClient();
+        HttpClient client = HttpClientManager.INSTANCE.getClient();
 
         uri = String.format(format, preferences.getSickbeardUrl(), preferences.getApiKey(), cmd);
         if (params != null) {
@@ -105,15 +109,21 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
 
             if (status.getStatusCode() == HttpStatus.SC_OK) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                response.getEntity().writeTo(stream);
+                HttpEntity entity = response.getEntity();
+                entity.writeTo(stream);
                 stream.close();
+                entity.consumeContent();
                 body = stream.toString();
+                stream.close();
             } else {
-                response.getEntity().getContent().close();
+                HttpEntity entity = response.getEntity();
+                entity.getContent().close();
+                entity.consumeContent();
                 throw new IOException(status.getReasonPhrase());
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -130,5 +140,18 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         for (ApiResponseListener<Result> listener : listeners) {
             listener.onApiRequestFinished(result);
         }
+    }
+
+    public void start(Executor executor, Params... args) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, args);
+        }
+        else {
+            this.execute(args);
+        }
+    }
+
+    public void start(Params... args) {
+        this.start(AsyncTask.THREAD_POOL_EXECUTOR, args);
     }
 }

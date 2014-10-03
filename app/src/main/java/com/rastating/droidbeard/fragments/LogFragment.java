@@ -71,7 +71,7 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
         showLoadingAnimation();
         FetchLogsTask task = new FetchLogsTask(getActivity());
         task.addResponseListener(this);
-        task.execute();
+        task.start();
     }
 
     protected void showError(String message) {

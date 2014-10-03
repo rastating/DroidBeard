@@ -121,8 +121,16 @@ public class EpisodeItem implements View.OnClickListener {
         mSeasonNumber = value;
     }
 
+    public void setOnCreateContextMenuListener(View.OnCreateContextMenuListener listener) {
+        mView.setOnCreateContextMenuListener(listener);
+    }
+
     public void setOnItemClickListener(EpisodeItemClickListener listener) {
         mItemClickListener = listener;
+    }
+
+    public void showContextMenu() {
+        mView.showContextMenu();
     }
 
     @Override

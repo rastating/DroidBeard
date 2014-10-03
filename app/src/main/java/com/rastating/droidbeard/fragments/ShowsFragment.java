@@ -61,7 +61,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             showLoadingAnimation();
             FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
             task.addResponseListener(this);
-            task.execute();
+            task.start();
         }
     }
 }
