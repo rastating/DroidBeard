@@ -9,6 +9,7 @@ import android.util.Pair;
 
 import com.rastating.droidbeard.Preferences;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -108,15 +109,21 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
 
             if (status.getStatusCode() == HttpStatus.SC_OK) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                response.getEntity().writeTo(stream);
+                HttpEntity entity = response.getEntity();
+                entity.writeTo(stream);
                 stream.close();
+                entity.consumeContent();
                 body = stream.toString();
+                stream.close();
             } else {
-                response.getEntity().getContent().close();
+                HttpEntity entity = response.getEntity();
+                entity.getContent().close();
+                entity.consumeContent();
                 throw new IOException(status.getReasonPhrase());
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 

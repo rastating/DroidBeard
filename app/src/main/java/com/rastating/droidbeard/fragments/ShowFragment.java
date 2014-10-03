@@ -85,7 +85,6 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mPaused = (ImageView) root.findViewById(R.id.paused);
         mAirByDate = (ImageView) root.findViewById(R.id.air_by_date);
         mSeasonContainer = (LinearLayout) root.findViewById(R.id.season_container);
-        mSeasonContainer.setOnCreateContextMenuListener(this);
 
         onRefreshButtonPressed();
 
@@ -149,7 +148,9 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             Collections.reverse(episodes);
 
             for (Episode episode : episodes) {
-                table.addEpisode(episode).setOnItemClickListener(this);
+                EpisodeItem item = table.addEpisode(episode);
+                item.setOnItemClickListener(this);
+                item.setOnCreateContextMenuListener(this);
             }
 
             mSeasonContainer.addView(table);
@@ -163,7 +164,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mSelectedEpisodeNumber = episodeNumber;
         mSelectedEpisode = item;
 
-        mSeasonContainer.showContextMenu();
+        item.showContextMenu();
     }
 
     @Override
