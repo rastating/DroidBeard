@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="search_for_episode">Search for Episode</string>
+    <string name="set_status">Set Status</string>
+    <string name="archived">Archived</string>
+    <string name="ignored">Ignored</string>
+    <string name="skipped">Skipped</string>
+    <string name="wanted">Wanted</string>
+    <string name="add_new_show">Add New Show</string>
+    <string name="menu">Menu</string>
+    <string name="do_not_show_again">Do not show again</string>
+    <string name="episode">Episode</string>
+    <string name="name">Name</string>
+    <string name="airdate">Airdate</string>
+    <string name="thank_you_notice">Thank you for installing DroidBeard!\n\nBefore you start, you need to provide your SickBeard address and API key (API keys can be found in the general settings in SickBeard itself).</string>
+    <string name="setup_now">Setup Now</string>
     <string name="app_name">DroidBeard</string>
     <string name="title_shows">Shows</string>
     <string name="title_coming_episodes">Coming Episodes</string>

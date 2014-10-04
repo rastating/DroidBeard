@@ -3,7 +3,7 @@
     tools:context=".MainActivity" >
 
     <item android:id="@+id/action_new"
-        android:title="Add New Show"
+        android:title="@string/add_new_show"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_content_new" />
@@ -14,7 +14,7 @@
         android:showAsAction="always"
         android:icon="@drawable/ic_action_navigation_refresh" />
 
-    <item android:title="Menu"
+    <item android:title="@string/menu"
         android:icon="@drawable/ic_action_overflow"
         android:orderInCategory="120"
         android:showAsAction="always">

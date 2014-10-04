@@ -31,7 +31,7 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
             JSONObject data = root.getJSONObject("data");
             Iterator<String> keys = data.keys();
             while (keys.hasNext()) {
-                String key = (String) keys.next();
+                String key = keys.next();
                 JSONObject show = data.getJSONObject(key);
                 int tvdbid = show.getInt("tvdbid");
 

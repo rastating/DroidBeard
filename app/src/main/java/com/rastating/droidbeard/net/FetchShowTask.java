@@ -51,7 +51,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
                     season.setSeasonNumber(Integer.valueOf(seasonKey));
 
                     while (episodeKeys.hasNext()) {
-                        String episodeKey = (String) episodeKeys.next();
+                        String episodeKey = episodeKeys.next();
                         JSONObject episodeData = seasonData.getJSONObject(episodeKey);
                         Episode episode = new Episode();
                         episode.setEpisodeNumber(Integer.valueOf(episodeKey));

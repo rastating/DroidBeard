@@ -2,13 +2,9 @@ package com.rastating.droidbeard.ui;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.rastating.droidbeard.R;
