@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rastating.droidbeard.MainActivity;
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.net.HttpClientManager;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     @Override
@@ -20,8 +22,21 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         addPreferencesFromResource(R.xml.preferences);
 
         SharedPreferences preferences = getPreferenceScreen().getSharedPreferences();
-        EditTextPreference preference = (EditTextPreference) findPreference("sickbeard_url");
-        String value = preferences.getString("sickbeard_url", null);
+
+        EditTextPreference preference = (EditTextPreference) findPreference("address");
+        String value = preferences.getString("address", null);
+        if (value != null) {
+            preference.setSummary(value);
+        }
+
+        preference = (EditTextPreference) findPreference("port");
+        value = preferences.getString("port", null);
+        if (value != null) {
+            preference.setSummary(value);
+        }
+
+        preference = (EditTextPreference) findPreference("extension_path");
+        value = preferences.getString("extension_path", null);
         if (value != null) {
             preference.setSummary(value);
         }
@@ -57,6 +72,9 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         if (preference instanceof EditTextPreference) {
             EditTextPreference editTextPreference = (EditTextPreference) preference;
             preference.setSummary(editTextPreference.getText());
+        }
+        else if (preference.getKey().equals(Preferences.TRUST_ALL_CERTIFICATES)) {
+            HttpClientManager.INSTANCE.invalidateClient();
         }
     }
 

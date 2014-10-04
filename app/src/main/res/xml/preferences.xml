@@ -4,13 +4,34 @@
     android:key="droidbeard_settings">
 
     <EditTextPreference
-        android:key="sickbeard_url"
-        android:summary="The URL where SickBeard is located."
-        android:title="SickBeard URL" />
+        android:key="address"
+        android:summary="The IP address or domain name where Sick Beard is hosted."
+        android:title="Address" />
+
+    <EditTextPreference
+        android:key="port"
+        android:summary="The port number Sick Beard runs on."
+        android:title="Port Number"
+        android:inputType="number" />
+
+    <EditTextPreference
+        android:key="extension_path"
+        android:summary="The web path to Sick Beard (leave this as &quot;/&quot; if you're not sure)"
+        android:title="Path" />
 
     <EditTextPreference
         android:key="api_key"
-        android:summary="Your SickBeard API key (found in general settings)."
+        android:summary="Your Sick Beard API key (found in general settings)."
         android:title="API Key" />
+
+    <CheckBoxPreference
+        android:key="use_https"
+        android:summary="Only enable this if you have enabled it in Sick Beard."
+        android:title="Use HTTPS" />
+
+    <CheckBoxPreference
+        android:key="trust_all_certificates"
+        android:summary="Enable this if you're using HTTPs without a trusted certificate."
+        android:title="Trust All SSL Certificates" />
 
 </PreferenceScreen>
