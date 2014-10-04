@@ -1,6 +1,7 @@
 package com.rastating.droidbeard.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -190,8 +191,32 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             status = "archived";
         }
 
+        final String finalStatus = status;
+        final ProgressDialog dialog = createProgressDialog("Setting Status", "Please wait...");
+        dialog.show();
+        task.addResponseListener(new ApiResponseListener<Boolean>() {
+            @Override
+            public void onApiRequestFinished(Boolean result) {
+                if (result) {
+                    mSelectedEpisode.setStatus(finalStatus);
+                }
+                dialog.dismiss();
+            }
+        });
         task.start(status);
-        mSelectedEpisode.setStatus(status);
+    }
+
+    private void onEpisodeSearchItemSelected() {
+        final ProgressDialog dialog = createProgressDialog("Searching for Episode", "Searching for \"" + mSelectedEpisodeName + "\", please wait...");
+        EpisodeSearchTask task = new EpisodeSearchTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber);
+        dialog.show();
+        task.addResponseListener(new ApiResponseListener<Boolean>() {
+            @Override
+            public void onApiRequestFinished(Boolean result) {
+                dialog.dismiss();
+            }
+        });
+        task.start();
     }
 
     @Override
@@ -205,13 +230,21 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
                 return true;
 
             case R.id.search:
-                new EpisodeSearchTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber).start();
-                Toast.makeText(getActivity(), mSelectedEpisodeName + " is being searched for.", Toast.LENGTH_LONG).show();
+                onEpisodeSearchItemSelected();
                 return true;
 
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private ProgressDialog createProgressDialog(String title, String message) {
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setTitle(title);
+        dialog.setMessage(message);
+        dialog.setCancelable(false);
+        dialog.setIndeterminate(true);
+        return dialog;
     }
 
     private void showToolTip() {
