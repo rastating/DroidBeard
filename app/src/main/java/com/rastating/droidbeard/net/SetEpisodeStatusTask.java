@@ -27,6 +27,12 @@ public class SetEpisodeStatusTask extends SickbeardAsyncTask<String, Void, Boole
         params.add(new Pair<String, Object>("episode", mEpisode));
         params.add(new Pair<String, Object>("status", strings[0]));
         params.add(new Pair<String, Object>("force", 1));
-        return getJson("episode.setstatus", params).contains("success");
+
+        try {
+            return getJson("episode.setstatus", params).contains("success");
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 }

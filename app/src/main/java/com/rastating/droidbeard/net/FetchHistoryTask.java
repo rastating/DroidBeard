@@ -19,9 +19,9 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
     @Override
     protected HistoricalEvent[] doInBackground(Void... voids) {
         List<HistoricalEvent> events = new ArrayList<HistoricalEvent>();
-        String json = getJson("history", null);
 
         try {
+            String json = getJson("history", null);
             JSONArray results = new JSONObject(json).getJSONArray("data");
             for (int i = 0; i < results.length(); i++) {
                 JSONObject data = results.getJSONObject(i);

@@ -28,11 +28,11 @@ public class SearchTvDBTask extends SickbeardAsyncTask<String, Void, TvDBResult[
             name = strings[0];
         }
 
-        String json = getJson("sb.searchtvdb", "name", name);
-        List<TvDBResult> list = new ArrayList<TvDBResult>();
+        try {
+            String json = getJson("sb.searchtvdb", "name", name);
+            List<TvDBResult> list = new ArrayList<TvDBResult>();
 
-        if (json != null && !json.equals("")) {
-            try {
+            if (json != null && !json.equals("")) {
                 JSONArray results = new JSONObject(json).getJSONObject("data").getJSONArray("results");
                 for (int i = 0; i < results.length(); i++) {
                     JSONObject result = results.getJSONObject(i);
@@ -44,13 +44,12 @@ public class SearchTvDBTask extends SickbeardAsyncTask<String, Void, TvDBResult[
                 }
 
                 return list.toArray(new TvDBResult[list.size()]);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
+            } else {
                 return null;
             }
         }
-        else {
+        catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

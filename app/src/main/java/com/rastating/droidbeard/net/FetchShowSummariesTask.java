@@ -24,9 +24,9 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
     @Override
     protected TVShowSummary[] doInBackground(Void... voids) {
         List<TVShowSummary> shows = new ArrayList<TVShowSummary>();
-        String json = getJson("shows", null);
 
         try {
+            String json = getJson("shows", null);
             JSONObject root = new JSONObject(json);
             JSONObject data = root.getJSONObject("data");
             Iterator<String> keys = data.keys();

@@ -15,20 +15,19 @@ public class FetchLogsTask extends SickbeardAsyncTask<Void, Void, String[]> {
 
     @Override
     protected String[] doInBackground(Void... voids) {
-        String json = getJson("logs", "min_level", "info");
-        List<String> logs = new ArrayList<String>();
-
         try {
+            String json = getJson("logs", "min_level", "info");
+            List<String> logs = new ArrayList<String>();
             JSONArray data = new JSONObject(json).getJSONArray("data");
             for (int i = 0; i < data.length(); i++) {
                 logs.add(data.getString(i));
             }
+
+            return logs.toArray(new String[logs.size()]);
         }
         catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return logs.toArray(new String[logs.size()]);
     }
 }

@@ -20,10 +20,10 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
 
     @Override
     protected UpcomingEpisode[] doInBackground(Void... voids) {
-        String json = getJson("future", null);
         List<UpcomingEpisode> episodes = new ArrayList<UpcomingEpisode>();
 
         try {
+            String json = getJson("future", null);
             JSONObject data = new JSONObject(json).getJSONObject("data");
             JSONArray missed = data.getJSONArray("missed");
             JSONArray today = data.getJSONArray("today");

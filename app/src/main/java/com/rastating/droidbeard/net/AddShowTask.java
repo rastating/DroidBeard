@@ -9,6 +9,12 @@ public class AddShowTask extends SickbeardAsyncTask<Integer, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Integer... integers) {
-        return getJson("show.addnew", "tvdbid", String.valueOf(integers[0])).contains("success");
+        try {
+            return getJson("show.addnew", "tvdbid", String.valueOf(integers[0])).contains("success");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

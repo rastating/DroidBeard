@@ -36,10 +36,10 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
     private List<Season> getSeasons(int tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
-        String json = getJson("show.seasons", params);
 
-        if (json != null && !json.equals("")) {
-            try {
+        try {
+            String json = getJson("show.seasons", params);
+            if (json != null && !json.equals("")) {
                 JSONObject data = new JSONObject(json).getJSONObject("data");
                 List<Season> seasons = new ArrayList<Season>();
                 Iterator<String> seasonKeys = data.keys();
@@ -68,12 +68,12 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
 
                 return seasons;
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            else {
                 return null;
             }
         }
-        else {
+        catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -81,10 +81,10 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
     private TVShow getTVShow(int tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
-        String json = getJson("show", params);
 
-        if (json != null && !json.equals("")) {
-            try {
+        try {
+            String json = getJson("show", params);
+            if (json != null && !json.equals("")) {
                 JSONObject data = new JSONObject(json).getJSONObject("data");
                 TVShow show = new TVShow();
 
@@ -120,12 +120,12 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
 
                 return show;
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            else {
                 return null;
             }
         }
-        else {
+        catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

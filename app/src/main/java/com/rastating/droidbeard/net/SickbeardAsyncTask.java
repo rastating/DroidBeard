@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import javax.net.ssl.SSLHandshakeException;
+
 public abstract class SickbeardAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
     private Context mContext;
     private List<ApiResponseListener<Result>> mResponseListeners;
@@ -75,17 +77,17 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         return mContext;
     }
 
-    protected String getJson(String cmd) {
+    protected String getJson(String cmd) throws SSLHandshakeException {
         return getJson(cmd, null);
     }
 
-    protected String getJson(String cmd, String paramKey, Object paramValue) {
+    protected String getJson(String cmd, String paramKey, Object paramValue) throws SSLHandshakeException {
         List<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>(paramKey, paramValue));
         return getJson(cmd, params);
     }
 
-    protected String getJson(String cmd, List<Pair<String, Object>> params) {
+    protected String getJson(String cmd, List<Pair<String, Object>> params) throws SSLHandshakeException {
         String uri = null;
         String body = null;
         String format = "%sapi/%s/?cmd=%s";
@@ -118,6 +120,9 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
                 entity.consumeContent();
                 throw new IOException(status.getReasonPhrase());
             }
+        }
+        catch (SSLHandshakeException e) {
+            throw(e);
         }
         catch (Exception e) {
             e.printStackTrace();
