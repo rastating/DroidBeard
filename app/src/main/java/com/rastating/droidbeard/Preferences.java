@@ -64,16 +64,21 @@ public class Preferences {
         boolean useHTTPS = preferences.getBoolean(Preferences.USE_HTTPS, false);
         boolean trustAllCertificates = preferences.getBoolean(Preferences.TRUST_ALL_CERTIFICATES, true);
 
-        String url = useHTTPS ? "https://" : "http://";
-        url += address.trim();
-
-        if (port != null) {
-            url += ":" + port.trim();
+        if (address == null || address.trim().equals("")) {
+            return null;
         }
+        else {
+            String url = useHTTPS ? "https://" : "http://";
+            url += address.trim();
 
-        url += path.trim().equals("") ? "/" : path;
+            if (port != null) {
+                url += ":" + port.trim();
+            }
 
-        return url.trim();
+            url += path.trim().equals("") ? "/" : path;
+
+            return url.trim();
+        }
     }
 
     public boolean getTrustAllCertificatesFlag() {

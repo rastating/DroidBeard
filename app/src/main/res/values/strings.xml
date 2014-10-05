@@ -12,7 +12,7 @@
     <string name="episode">Episode</string>
     <string name="name">Name</string>
     <string name="airdate">Airdate</string>
-    <string name="thank_you_notice">Thank you for installing DroidBeard!\n\nBefore you start, you need to provide your SickBeard address and API key (API keys can be found in the general settings in SickBeard itself).</string>
+    <string name="thank_you_notice">Thank you for installing DroidBeard!\n\nBefore you start, you need to provide your Sick Beard address and API key (API keys can be found in the general settings in Sick Beard itself).</string>
     <string name="setup_now">Setup Now</string>
     <string name="app_name">DroidBeard</string>
     <string name="title_shows">Shows</string>
