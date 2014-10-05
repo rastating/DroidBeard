@@ -71,7 +71,7 @@ public class Preferences {
             url += ":" + port.trim();
         }
 
-        url += path;
+        url += path.trim().equals("") ? "/" : path;
 
         return url.trim();
     }
