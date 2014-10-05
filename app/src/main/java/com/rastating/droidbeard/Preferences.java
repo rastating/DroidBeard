@@ -26,7 +26,7 @@ public class Preferences {
         // Ensure any users from version 1.0 have their preferences updated.
         String url = getV1Url();
         if (url != null && url.trim().length() > 0) {
-            Pattern pattern = Pattern.compile("(http(s?)://)?([^:/]+)(:[0-9]+)?(/.*)?");
+            Pattern pattern = Pattern.compile("(http(s?)://)?([^:/]+)(:[0-9]+)?(/.*)?", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(url);
             if (matcher.matches()) {
                 String prefix = matcher.group(1);
@@ -58,17 +58,17 @@ public class Preferences {
 
     public String getSickbeardUrl() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        String address = preferences.getString(Preferences.ADDRESS, null);
+        String address = preferences.getString(Preferences.ADDRESS, "");
         String port = preferences.getString(Preferences.PORT_NUMBER, null);
         String path = preferences.getString(Preferences.EXTENSION_PATH, "/");
         boolean useHTTPS = preferences.getBoolean(Preferences.USE_HTTPS, false);
         boolean trustAllCertificates = preferences.getBoolean(Preferences.TRUST_ALL_CERTIFICATES, true);
 
         String url = useHTTPS ? "https://" : "http://";
-        url += address;
+        url += address.trim();
 
         if (port != null) {
-            url += ":" + port;
+            url += ":" + port.trim();
         }
 
         url += path;
