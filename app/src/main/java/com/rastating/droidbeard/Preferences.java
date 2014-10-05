@@ -33,7 +33,7 @@ public class Preferences {
                 String address = matcher.group(3);
                 String port = matcher.group(4);
                 String path = matcher.group(5);
-                boolean useHTTPS = prefix != null && prefix.contains("https");
+                boolean useHTTPS = prefix != null && prefix.toLowerCase().contains("https");
 
                 if (port != null) {
                     port = port.replace(":", "");
