@@ -34,4 +34,15 @@
         android:summary="Enable this if you're using HTTPs without a trusted certificate."
         android:title="Trust All SSL Certificates" />
 
+    <EditTextPreference
+        android:key="http_username"
+        android:summary="Username for authentication (blank for none)."
+        android:title="HTTP Username" />
+
+    <EditTextPreference
+        android:key="http_password"
+        android:summary="Password for authentication (blank for none)."
+        android:title="HTTP Password"
+        android:password="true" />
+
 </PreferenceScreen>

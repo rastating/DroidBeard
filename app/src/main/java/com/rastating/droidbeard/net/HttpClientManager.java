@@ -1,17 +1,21 @@
 package com.rastating.droidbeard.net;
 
-import android.app.Application;
 import android.content.Context;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
 
 import org.apache.http.HttpVersion;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -32,6 +36,17 @@ public class HttpClientManager {
 
     public HttpClient getClient() {
         return mClient;
+    }
+
+    private void setupHttpCredentials() {
+        try {
+            Preferences preferences = new Preferences(Application.getContext());
+            Credentials credentials = new UsernamePasswordCredentials(preferences.getHttpUsername(), preferences.getHttpPassword());
+            ((AbstractHttpClient) mClient).getCredentialsProvider().setCredentials(new AuthScope(preferences.getAddress(), preferences.getPort()), credentials);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void invalidateClient() {
@@ -63,5 +78,7 @@ public class HttpClientManager {
         else {
             mClient = new DefaultHttpClient();
         }
+
+        setupHttpCredentials();
     }
 }

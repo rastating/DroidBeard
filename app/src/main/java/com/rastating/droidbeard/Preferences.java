@@ -17,6 +17,8 @@ public class Preferences {
     public final static String V1_SICKBEARD_URL = "sickbeard_url";
     public final static String ACKNOWLEDGED_EPISODE_HELP = "acknowledged_episode_help";
     public final static String ACKNOWLEDGED_SHOW_ADDING_HELP = "acknowledged_show_adding_help";
+    public final static String HTTP_USERNAME = "http_username";
+    public final static String HTTP_PASSWORD = "http_password";
 
     private Context mContext;
 
@@ -50,10 +52,34 @@ public class Preferences {
         }
     }
 
+    public String getAddress() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String address = preferences.getString(ADDRESS, "");
+        return address;
+    }
+
     public String getApiKey() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String key = preferences.getString(API_KEY, null);
         return key != null ? key.trim() : null;
+    }
+
+    public String getHttpUsername() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String username = preferences.getString(HTTP_USERNAME, "");
+        return username;
+    }
+
+    public String getHttpPassword() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String password = preferences.getString(HTTP_PASSWORD, "");
+        return password;
+    }
+
+    public int getPort() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String port = preferences.getString(PORT_NUMBER, "");
+        return Integer.valueOf(port);
     }
 
     public String getSickbeardUrl() {
@@ -76,8 +102,13 @@ public class Preferences {
             }
 
             url += path.trim().equals("") ? "/" : path;
+            url = url.trim();
 
-            return url.trim();
+            if (!url.endsWith("/")) {
+                url += "/";
+            }
+
+            return url;
         }
     }
 

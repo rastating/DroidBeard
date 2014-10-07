@@ -25,26 +25,44 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 
         EditTextPreference preference = (EditTextPreference) findPreference("address");
         String value = preferences.getString("address", null);
-        if (value != null) {
+        if (value != null && !value.equals("")) {
             preference.setSummary(value);
         }
 
         preference = (EditTextPreference) findPreference("port");
         value = preferences.getString("port", null);
-        if (value != null) {
+        if (value != null && !value.equals("")) {
             preference.setSummary(value);
         }
 
         preference = (EditTextPreference) findPreference("extension_path");
         value = preferences.getString("extension_path", null);
-        if (value != null) {
+        if (value != null && !value.equals("")) {
             preference.setSummary(value);
         }
 
         preference = (EditTextPreference) findPreference("api_key");
         value = preferences.getString("api_key", null);
-        if (value != null) {
+        if (value != null && !value.equals("")) {
             preference.setSummary(value);
+        }
+
+        preference = (EditTextPreference) findPreference("http_username");
+        value = preferences.getString("http_username", null);
+        if (value != null && !value.equals("")) {
+            preference.setSummary(value);
+        }
+
+        preference = (EditTextPreference) findPreference("http_password");
+        value = preferences.getString("http_password", null);
+        if (value != null && !value.equals("")) {
+            int n = value.length();
+            if (n > 0) {
+                preference.setSummary(String.format(String.format("%%0%dd", n), 0).replace("0", "*"));
+            }
+            else {
+                preference.setSummary("");
+            }
         }
     }
 
@@ -71,11 +89,21 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         Preference preference = findPreference(key);
         if (preference instanceof EditTextPreference) {
             EditTextPreference editTextPreference = (EditTextPreference) preference;
-            preference.setSummary(editTextPreference.getText());
+            if (key.equals(Preferences.HTTP_PASSWORD)) {
+                int n = editTextPreference.getText().length();
+                if (n > 0) {
+                    preference.setSummary(String.format(String.format("%%0%dd", n), 0).replace("0", "*"));
+                }
+                else {
+                    preference.setSummary("");
+                }
+            }
+            else {
+                preference.setSummary(editTextPreference.getText());
+            }
         }
-        else if (preference.getKey().equals(Preferences.TRUST_ALL_CERTIFICATES)) {
-            HttpClientManager.INSTANCE.invalidateClient();
-        }
+
+        HttpClientManager.INSTANCE.invalidateClient();
     }
 
     @Override
