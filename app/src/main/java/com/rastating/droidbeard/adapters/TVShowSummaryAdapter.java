@@ -66,10 +66,16 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
             }
         }
 
-        sectionedList.add(new ListViewSectionHeader("Active Shows"));
-        sectionedList.addAll(activeShows);
-        sectionedList.add(new ListViewSectionHeader("Inactive Shows"));
-        sectionedList.addAll(inactiveShows);
+        if (activeShows.size() > 0 && inactiveShows.size() > 0) {
+            sectionedList.add(new ListViewSectionHeader("Active Shows"));
+            sectionedList.addAll(activeShows);
+            sectionedList.add(new ListViewSectionHeader("Inactive Shows"));
+            sectionedList.addAll(inactiveShows);
+        }
+        else {
+            sectionedList.addAll(activeShows);
+            sectionedList.addAll(inactiveShows);
+        }
 
         return sectionedList.toArray(new Object[sectionedList.size()]);
     }
