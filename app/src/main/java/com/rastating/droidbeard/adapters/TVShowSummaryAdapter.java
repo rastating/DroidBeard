@@ -28,14 +28,17 @@ import android.widget.TextView;
 
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
+import com.rastating.droidbeard.ui.ListViewSectionHeader;
 
-public class TVShowSummaryAdapter extends ArrayAdapter<TVShowSummary> {
+import java.util.ArrayList;
+
+public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
     private Context mContext;
     private int mLayoutResourceId;
-    private TVShowSummary[] mObjects;
+    private Object[] mObjects;
     private LayoutInflater mInflater;
 
-    public TVShowSummaryAdapter(Context context, LayoutInflater inflater, int layoutResourceId, TVShowSummary[] objects) {
+    private TVShowSummaryAdapter(Context context, LayoutInflater inflater, int layoutResourceId, Object[] objects) {
         super(context, layoutResourceId, objects);
 
         mContext = context;
@@ -44,17 +47,43 @@ public class TVShowSummaryAdapter extends ArrayAdapter<TVShowSummary> {
         mInflater = inflater;
     }
 
-    @Override
-    public TVShowSummary getItem(int position) {
-        return mObjects[position];
+    public static TVShowSummaryAdapter createInstance(Context context, LayoutInflater inflater, int layoutResourceId, TVShowSummary[] objects) {
+        Object[] list = createSectionedList(objects);
+        return new TVShowSummaryAdapter(context, inflater, layoutResourceId, list);
+    }
+
+    private static Object[] createSectionedList(TVShowSummary[] objects) {
+        ArrayList<Object> sectionedList = new ArrayList<Object>();
+        ArrayList<TVShowSummary> activeShows = new ArrayList<TVShowSummary>();
+        ArrayList<TVShowSummary> inactiveShows = new ArrayList<TVShowSummary>();
+
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i].getPaused() || objects[i].getStatus().equalsIgnoreCase("Ended")) {
+                inactiveShows.add(objects[i]);
+            }
+            else {
+                activeShows.add(objects[i]);
+            }
+        }
+
+        sectionedList.add(new ListViewSectionHeader("Active Shows"));
+        sectionedList.addAll(activeShows);
+        sectionedList.add(new ListViewSectionHeader("Inactive Shows"));
+        sectionedList.addAll(inactiveShows);
+
+        return sectionedList.toArray(new Object[sectionedList.size()]);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public TVShowSummary getItem(int position) {
+        return mObjects[position] instanceof TVShowSummary ? (TVShowSummary) mObjects[position] : null;
+    }
+
+    private View getTVShowSummaryRowView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         TVShowHolder holder;
 
-        if (row == null) {
+        if (row == null || row.getTag() == null) {
             row = mInflater.inflate(mLayoutResourceId, parent, false);
             holder = new TVShowHolder();
             holder.showName = (TextView) row.findViewById(R.id.show_name);
@@ -72,8 +101,9 @@ public class TVShowSummaryAdapter extends ArrayAdapter<TVShowSummary> {
             row.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        TVShowSummary show = mObjects[position];
+        TVShowSummary show = (TVShowSummary) mObjects[position];
         holder.showName.setText(show.getName());
+
         if (show.getNextAirDate() != null) {
             holder.airs.setText(String.format("Next episode on %tB %te, %tY on %s", show.getNextAirDate(), show.getNextAirDate(), show.getNextAirDate(), show.getNetwork()));
         }
@@ -82,6 +112,25 @@ public class TVShowSummaryAdapter extends ArrayAdapter<TVShowSummary> {
         }
 
         return row;
+    }
+
+    private View getSectionHeaderView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        row = mInflater.inflate(R.layout.list_view_section_header_item, parent, false);
+        ListViewSectionHeader header = (ListViewSectionHeader) mObjects[position];
+        ((TextView) row.findViewById(R.id.title)).setText(header.getTitle());
+
+        return row;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (mObjects[position] instanceof TVShowSummary) {
+            return getTVShowSummaryRowView(position, convertView, parent);
+        }
+        else {
+            return getSectionHeaderView(position, convertView, parent);
+        }
     }
 
     private class TVShowHolder {

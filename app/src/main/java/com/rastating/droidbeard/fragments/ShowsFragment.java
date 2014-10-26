@@ -50,10 +50,12 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         view.setSelected(true);
         TVShowSummary show = mAdapter.getItem(position);
-        FragmentManager manager = this.getFragmentManager();
-        ShowFragment fragment = new ShowFragment();
-        fragment.setTvShowSummary(show);
-        manager.beginTransaction().replace(R.id.container, fragment).commit();
+        if (show != null) {
+            FragmentManager manager = this.getFragmentManager();
+            ShowFragment fragment = new ShowFragment();
+            fragment.setTvShowSummary(show);
+            manager.beginTransaction().replace(R.id.container, fragment).commit();
+        }
     }
 
     @Override
@@ -63,7 +65,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
 
             if (objects != null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                mAdapter = new TVShowSummaryAdapter(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
+                mAdapter = TVShowSummaryAdapter.createInstance(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
                 setAdapter(mAdapter);
                 showListView();
             } else {

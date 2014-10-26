@@ -25,6 +25,8 @@ public class TVShowSummary {
     private String mName;
     private String mNetwork;
     private Date mNextAirDate;
+    private boolean mPaused;
+    private String mStatus;
     private int mTvDbId;
 
     public TVShowSummary(String name) {
@@ -53,6 +55,14 @@ public class TVShowSummary {
         return mNextAirDate;
     }
 
+    public boolean getPaused() {
+        return mPaused;
+    }
+
+    public String getStatus() {
+        return mStatus;
+    }
+
     public int getTvDbId() {
         return mTvDbId;
     }
@@ -67,6 +77,14 @@ public class TVShowSummary {
 
     public void setNextAirDate(Date value) {
         mNextAirDate = value;
+    }
+
+    public void setPaused(boolean value) {
+        mPaused = value;
+    }
+
+    public void setStatus(String value) {
+        mStatus = value;
     }
 
     public void setTvDbId(int value) {
