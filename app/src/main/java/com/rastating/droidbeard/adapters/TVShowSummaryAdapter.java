@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.ui.ListViewSectionHeader;
@@ -48,8 +49,18 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
     }
 
     public static TVShowSummaryAdapter createInstance(Context context, LayoutInflater inflater, int layoutResourceId, TVShowSummary[] objects) {
-        Object[] list = createSectionedList(objects);
+        Preferences preferences = new Preferences(context);
+        Object[] list = preferences.getGroupInactiveShows() ? createSectionedList(objects) : createStandardList(objects);
         return new TVShowSummaryAdapter(context, inflater, layoutResourceId, list);
+    }
+
+    private static Object[] createStandardList(TVShowSummary[] objects) {
+        ArrayList<Object> list = new ArrayList<Object>(objects.length);
+        for (int i = 0; i < objects.length; i++) {
+            list.add(objects[i]);
+        }
+
+        return list.toArray(new Object[list.size()]);
     }
 
     private static Object[] createSectionedList(TVShowSummary[] objects) {
@@ -121,12 +132,11 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
     }
 
     private View getSectionHeaderView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        row = mInflater.inflate(R.layout.list_view_section_header_item, parent, false);
+        convertView = mInflater.inflate(R.layout.list_view_section_header_item, parent, false);
         ListViewSectionHeader header = (ListViewSectionHeader) mObjects[position];
-        ((TextView) row.findViewById(R.id.title)).setText(header.getTitle());
+        ((TextView) convertView.findViewById(R.id.title)).setText(header.getTitle());
 
-        return row;
+        return convertView;
     }
 
     @Override

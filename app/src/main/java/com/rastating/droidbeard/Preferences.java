@@ -37,6 +37,7 @@ public class Preferences {
     public final static String ACKNOWLEDGED_SHOW_ADDING_HELP = "acknowledged_show_adding_help";
     public final static String HTTP_USERNAME = "http_username";
     public final static String HTTP_PASSWORD = "http_password";
+    public final static String GROUP_INACTIVE_SHOWS = "group_inactive_shows";
 
     private Context mContext;
 
@@ -68,6 +69,17 @@ public class Preferences {
 
             putString(Preferences.V1_SICKBEARD_URL, null);
         }
+
+        // Set trust all certificates to true if migrating to v1.2
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (!preferences.contains(Preferences.TRUST_ALL_CERTIFICATES)) {
+            putBoolean(Preferences.TRUST_ALL_CERTIFICATES, true);
+        }
+
+        // Set status grouping to true if migrating to v1.3
+        if (!preferences.contains(Preferences.GROUP_INACTIVE_SHOWS)) {
+            putBoolean(Preferences.GROUP_INACTIVE_SHOWS, true);
+        }
     }
 
     public String getAddress() {
@@ -80,6 +92,11 @@ public class Preferences {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String key = preferences.getString(API_KEY, null);
         return key != null ? key.trim() : null;
+    }
+
+    public boolean getGroupInactiveShows() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return preferences.getBoolean(Preferences.GROUP_INACTIVE_SHOWS, true);
     }
 
     public String getHttpUsername() {
