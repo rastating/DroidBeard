@@ -4,11 +4,11 @@
 
     .content {
         margin: 0 auto;
+        padding-left: 10px;
+        padding-right: 10px;
 
         @media screen and (min-width: $break-xsmall) {
             width: auto;
-            padding-left: 10px;
-            padding-right: 10px;
         }
 
         @media screen and (min-width: $break-medium) {
@@ -34,6 +34,16 @@
 
         .fa-stack {
             float: left;
+        }
+    }
+
+    @media screen and (max-width: $break-xsmall) {
+        text-align: center;
+    }
+
+    @media screen and (max-width: $break-xsmall) {
+        .fa-stack {
+            display: none;
         }
     }
 
@@ -76,6 +86,11 @@
 
         a:hover {
             color: $red-link-color;
+        }
+
+        @media screen and (max-width: $break-xsmall) {
+            margin-left: 0px;
+            margin-right: 0px;
         }
     }
 }

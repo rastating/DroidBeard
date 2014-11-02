@@ -47,6 +47,10 @@ a.btn {
     padding-bottom: 40px;
     border-bottom: 1px solid #919191;
     margin-bottom: 40px;
+
+    @media screen and (max-width: $break-small) {
+        font-size: 50px !important;
+    }
 }
 
 .wrapper {
