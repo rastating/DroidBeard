@@ -1,0 +1,99 @@
+.cover {
+    background: #222 no-repeat center center;
+    background-image: url('../img/cover.jpg');
+    position: relative;
+    display: table;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-size: cover;
+    overflow: hidden;
+
+    .inner {
+        position: relative;
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+.vertical {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.page-title {
+    -webkit-animation: fade-in-down 0.6s;
+    animation: fade-in-down 0.6s;
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+    margin: 10px 0 10px 0;
+    letter-spacing: -1px;
+    color: #fff;
+    font-family: $open-sans-family;
+    font-size: 62px;
+    font-weight: normal;
+    height: 62px;
+    line-height: 62px;
+}
+
+.headline {
+    @extend .page-title;
+    color: $grey-text-color;
+    height: inherit;
+}
+
+.page-description {
+    -webkit-animation: fade-in-down 0.9s;
+    animation: fade-in-down 0.9s;
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.5em;
+    font-weight: 400;
+    font-family: "Merriweather", serif;
+    letter-spacing: 0.01rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.scroll-down {
+    display: block;
+    position: absolute;
+    z-index: 100;
+    bottom: 45px;
+    left: 50%;
+    margin-left: -16px;
+    width: 34px;
+    height: 34px;
+    font-size: 34px;
+    text-align: center;
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    -webkit-animation: bounce 4s 2s infinite;
+    animation: bounce 4s 2s infinite;
+}
+
+.icon-arrow-left:before {
+    content: "\f605";
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    font-family: "casper-icons", "Open Sans", sans-serif;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    text-decoration: none !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.scroll-down:hover {
+    color: #fff;
+    -webkit-animation: none;
+    animation: none;
+}

@@ -1,0 +1,38 @@
+.main-footer {
+    margin-top: 60px;
+    min-height: 100px;
+    background: #1e1e1e;
+    color: #4e4e4e;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 20px 0 20px 0;
+    text-align: center;
+    font-family: $open-sans-family;
+}
+
+.main-footer a {
+    color: $red-link-color;
+    text-decoration: none;
+}
+
+.main-footer a:hover {
+    text-decoration: underline;
+}
+
+.main-footer .icons {
+    font-size: 70%;
+}
+
+.main-footer .icons a {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    color: #4e4e4e;
+}
+
+.main-footer .icons a:hover {
+    color: $red-link-color;
+    text-decoration: none;
+}

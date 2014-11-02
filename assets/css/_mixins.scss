@@ -1,0 +1,19 @@
+@mixin ease-in-transition($duration) {
+    -webkit-transition: all $duration ease-in-out;
+    -moz-transition: all $duration ease-in-out;
+    -o-transition: all $duration ease-in-out;
+    -ms-transition: all $duration ease-in-out;
+    transition: all $duration ease-in-out;
+}
+
+@mixin font-feature-setting($setting) {
+    -webkit-font-feature-settings: $setting;
+    -moz-font-feature-settings: $setting;
+    -o-font-feature-settings: $setting;
+}
+
+@mixin font-feature-setting-4($setting1, $setting2, $setting3, $setting4) {
+    -webkit-font-feature-settings: $setting1, $setting2, $setting3, $setting4;
+    -moz-font-feature-settings: $setting1, $setting2, $setting3, $setting4;
+    -o-font-feature-settings: $setting1, $setting2, $setting3, $setting4;
+}
