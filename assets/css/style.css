@@ -238,7 +238,7 @@ a.btn {
     margin: 0 auto;
     padding-left: 10px;
     padding-right: 10px; }
-    @media screen and (min-width: 350px) {
+    @media screen and (min-width: 430px) {
       .section .content {
         width: auto; } }
     @media screen and (min-width: 750px) {
@@ -251,7 +251,7 @@ a.btn {
 .alternate-section {
   background-color: #f7f7f7; }
 
-@media screen and (min-width: 350px) {
+@media screen and (min-width: 430px) {
   .column {
     display: block;
     float: none;
@@ -259,10 +259,10 @@ a.btn {
     text-align: left; }
     .column .fa-stack {
       float: left; } }
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 430px) {
   .column {
     text-align: center; } }
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 430px) {
   .column .fa-stack {
     display: none; } }
 @media screen and (min-width: 750px) {
@@ -296,7 +296,7 @@ a.btn {
   text-align: justify; }
   .column p a:hover {
     color: #ed5153; }
-  @media screen and (max-width: 350px) {
+  @media screen and (max-width: 430px) {
     .column p {
       margin-left: 0px;
       margin-right: 0px; } }
