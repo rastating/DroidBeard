@@ -88,6 +88,10 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_show, container, false);
 
+        if (savedInstanceState != null) {
+            mShowSummary = (TVShowSummary) savedInstanceState.getParcelable("summary");
+        }
+
         // Get references to all required views.
         mBanner = (ImageView) root.findViewById(R.id.banner);
         mLoadingImage = (ImageView) root.findViewById(R.id.loading);
@@ -140,6 +144,12 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         FetchShowTask task = new FetchShowTask(getActivity());
         task.addResponseListener(this);
         task.start(mShowSummary.getTvDbId());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("summary", mShowSummary);
     }
 
     private void populateViews() {

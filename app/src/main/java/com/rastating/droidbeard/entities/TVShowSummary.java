@@ -18,9 +18,12 @@
 
 package com.rastating.droidbeard.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
-public class TVShowSummary {
+public class TVShowSummary implements Parcelable {
     private String mAirs;
     private String mName;
     private String mNetwork;
@@ -34,9 +37,19 @@ public class TVShowSummary {
         mNextAirDate = null;
     }
 
-    public TVShowSummary() {
-        mName = "";
-        mNextAirDate = null;
+    public TVShowSummary(Parcel in) {
+        String[] strings = new String[4];
+        in.readStringArray(strings);
+        mAirs = strings[0];
+        mName = strings[1];
+        mNetwork = strings[2];
+        mStatus = strings[3];
+
+        long airDateTimeStamp = in.readLong();
+        mNextAirDate = airDateTimeStamp > 0 ? new Date(airDateTimeStamp) : null;
+
+        mPaused = in.readInt() == 1;
+        mTvDbId = in.readInt();
     }
 
     public String getAirs() {
@@ -90,4 +103,27 @@ public class TVShowSummary {
     public void setTvDbId(int value) {
         mTvDbId = value;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeStringArray(new String[] { mAirs, mName, mNetwork, mStatus });
+        parcel.writeLong(mNextAirDate != null ? mNextAirDate.getTime() : 0);
+        parcel.writeInt(mPaused ? 1 : 0);
+        parcel.writeInt(mTvDbId);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public TVShowSummary createFromParcel(Parcel in) {
+            return new TVShowSummary(in);
+        }
+
+        public TVShowSummary[] newArray(int size) {
+            return new TVShowSummary[size];
+        }
+    };
 }
