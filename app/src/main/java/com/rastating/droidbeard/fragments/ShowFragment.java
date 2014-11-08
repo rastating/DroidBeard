@@ -18,22 +18,19 @@
 
 package com.rastating.droidbeard.fragments;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.ContextMenu;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.comparators.EpisodeComparator;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.Episode;
@@ -44,12 +41,15 @@ import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.EpisodeSearchTask;
 import com.rastating.droidbeard.net.FetchShowTask;
 import com.rastating.droidbeard.net.SetEpisodeStatusTask;
+import com.rastating.droidbeard.net.SickbeardTaskPool;
+import com.rastating.droidbeard.net.TaskPoolSubscriber;
 import com.rastating.droidbeard.ui.CrossFader;
 import com.rastating.droidbeard.ui.EpisodeItem;
 import com.rastating.droidbeard.ui.EpisodeItemClickListener;
 import com.rastating.droidbeard.ui.LoadingAnimation;
 import com.rastating.droidbeard.ui.SeasonTable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,13 +70,63 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     private ImageView mAirByDate;
     private LinearLayout mSeasonContainer;
 
-    private int mSelectedSeasonNumber;
-    private int mSelectedEpisodeNumber;
-    private String mSelectedEpisodeName;
-    private EpisodeItem mSelectedEpisode;
+    private ArrayList<EpisodeItem> mSelectedEpisodes;
+
+    private ActionMode mActionMode;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.episode_context_menu, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case 0:
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+
+                case R.id.set_archived:
+                case R.id.set_ignored:
+                case R.id.set_skipped:
+                case R.id.set_wanted:
+                    onSetStatusItemSelected(item);
+                    mode.finish();
+                    return true;
+
+                case R.id.search:
+                    onEpisodeSearchItemSelected();
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+    };
 
     public ShowFragment() {
         mShowSummary = null;
+        mSelectedEpisodes = new ArrayList<EpisodeItem>();
     }
 
     public void setTvShowSummary(TVShowSummary show) {
@@ -108,11 +158,6 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mSeasonContainer = (LinearLayout) root.findViewById(R.id.season_container);
 
         onRefreshButtonPressed();
-
-        Preferences preferences = new Preferences(getActivity());
-        if (!preferences.hasAcknowledgedEpisodeHelp()) {
-            showToolTip();
-        }
 
         return root;
     }
@@ -169,7 +214,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
         mSeasonContainer.removeAllViews();
         for (Season season : mShow.getSeasons()) {
-            SeasonTable table = new SeasonTable(getActivity());
+            SeasonTable table = new SeasonTable(getActivity(), season);
             table.setTitle(season.getTitle());
 
             List<Episode> episodes = season.getEpisodes();
@@ -188,82 +233,129 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
     @Override
     public void onItemClick(EpisodeItem item, int seasonNumber, int episodeNumber, String name) {
-        mSelectedEpisodeName = name;
-        mSelectedSeasonNumber = seasonNumber;
-        mSelectedEpisodeNumber = episodeNumber;
-        mSelectedEpisode = item;
-
-        item.showContextMenu();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.episode_context_menu, menu);
-        menu.setHeaderTitle(String.format("%dx%d - %s", mSelectedSeasonNumber, mSelectedEpisodeNumber, mSelectedEpisodeName));
-    }
-
-    private void onSetStatusItemSelected(MenuItem item) {
-        SetEpisodeStatusTask task = new SetEpisodeStatusTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber);
-        String status = "";
-        if (item.getItemId() == R.id.set_wanted) {
-            status = "wanted";
-        }
-        else if (item.getItemId() == R.id.set_skipped) {
-            status = "skipped";
-        }
-        else if (item.getItemId() == R.id.set_ignored) {
-            status = "ignored";
+        if (item.isChecked()) {
+            mSelectedEpisodes.add(item);
         }
         else {
-            status = "archived";
+            mSelectedEpisodes.remove(item);
         }
 
+        if (mActionMode == null && mSelectedEpisodes.size() > 0) {
+            mActionMode = getActivity().startActionMode(mActionModeCallback);
+        }
+        else if (mActionMode != null && mSelectedEpisodes.size() == 0) {
+            mActionMode.finish();
+        }
+    }
+
+    private SetEpisodeStatusTask buildEpisodeStatusTask(SeasonTable seasonTable, EpisodeItem episodeItem, int tvdbid, int season, int episode, String status) {
+        // Create finals for use in callback...
+        final EpisodeItem finalEpisodeItem = episodeItem;
+        final SeasonTable finalSeasonTable = seasonTable;
+        final int finalEpisode = episode;
         final String finalStatus = status;
-        final ProgressDialog dialog = createProgressDialog("Setting Status", "Please wait...");
-        dialog.show();
+
+        SetEpisodeStatusTask task = new SetEpisodeStatusTask(getActivity(), tvdbid, season, episode);
         task.addResponseListener(new ApiResponseListener<Boolean>() {
             @Override
             public void onApiRequestFinished(Boolean result) {
                 if (result) {
-                    mSelectedEpisode.setStatus(finalStatus);
+                    if (finalEpisode > 0) {
+                        finalEpisodeItem.setStatus(finalStatus);
+                        finalEpisodeItem.setChecked(false);
+                    }
+                    else {
+                        finalSeasonTable.setChecked(false);
+                        for (EpisodeItem item : finalSeasonTable.getEpisodeItems()) {
+                            item.setStatus(finalStatus);
+                            item.setChecked(false);
+                        }
+                    }
                 }
-                dialog.dismiss();
             }
         });
-        task.start(status);
+
+        return task;
+    }
+
+    private void onSetStatusItemSelected(MenuItem item) {
+        // Group selected episodes into a list of individual episodes and full seasons...
+        ArrayList<SeasonTable> selectedSeasons = new ArrayList<SeasonTable>();
+        ArrayList<EpisodeItem> selectedEpisodes = new ArrayList<EpisodeItem>();
+        for (EpisodeItem episode : mSelectedEpisodes) {
+            SeasonTable seasonTable = episode.getSeasonTable();
+            if (seasonTable.allEpisodesChecked()) {
+                if (!selectedSeasons.contains(seasonTable)) {
+                    selectedSeasons.add(seasonTable);
+                }
+            }
+            else {
+                selectedEpisodes.add(episode);
+            }
+        }
+
+        String status = "";
+        if (item.getItemId() == R.id.set_wanted) {
+            status = "wanted";
+        } else if (item.getItemId() == R.id.set_skipped) {
+            status = "skipped";
+        } else if (item.getItemId() == R.id.set_ignored) {
+            status = "ignored";
+        } else {
+            status = "archived";
+        }
+
+        SickbeardTaskPool<String> pool = new SickbeardTaskPool<String>();
+
+        for (SeasonTable seasonTable : selectedSeasons) {
+            Season season = seasonTable.getSeason();
+            SetEpisodeStatusTask task = buildEpisodeStatusTask(seasonTable, null, season.getTVDBID(), season.getSeasonNumber(), -1, status);
+            pool.addTask(task);
+        }
+
+        for (EpisodeItem episodeItem : selectedEpisodes) {
+            Episode episode = episodeItem.getEpisode();
+            SetEpisodeStatusTask task = buildEpisodeStatusTask(null, episodeItem, episode.getTVDBID(), episode.getSeasonNumber(), episode.getEpisodeNumber(), status);
+            pool.addTask(task);
+        }
+
+        final ProgressDialog dialog = createProgressDialog("Performing Status Updates", "Please wait...");
+        dialog.show();
+        pool.setTaskPoolSubscriber(new TaskPoolSubscriber() {
+            @Override
+            public void executionFinished() {
+                dialog.dismiss();
+                mSelectedEpisodes.clear();
+            }
+        });
+        pool.start(status);
     }
 
     private void onEpisodeSearchItemSelected() {
-        final ProgressDialog dialog = createProgressDialog("Searching for Episode", "Searching for \"" + mSelectedEpisodeName + "\", please wait...");
-        EpisodeSearchTask task = new EpisodeSearchTask(getActivity(), mShowSummary.getTvDbId(), mSelectedSeasonNumber, mSelectedEpisodeNumber);
+        SickbeardTaskPool<Void> pool = new SickbeardTaskPool<Void>();
+        for (EpisodeItem episodeItem : mSelectedEpisodes) {
+            Episode episode = episodeItem.getEpisode();
+            EpisodeSearchTask task = new EpisodeSearchTask(getActivity(), episode.getTVDBID(), episode.getSeasonNumber(), episode.getEpisodeNumber());
+            pool.addTask(task);
+        }
+
+        final ProgressDialog dialog = createProgressDialog("Searching for Selected Episodes", "Please wait...");
         dialog.show();
-        task.addResponseListener(new ApiResponseListener<Boolean>() {
+        pool.setTaskPoolSubscriber(new TaskPoolSubscriber() {
             @Override
-            public void onApiRequestFinished(Boolean result) {
+            public void executionFinished() {
                 dialog.dismiss();
+
+                for (int i = mSelectedEpisodes.size() - 1; i >= 0; i--)  {
+                    EpisodeItem item = mSelectedEpisodes.get(i);
+                    item.setChecked(false);
+                }
+
+                mSelectedEpisodes.clear();
+                onRefreshButtonPressed();
             }
         });
-        task.start();
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.set_archived:
-            case R.id.set_ignored:
-            case R.id.set_skipped:
-            case R.id.set_wanted:
-                onSetStatusItemSelected(item);
-                return true;
-
-            case R.id.search:
-                onEpisodeSearchItemSelected();
-                return true;
-
-            default:
-                return super.onContextItemSelected(item);
-        }
+        pool.start();
     }
 
     private ProgressDialog createProgressDialog(String title, String message) {
@@ -273,25 +365,5 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         dialog.setCancelable(false);
         dialog.setIndeterminate(true);
         return dialog;
-    }
-
-    private void showToolTip() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.tooltip_dialog, null);
-        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.do_not_show_again);
-        builder.setView(view);
-        builder.setTitle("DroidBeard Tip");
-        builder.setMessage("Tapping an episode in the episode list opens a menu that will allow you to manually search for the episode or change its status.");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (checkBox.isChecked()) {
-                    Preferences preferences = new Preferences(ShowFragment.this.getActivity());
-                    preferences.putBoolean(Preferences.ACKNOWLEDGED_EPISODE_HELP, true);
-                }
-            }
-        });
-        builder.show();
     }
 }

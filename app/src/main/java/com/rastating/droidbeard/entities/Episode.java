@@ -39,6 +39,7 @@ public class Episode {
     private String mQuality;
     private int mSeasonNumber;
     private EpisodeStatus mStatus;
+    private int mTVDBID;
 
     public Date getAirdate() {
         return mAirdate;
@@ -62,6 +63,10 @@ public class Episode {
 
     public int getSeasonNumber() {
         return mSeasonNumber;
+    }
+
+    public int getTVDBID() {
+        return mTVDBID;
     }
 
     public EpisodeStatus getStatus() {
@@ -157,5 +162,9 @@ public class Episode {
         else {
             mStatus = EpisodeStatus.IGNORED;
         }
+    }
+
+    public void setTVDBID(int value) {
+        mTVDBID = value;
     }
 }
