@@ -255,6 +255,10 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             } else if (mActionMode != null && mSelectedEpisodes.size() == 0) {
                 mActionMode.finish();
             }
+
+            if (mActionMode != null && mSelectedEpisodes.size() > 0) {
+                mActionMode.setTitle(String.valueOf(mSelectedEpisodes.size()) + " selected");
+            }
         }
     }
 
