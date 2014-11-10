@@ -72,6 +72,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
     private ArrayList<EpisodeItem> mSelectedEpisodes;
 
+    private boolean mDisposingActionMode;
     private ActionMode mActionMode;
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -121,6 +122,15 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
+            mDisposingActionMode = true;
+
+            for (int i = mSelectedEpisodes.size() - 1; i >= 0 && mSelectedEpisodes.size() > 0; i--)  {
+                EpisodeItem item = mSelectedEpisodes.get(i);
+                item.setChecked(false);
+            }
+
+            mSelectedEpisodes.clear();
+            mDisposingActionMode = false;
         }
     };
 
@@ -233,18 +243,18 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
     @Override
     public void onItemClick(EpisodeItem item, int seasonNumber, int episodeNumber, String name) {
-        if (item.isChecked()) {
-            mSelectedEpisodes.add(item);
-        }
-        else {
-            mSelectedEpisodes.remove(item);
-        }
+        if (!mDisposingActionMode) {
+            if (item.isChecked()) {
+                mSelectedEpisodes.add(item);
+            } else {
+                mSelectedEpisodes.remove(item);
+            }
 
-        if (mActionMode == null && mSelectedEpisodes.size() > 0) {
-            mActionMode = getActivity().startActionMode(mActionModeCallback);
-        }
-        else if (mActionMode != null && mSelectedEpisodes.size() == 0) {
-            mActionMode.finish();
+            if (mActionMode == null && mSelectedEpisodes.size() > 0) {
+                mActionMode = getActivity().startActionMode(mActionModeCallback);
+            } else if (mActionMode != null && mSelectedEpisodes.size() == 0) {
+                mActionMode.finish();
+            }
         }
     }
 
