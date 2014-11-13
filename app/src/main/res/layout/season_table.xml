@@ -36,10 +36,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:stretchColumns="1"
-        android:shrinkColumns="1">
+        android:stretchColumns="2"
+        android:shrinkColumns="2">
 
-        <TableRow>
+        <TableRow android:gravity="center">
+            <CheckBox android:id="@+id/select_all"
+                android:background="@android:color/black"
+                android:textColor="@android:color/white"
+                android:layout_height="match_parent"
+                android:layout_width="32dp"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:gravity="center"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:button="@drawable/darktheme_btn_check_holo_dark"
+            />
+
             <TextView android:background="@android:color/black"
                 android:textColor="@android:color/white"
                 android:layout_height="wrap_content"
@@ -72,6 +85,7 @@
                 android:textStyle="bold"
                 android:padding="5dp"
                 android:gravity="center"
+                android:layout_marginBottom="1dp"
                 />
         </TableRow>
 

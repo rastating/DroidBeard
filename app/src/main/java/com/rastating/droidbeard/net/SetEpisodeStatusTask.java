@@ -42,7 +42,11 @@ public class SetEpisodeStatusTask extends SickbeardAsyncTask<String, Void, Boole
         List<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", mTvDBId));
         params.add(new Pair<String, Object>("season", mSeason));
-        params.add(new Pair<String, Object>("episode", mEpisode));
+
+        if (mEpisode > 0) {
+            params.add(new Pair<String, Object>("episode", mEpisode));
+        }
+
         params.add(new Pair<String, Object>("status", strings[0]));
         params.add(new Pair<String, Object>("force", 1));
 

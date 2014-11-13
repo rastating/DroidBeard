@@ -48,16 +48,22 @@ import javax.net.ssl.SSLHandshakeException;
 public abstract class SickbeardAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
     private Context mContext;
     private List<ApiResponseListener<Result>> mResponseListeners;
+    private List<AsyncTaskCompleteListener> mCompleteListeners;
 
     public SickbeardAsyncTask(Context context) {
         mContext = context;
         mResponseListeners = new ArrayList<ApiResponseListener<Result>>();
+        mCompleteListeners = new ArrayList<AsyncTaskCompleteListener>();
     }
 
     public void addResponseListener(ApiResponseListener<Result> listener) {
         if (!mResponseListeners.contains(listener)) {
             mResponseListeners.add(listener);
         }
+    }
+
+    public void addCompleteListener(AsyncTaskCompleteListener listener) {
+        mCompleteListeners.add(listener);
     }
 
     public void removeResponseListener(ApiResponseListener<Result> listener) {
@@ -159,6 +165,10 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         List<ApiResponseListener<Result>> listeners = getResponseListeners();
         for (ApiResponseListener<Result> listener : listeners) {
             listener.onApiRequestFinished(result);
+        }
+
+        for (AsyncTaskCompleteListener listener : mCompleteListeners) {
+            listener.onAsyncTaskComplete(this);
         }
     }
 

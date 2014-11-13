@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -31,28 +33,51 @@ import com.rastating.droidbeard.entities.Episode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EpisodeItem implements View.OnClickListener {
+public class EpisodeItem implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private Context mContext;
     private View mView;
     private TextView mEpisodeNumber;
     private TextView mName;
     private TextView mAirdate;
+    private CheckBox mInclude;
     private int mSeasonNumber;
     private EpisodeItemClickListener mItemClickListener;
+    private SeasonTable mSeasonTable;
+    private Episode mEpisode;
 
-    public EpisodeItem(Context context) {
+    public EpisodeItem(Context context, SeasonTable table, Episode episode) {
         mContext = context;
+        mSeasonTable = table;
+        mEpisode = episode;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.episode_item, null);
         mEpisodeNumber = (TextView) mView.findViewById(R.id.episode_number);
         mName = (TextView) mView.findViewById(R.id.name);
         mAirdate = (TextView) mView.findViewById(R.id.airdate);
+        mInclude = (CheckBox) mView.findViewById(R.id.include);
 
         mView.setOnClickListener(this);
+        mInclude.setOnCheckedChangeListener(this);
     }
 
     public void addToTable(TableLayout table) {
         table.addView(mView);
+    }
+
+    public boolean isChecked() {
+        return mInclude.isChecked();
+    }
+
+    public Episode getEpisode() {
+        return mEpisode;
+    }
+
+    public SeasonTable getSeasonTable() {
+        return mSeasonTable;
+    }
+
+    public void setChecked(boolean value) {
+        mInclude.setChecked(value);
     }
 
     public void setEpisodeNumber(int value) {
@@ -126,6 +151,7 @@ public class EpisodeItem implements View.OnClickListener {
                 break;
         }
 
+        mInclude.setBackgroundColor(color);
         mEpisodeNumber.setBackgroundColor(color);
         mName.setBackgroundColor(color);
         mAirdate.setBackgroundColor(color);
@@ -149,8 +175,19 @@ public class EpisodeItem implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (mItemClickListener != null) {
-            mItemClickListener.onItemClick(this, mSeasonNumber, Integer.valueOf(mEpisodeNumber.getText().toString()), mName.getText().toString());
+        if (view != mInclude) {
+            mInclude.toggle();
         }
+        else {
+            if (mItemClickListener != null) {
+                mSeasonTable.updateSelectAllState();
+                mItemClickListener.onItemClick(this, mSeasonNumber, Integer.valueOf(mEpisodeNumber.getText().toString()), mName.getText().toString());
+            }
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        onClick(mInclude);
     }
 }

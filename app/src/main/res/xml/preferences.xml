@@ -63,4 +63,8 @@
         android:title="HTTP Password"
         android:password="true" />
 
+    <CheckBoxPreference
+        android:key="group_inactive_shows"
+        android:summary="Group shows by their active status in the shows screen."
+        android:title="Group Shows by Active Status" />
 </PreferenceScreen>

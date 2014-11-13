@@ -24,6 +24,7 @@ import java.util.List;
 public class Season {
     private int mSeasonNumber;
     private List<Episode> mEpisodes;
+    private int mTVDBID;
 
     public Season() {
         mEpisodes = new ArrayList<Episode>();
@@ -50,7 +51,15 @@ public class Season {
         return mEpisodes;
     }
 
+    public int getTVDBID() {
+        return mTVDBID;
+    }
+
     public void setSeasonNumber(int value) {
         mSeasonNumber = value;
+    }
+
+    public void setTVDBID(int value) {
+        mTVDBID = value;
     }
 }

@@ -67,6 +67,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
                     Iterator<String> episodeKeys = seasonData.keys();
                     Season season = new Season();
                     season.setSeasonNumber(Integer.valueOf(seasonKey));
+                    season.setTVDBID(tvdbid);
 
                     while (episodeKeys.hasNext()) {
                         String episodeKey = episodeKeys.next();
@@ -78,6 +79,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
                         episode.setQuality(episodeData.getString("quality"));
                         episode.setStatus(episodeData.getString("status"));
                         episode.setSeasonNumber(Integer.valueOf(seasonKey));
+                        episode.setTVDBID(tvdbid);
                         season.addEpisode(episode);
                     }
 

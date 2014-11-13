@@ -32,4 +32,5 @@
     <color name="upcoming_episode_current">#dfd</color>
     <color name="upcoming_episode_future">#f5f1e4</color>
     <color name="upcoming_episode_distant">#ddf</color>
+    <color name="header">#333333</color>
 </resources>

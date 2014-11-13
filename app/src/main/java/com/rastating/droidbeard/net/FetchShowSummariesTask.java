@@ -56,6 +56,8 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                 TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
                 tvShowSummary.setNetwork(show.getString("network"));
                 tvShowSummary.setTvDbId(tvdbid);
+                tvShowSummary.setStatus(show.getString("status"));
+                tvShowSummary.setPaused(show.getInt("paused") == 1);
 
                 try {
                     String nextDateString = show.getString("next_ep_airdate");
