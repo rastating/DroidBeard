@@ -71,6 +71,7 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
             episode.setEpisodeNumber(episodeData.getInt("episode"));
             episode.setSeasonNumber(episodeData.getInt("season"));
             episode.setShowName(episodeData.getString("show_name"));
+            episode.setTVDBID(episodeData.getInt("tvdbid"));
             episode.setUpcomingStatus(status);
             episodes.add(episode);
         }

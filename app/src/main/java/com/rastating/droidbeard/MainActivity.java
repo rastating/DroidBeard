@@ -75,7 +75,12 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             DroidbeardFragment fragment = (DroidbeardFragment) getCurrentFragment();
             if (fragment.onBackPressed()) {
                 if (fragment instanceof ShowFragment) {
-                    onNavigationDrawerItemSelected(0);
+                    if (((ShowFragment) fragment).shouldReturnToUpcomingEpisodes()) {
+                        onNavigationDrawerItemSelected(1);
+                    }
+                    else {
+                        onNavigationDrawerItemSelected(0);
+                    }
                 }
                 else {
                     super.onBackPressed();

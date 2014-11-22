@@ -18,6 +18,7 @@
 
 package com.rastating.droidbeard.fragments;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.entities.UpcomingEpisode;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchUpcomingEpisodesTask;
@@ -36,6 +38,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComingEpisodesFragment extends ListViewFragment implements ApiResponseListener<UpcomingEpisode[]> {
+    private UpcomingEpisode[] mEpisodes;
+
     public ComingEpisodesFragment() {
         setTitle("Coming Episodes");
     }
@@ -54,13 +58,23 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        UpcomingEpisode episode = mEpisodes[position];
+        TVShowSummary show = new TVShowSummary(episode.getShowName());
+        show.setTvDbId(episode.getTVDBID());
+
+        FragmentManager manager = this.getFragmentManager();
+        ShowFragment fragment = new ShowFragment();
+        fragment.setShouldReturnToUpcomingEpisodes(true);
+        fragment.setTvShowSummary(show);
+        manager.beginTransaction().replace(R.id.container, fragment).commit();
     }
 
     @Override
     public void onApiRequestFinished(UpcomingEpisode[] result) {
         if (activityStillExists()) {
             if (result != null) {
+                mEpisodes = result;
                 ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
                 for (UpcomingEpisode episode : result) {
                     HashMap<String, String> item = new HashMap<String, String>();
@@ -95,11 +109,6 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                         }
 
                         return view;
-                    }
-
-                    @Override
-                    public boolean isEnabled(int position) {
-                        return false;
                     }
                 };
 

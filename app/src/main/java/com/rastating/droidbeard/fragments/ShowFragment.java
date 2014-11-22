@@ -133,6 +133,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             mDisposingActionMode = false;
         }
     };
+    private boolean mReturnToUpcomingEpisodes;
 
     public ShowFragment() {
         mShowSummary = null;
@@ -379,5 +380,13 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         dialog.setCancelable(false);
         dialog.setIndeterminate(true);
         return dialog;
+    }
+
+    public void setShouldReturnToUpcomingEpisodes(boolean value) {
+        mReturnToUpcomingEpisodes = value;
+    }
+
+    public boolean shouldReturnToUpcomingEpisodes() {
+        return mReturnToUpcomingEpisodes;
     }
 }
