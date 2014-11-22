@@ -39,6 +39,7 @@ import java.util.Map;
 
 public class ComingEpisodesFragment extends ListViewFragment implements ApiResponseListener<UpcomingEpisode[]> {
     private UpcomingEpisode[] mEpisodes;
+    SimpleAdapter mAdapter;
 
     public ComingEpisodesFragment() {
         setTitle("Coming Episodes");
@@ -52,7 +53,13 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
         setBackgroundColor(getResources().getColor(android.R.color.white));
         setDivider(android.R.color.white, 3);
 
-        onRefreshButtonPressed();
+        if (mAdapter == null) {
+            onRefreshButtonPressed();
+        }
+        else {
+            setAdapter(mAdapter);
+            showListView(true);
+        }
 
         return root;
     }
@@ -86,7 +93,7 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                 String[] from = new String[]{"name", "desc"};
                 int[] to = new int[]{R.id.episode, R.id.event_details};
                 final UpcomingEpisode[] episodes = result;
-                SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.historical_event_item, from, to) {
+                mAdapter = new SimpleAdapter(getActivity(), data, R.layout.historical_event_item, from, to) {
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View view = super.getView(position, convertView, parent);
@@ -112,7 +119,7 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                     }
                 };
 
-                setAdapter(adapter);
+                setAdapter(mAdapter);
                 showListView();
             } else {
                 showError(getString(R.string.error_fetching_coming_episodes));

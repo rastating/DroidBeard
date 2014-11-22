@@ -51,6 +51,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     private Fragment mCurrentFragment;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private ShowsFragment mShowsFragment;
+    private ComingEpisodesFragment mComingEpisodesFragment;
     private CharSequence mTitle;
 
     private Fragment getCurrentFragment() {
@@ -122,7 +123,11 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             fragment = mShowsFragment;
         }
         else if (position == 1) {
-            fragment = new ComingEpisodesFragment();
+            if (mComingEpisodesFragment == null) {
+                mComingEpisodesFragment = new ComingEpisodesFragment();
+            }
+
+            fragment = mComingEpisodesFragment;
         }
         else if (position == 2) {
             fragment = new HistoryFragment();
