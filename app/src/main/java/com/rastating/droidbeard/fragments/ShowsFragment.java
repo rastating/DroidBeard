@@ -42,7 +42,15 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
-        onRefreshButtonPressed();
+
+        if (mAdapter != null) {
+            setAdapter(mAdapter);
+            showListView(true);
+        }
+        else {
+            onRefreshButtonPressed();
+        }
+
         return root;
     }
 

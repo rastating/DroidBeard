@@ -27,6 +27,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,7 +46,7 @@ import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.RestartTask;
 import com.rastating.droidbeard.net.ShutdownTask;
 
-public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Fragment mCurrentFragment;
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -266,5 +267,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        mShowsFragment = null;
     }
 }

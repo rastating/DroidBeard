@@ -84,9 +84,21 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
         mLoadingImage.setVisibility(View.GONE);
     }
 
+    protected void showListView(boolean immediately) {
+        if (immediately) {
+            mLoadingImage.setAlpha(0.0f);
+            mLoadingImage.setVisibility(View.GONE);
+            mListView.setAlpha(1.0f);
+            mListView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mErrorContainer.setVisibility(View.GONE);
+            new CrossFader(mLoadingImage, mListView, 500).start();
+        }
+    }
+
     protected void showListView() {
-        mErrorContainer.setVisibility(View.GONE);
-        new CrossFader(mLoadingImage, mListView, 500).start();
+        showListView(false);
     }
 
     protected void showLoadingAnimation() {

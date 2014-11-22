@@ -34,7 +34,8 @@ import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.net.HttpClientManager;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-    @Override
+    MainActivity mMainActivity;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
@@ -94,12 +95,18 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        if (mMainActivity != null) {
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(mMainActivity);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        if (mMainActivity != null) {
+            getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(mMainActivity);
+        }
     }
 
     @Override
@@ -131,6 +138,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         if (activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity) activity;
             mainActivity.setCurrentFragment(this);
+            mMainActivity = mainActivity;
         }
     }
 }
