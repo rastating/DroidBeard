@@ -275,6 +275,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
                 ((DroidbeardFragment) mCurrentFragment).onRefreshButtonPressed();
             }
         }
+        else if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        }
 
         return super.onOptionsItemSelected(item);
     }
