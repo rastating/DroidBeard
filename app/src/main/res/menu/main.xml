@@ -54,6 +54,12 @@
                 android:orderInCategory="120"
                 android:showAsAction="never"
                 android:icon="@drawable/ic_action_warning" />
+
+            <item android:id="@+id/action_about"
+                android:title="@string/about"
+                android:orderInCategory="130"
+                android:showAsAction="never"
+                android:icon="@drawable/ic_action_about" />
         </menu>
     </item>
 </menu>

@@ -33,4 +33,5 @@
     <color name="upcoming_episode_future">#f5f1e4</color>
     <color name="upcoming_episode_distant">#ddf</color>
     <color name="header">#333333</color>
+    <color name="about_link">#ed5153</color>
 </resources>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:src="@drawable/sickbeard_icon"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DroidBeard"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/uh_oh_caption_size" />
+
+        <TextView
+            android:id="@+id/version_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:text="Version {{versionName}}"
+            android:textSize="@dimen/version_number_size" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Developed By"
+            android:textColor="@color/secondary_color"
+            android:textSize="@dimen/version_number_size"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
+        <TextView android:id="@+id/rastating_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\@rastating"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Special Thanks To"
+            android:textColor="@color/secondary_color"
+            android:textSize="@dimen/version_number_size"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
+        <TextView android:id="@+id/adam_prescott_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\@Adam_Prescott"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView android:id="@+id/reddit_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="/r/sickbeard"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView android:id="@+id/phyushin_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\@Phyushin"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Keep Up To Date At"
+            android:textColor="@color/secondary_color"
+            android:textSize="@dimen/version_number_size"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
+
+        <TextView android:id="@+id/official_website_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Official Website"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView android:id="@+id/facebook_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Facebook"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView android:id="@+id/google_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Google+"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+    </LinearLayout>
+</ScrollView>

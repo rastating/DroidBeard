@@ -26,4 +26,5 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
 
     <dimen name="uh_oh_caption_size">50sp</dimen>
+    <dimen name="version_number_size">20sp</dimen>
 </resources>
