@@ -32,6 +32,7 @@ import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.entities.UpcomingEpisode;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchUpcomingEpisodesTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
     }
 
     @Override
-    public void onApiRequestFinished(UpcomingEpisode[] result) {
+    public void onApiRequestFinished(SickbeardAsyncTask sender, UpcomingEpisode[] result) {
         if (activityStillExists()) {
             if (result != null) {
                 mEpisodes = result;
@@ -122,7 +123,7 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                 setAdapter(mAdapter);
                 showListView();
             } else {
-                showError(getString(R.string.error_fetching_coming_episodes));
+                showError(getString(R.string.error_fetching_coming_episodes), sender.getLastException());
             }
         }
     }

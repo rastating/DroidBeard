@@ -30,6 +30,7 @@ import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.adapters.TVShowSummaryAdapter;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchShowSummariesTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 public class ShowsFragment extends ListViewFragment implements ApiResponseListener<TVShowSummary[]> {
     private TVShowSummaryAdapter mAdapter;
@@ -67,7 +68,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     }
 
     @Override
-    public void onApiRequestFinished(TVShowSummary[] objects) {
+    public void onApiRequestFinished(SickbeardAsyncTask sender, TVShowSummary[] objects) {
         if (activityStillExists()) {
             mLoading = false;
 
@@ -77,7 +78,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
                 setAdapter(mAdapter);
                 showListView();
             } else {
-                showError(getString(R.string.error_fetching_show_list));
+                showError(getString(R.string.error_fetching_show_list), sender.getLastException());
             }
         }
     }

@@ -49,6 +49,7 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
     private Context mContext;
     private List<ApiResponseListener<Result>> mResponseListeners;
     private List<AsyncTaskCompleteListener> mCompleteListeners;
+    private Exception mLastException;
 
     public SickbeardAsyncTask(Context context) {
         mContext = context;
@@ -87,10 +88,10 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
             bitmap = BitmapFactory.decodeStream(stream);
             stream.close();
         } catch (MalformedURLException e) {
-            // TODO: handle exception
+            mLastException = e;
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO: handle exception
+            mLastException = e;
             e.printStackTrace();
         }
 
@@ -146,9 +147,11 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
             }
         }
         catch (SSLHandshakeException e) {
+            mLastException = e;
             throw(e);
         }
         catch (Exception e) {
+            mLastException = e;
             e.printStackTrace();
             return null;
         }
@@ -164,7 +167,7 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
     protected void onPostExecute(Result result) {
         List<ApiResponseListener<Result>> listeners = getResponseListeners();
         for (ApiResponseListener<Result> listener : listeners) {
-            listener.onApiRequestFinished(result);
+            listener.onApiRequestFinished(this, result);
         }
 
         for (AsyncTaskCompleteListener listener : mCompleteListeners) {
@@ -183,5 +186,13 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
 
     public void start(Params... args) {
         this.start(AsyncTask.THREAD_POOL_EXECUTOR, args);
+    }
+
+    protected void setLastException(Exception value) {
+        mLastException = value;
+    }
+
+    public Exception getLastException() {
+        return mLastException;
     }
 }

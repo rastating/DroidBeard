@@ -39,6 +39,7 @@ import com.rastating.droidbeard.entities.TvDBResult;
 import com.rastating.droidbeard.net.AddShowTask;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.SearchTvDBTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +81,7 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
                 AddShowTask task = new AddShowTask(ShowSearch.this);
                 task.addResponseListener(new ApiResponseListener<Boolean>() {
                     @Override
-                    public void onApiRequestFinished(Boolean result) {
+                    public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
                         mDialog.dismiss();
                         AlertDialog.Builder builder = new AlertDialog.Builder(ShowSearch.this);
                         builder.setTitle("Show Queued")
@@ -116,7 +117,7 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
     }
 
     @Override
-    public void onApiRequestFinished(TvDBResult[] results) {
+    public void onApiRequestFinished(SickbeardAsyncTask sender, TvDBResult[] results) {
         mTask = null;
         mDialog.dismiss();
 

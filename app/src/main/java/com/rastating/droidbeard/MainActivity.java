@@ -45,6 +45,7 @@ import com.rastating.droidbeard.fragments.ShowsFragment;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.RestartTask;
 import com.rastating.droidbeard.net.ShutdownTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -203,7 +204,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             ShutdownTask task = new ShutdownTask(this);
             task.addResponseListener(new ApiResponseListener<Boolean>() {
                 @Override
-                public void onApiRequestFinished(Boolean result) {
+                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
                     finish();
                 }
             });
@@ -243,7 +244,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             RestartTask task = new RestartTask(this);
             task.addResponseListener(new ApiResponseListener<Boolean>() {
                 @Override
-                public void onApiRequestFinished(Boolean result) {
+                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
                     dialog.dismiss();
                 }
             });

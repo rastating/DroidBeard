@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.ui.CrossFader;
@@ -76,12 +77,14 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
         mListView.setSelector(selector);
     }
 
-    protected void showError(String message) {
+    protected void showError(String message, Exception e) {
         mErrorMessage.setText(message);
         mErrorContainer.setVisibility(View.VISIBLE);
         mListView.setVisibility(View.GONE);
         mLoadingImage.clearAnimation();
         mLoadingImage.setVisibility(View.GONE);
+
+        Toast.makeText(getActivity(), e.getStackTrace().toString(), Toast.LENGTH_LONG).show();
     }
 
     protected void showListView(boolean immediately) {

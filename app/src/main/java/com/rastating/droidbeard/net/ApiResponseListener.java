@@ -19,5 +19,5 @@
 package com.rastating.droidbeard.net;
 
 public interface ApiResponseListener<T> {
-    public void onApiRequestFinished(T result);
+    public void onApiRequestFinished(SickbeardAsyncTask sender, T result);
 }
