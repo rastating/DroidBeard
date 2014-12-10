@@ -18,9 +18,11 @@
 
 package com.rastating.droidbeard.fragments;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rastating.droidbeard.AboutActivity;
+import com.rastating.droidbeard.ErrorReportActivity;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.ui.CrossFader;
 import com.rastating.droidbeard.ui.LoadingAnimation;
@@ -40,6 +44,7 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
     private View mErrorContainer;
     private ImageView mLoadingImage;
     private TextView mErrorMessage;
+    private Exception mLastException;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +53,17 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
         mErrorContainer = root.findViewById(R.id.error_container);
         mLoadingImage = (ImageView) root.findViewById(R.id.loading);
         mErrorMessage = (TextView) root.findViewById(R.id.error_message);
+
+        root.findViewById(R.id.send_error_report).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ListViewFragment.this.getActivity(), ErrorReportActivity.class);
+                intent.putExtra("exception", mLastException.getMessage());
+                intent.putExtra("stackTrace", Log.getStackTraceString(mLastException));
+                startActivity(intent);
+            }
+        });
+
         return root;
     }
 
@@ -83,8 +99,7 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
         mListView.setVisibility(View.GONE);
         mLoadingImage.clearAnimation();
         mLoadingImage.setVisibility(View.GONE);
-
-        Toast.makeText(getActivity(), e.getStackTrace().toString(), Toast.LENGTH_LONG).show();
+        mLastException = e;
     }
 
     protected void showListView(boolean immediately) {

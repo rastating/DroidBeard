@@ -43,6 +43,7 @@
         </activity>
 
         <activity android:name=".ShowSearch" android:label="New Show" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".ErrorReportActivity" android:label="Error Report Preview" android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".AboutActivity" android:theme="@style/SickBeardTheme.NoTitle" android:configChanges="orientation|screenSize|keyboardHidden" />
     </application>
 
