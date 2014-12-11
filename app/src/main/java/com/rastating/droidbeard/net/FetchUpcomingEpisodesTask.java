@@ -54,6 +54,7 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
             processEpisodes(later, UpcomingEpisode.UpcomingEpisodeStatus.DISTANT, episodes);
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return null;
         }

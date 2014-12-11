@@ -55,6 +55,7 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
             }
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return null;
         }

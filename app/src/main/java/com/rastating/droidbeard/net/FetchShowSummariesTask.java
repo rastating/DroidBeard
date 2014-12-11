@@ -42,11 +42,7 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
     @Override
     protected TVShowSummary[] doInBackground(Void... voids) {
         List<TVShowSummary> shows = new ArrayList<TVShowSummary>();
-        setLastException(new Exception("Testing error reporting"));
 
-        return null;
-
-        /*
         try {
             String json = getJson("shows", null);
             JSONObject root = new JSONObject(json);
@@ -85,12 +81,12 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
             }
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return null;
         }
 
         Collections.sort(shows, new TVShowSummaryComparator());
         return shows.toArray(new TVShowSummary[shows.size()]);
-        */
     }
 }

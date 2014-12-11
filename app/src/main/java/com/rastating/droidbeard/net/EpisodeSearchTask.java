@@ -60,6 +60,7 @@ public class EpisodeSearchTask extends SickbeardAsyncTask<Void, Void, Boolean> {
             }
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return false;
         }

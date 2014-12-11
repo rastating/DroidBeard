@@ -145,6 +145,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
             }
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return null;
         }

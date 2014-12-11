@@ -44,6 +44,7 @@ public class FetchLogsTask extends SickbeardAsyncTask<Void, Void, String[]> {
             return logs.toArray(new String[logs.size()]);
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return null;
         }
