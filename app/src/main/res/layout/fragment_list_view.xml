@@ -64,14 +64,14 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:textColor="@color/secondary_color"
-            android:text="To help us fix this problem, please click the button below to send us an anonymous error report. You will be able to review the data that will be sent before sending."/>
+            android:text="@string/error_report_issue"/>
 
         <Button android:id="@+id/send_error_report"
             android:padding="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Send Error Report"
+            android:text="@string/send_error_report"
             android:layout_gravity="center"
             />
     </LinearLayout>

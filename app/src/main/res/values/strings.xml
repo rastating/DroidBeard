@@ -62,4 +62,7 @@
     <string name="first_aired">First Aired: </string>
     <string name="welcome">Welcome</string>
     <string name="about">About</string>
+    <string name="submit_report">Submit Report</string>
+    <string name="error_report_issue">To help us fix this problem, please click the button below to send us an anonymous error report. You will be able to review the data that will be sent before sending.</string>
+    <string name="send_error_report">Send Error Report</string>
 </resources>
