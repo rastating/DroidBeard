@@ -45,39 +45,43 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
 
         try {
             String json = getJson("shows", null);
-            JSONObject root = new JSONObject(json);
-            JSONObject data = root.getJSONObject("data");
-            Iterator<String> keys = data.keys();
-            while (keys.hasNext()) {
-                String key = keys.next();
-                JSONObject show = data.getJSONObject(key);
+            if (json != null) {
+                JSONObject root = new JSONObject(json);
+                JSONObject data = root.getJSONObject("data");
+                Iterator<String> keys = data.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    JSONObject show = data.getJSONObject(key);
 
-                int tvdbid = Integer.valueOf(key);
+                    int tvdbid = Integer.valueOf(key);
 
-                TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
-                tvShowSummary.setNetwork(show.getString("network"));
-                tvShowSummary.setTvDbId(tvdbid);
-                tvShowSummary.setStatus(show.getString("status"));
+                    TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
+                    tvShowSummary.setNetwork(show.getString("network"));
+                    tvShowSummary.setTvDbId(tvdbid);
+                    tvShowSummary.setStatus(show.getString("status"));
 
-                Object pausedState = show.get("paused");
-                if (pausedState instanceof Boolean) {
-                    tvShowSummary.setPaused((Boolean) pausedState);
-                }
-                else {
-                    tvShowSummary.setPaused(pausedState.equals(1));
-                }
-
-                try {
-                    String nextDateString = show.getString("next_ep_airdate");
-                    if (!nextDateString.equals("")) {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(nextDateString);
-                        tvShowSummary.setNextAirDate(date);
+                    Object pausedState = show.get("paused");
+                    if (pausedState instanceof Boolean) {
+                        tvShowSummary.setPaused((Boolean) pausedState);
+                    } else {
+                        tvShowSummary.setPaused(pausedState.equals(1));
                     }
-                } catch (ParseException e) {
-                    tvShowSummary.setNextAirDate(null);
-                }
 
-                shows.add(tvShowSummary);
+                    try {
+                        String nextDateString = show.getString("next_ep_airdate");
+                        if (!nextDateString.equals("")) {
+                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(nextDateString);
+                            tvShowSummary.setNextAirDate(date);
+                        }
+                    } catch (ParseException e) {
+                        tvShowSummary.setNextAirDate(null);
+                    }
+
+                    shows.add(tvShowSummary);
+                }
+            }
+            else {
+                return null;
             }
         }
         catch (Exception e) {
