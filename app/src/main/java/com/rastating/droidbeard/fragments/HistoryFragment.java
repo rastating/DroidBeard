@@ -31,6 +31,7 @@ import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.HistoricalEvent;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchHistoryTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
     }
 
     @Override
-    public void onApiRequestFinished(HistoricalEvent[] result) {
+    public void onApiRequestFinished(SickbeardAsyncTask sender, HistoricalEvent[] result) {
         if (activityStillExists()) {
             if (result != null) {
                 ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>(result.length);
@@ -89,7 +90,7 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
 
                 showListView();
             } else {
-                showError(getString(R.string.error_fetching_history));
+                showError(getString(R.string.error_fetching_history), sender.getLastException());
             }
         }
     }

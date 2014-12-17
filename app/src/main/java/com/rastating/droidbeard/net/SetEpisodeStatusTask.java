@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SetEpisodeStatusTask extends SickbeardAsyncTask<String, Void, Boolean> {
-    private int mTvDBId;
+    private long mTvDBId;
     private int mSeason;
     private int mEpisode;
 
-    public SetEpisodeStatusTask(Context context, int tvdbid, int season, int episode) {
+    public SetEpisodeStatusTask(Context context, long tvdbid, int season, int episode) {
         super(context);
 
         mTvDBId = tvdbid;

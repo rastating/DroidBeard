@@ -42,18 +42,24 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
 
         try {
             String json = getJson("future", null);
-            JSONObject data = new JSONObject(json).getJSONObject("data");
-            JSONArray missed = data.getJSONArray("missed");
-            JSONArray today = data.getJSONArray("today");
-            JSONArray soon = data.getJSONArray("soon");
-            JSONArray later = data.getJSONArray("later");
+            if (json != null) {
+                JSONObject data = new JSONObject(json).getJSONObject("data");
+                JSONArray missed = data.getJSONArray("missed");
+                JSONArray today = data.getJSONArray("today");
+                JSONArray soon = data.getJSONArray("soon");
+                JSONArray later = data.getJSONArray("later");
 
-            processEpisodes(missed, UpcomingEpisode.UpcomingEpisodeStatus.PAST, episodes);
-            processEpisodes(today, UpcomingEpisode.UpcomingEpisodeStatus.CURRENT, episodes);
-            processEpisodes(soon, UpcomingEpisode.UpcomingEpisodeStatus.FUTURE, episodes);
-            processEpisodes(later, UpcomingEpisode.UpcomingEpisodeStatus.DISTANT, episodes);
+                processEpisodes(missed, UpcomingEpisode.UpcomingEpisodeStatus.PAST, episodes);
+                processEpisodes(today, UpcomingEpisode.UpcomingEpisodeStatus.CURRENT, episodes);
+                processEpisodes(soon, UpcomingEpisode.UpcomingEpisodeStatus.FUTURE, episodes);
+                processEpisodes(later, UpcomingEpisode.UpcomingEpisodeStatus.DISTANT, episodes);
+            }
+            else {
+                return null;
+            }
         }
         catch (Exception e) {
+            setLastException(e);
             e.printStackTrace();
             return null;
         }

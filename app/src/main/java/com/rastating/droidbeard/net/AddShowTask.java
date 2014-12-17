@@ -20,15 +20,15 @@ package com.rastating.droidbeard.net;
 
 import android.content.Context;
 
-public class AddShowTask extends SickbeardAsyncTask<Integer, Void, Boolean> {
+public class AddShowTask extends SickbeardAsyncTask<Long, Void, Boolean> {
     public AddShowTask(Context context) {
         super(context);
     }
 
     @Override
-    protected Boolean doInBackground(Integer... integers) {
+    protected Boolean doInBackground(Long... longs) {
         try {
-            return getJson("show.addnew", "tvdbid", String.valueOf(integers[0])).contains("success");
+            return getJson("show.addnew", "tvdbid", String.valueOf(longs[0])).contains("success");
         }
         catch (Exception e) {
             e.printStackTrace();

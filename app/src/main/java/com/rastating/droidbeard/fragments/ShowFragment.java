@@ -41,6 +41,7 @@ import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.EpisodeSearchTask;
 import com.rastating.droidbeard.net.FetchShowTask;
 import com.rastating.droidbeard.net.SetEpisodeStatusTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 import com.rastating.droidbeard.net.SickbeardTaskPool;
 import com.rastating.droidbeard.net.TaskPoolSubscriber;
 import com.rastating.droidbeard.ui.CrossFader;
@@ -174,7 +175,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     }
 
     @Override
-    public void onApiRequestFinished(TVShow result) {
+    public void onApiRequestFinished(SickbeardAsyncTask sender, TVShow result) {
         if (activityStillExists()) {
             mShow = result;
             if (mShow != null) {
@@ -263,7 +264,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         }
     }
 
-    private SetEpisodeStatusTask buildEpisodeStatusTask(SeasonTable seasonTable, EpisodeItem episodeItem, int tvdbid, int season, int episode, String status) {
+    private SetEpisodeStatusTask buildEpisodeStatusTask(SeasonTable seasonTable, EpisodeItem episodeItem, long tvdbid, int season, int episode, String status) {
         // Create finals for use in callback...
         final EpisodeItem finalEpisodeItem = episodeItem;
         final SeasonTable finalSeasonTable = seasonTable;
@@ -273,7 +274,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         SetEpisodeStatusTask task = new SetEpisodeStatusTask(getActivity(), tvdbid, season, episode);
         task.addResponseListener(new ApiResponseListener<Boolean>() {
             @Override
-            public void onApiRequestFinished(Boolean result) {
+            public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
                 if (result) {
                     if (finalEpisode > 0) {
                         finalEpisodeItem.setStatus(finalStatus);

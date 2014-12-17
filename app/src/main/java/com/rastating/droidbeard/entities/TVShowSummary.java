@@ -30,7 +30,7 @@ public class TVShowSummary implements Parcelable {
     private Date mNextAirDate;
     private boolean mPaused;
     private String mStatus;
-    private int mTvDbId;
+    private long mTvDbId;
 
     public TVShowSummary(String name) {
         mName = name;
@@ -49,7 +49,7 @@ public class TVShowSummary implements Parcelable {
         mNextAirDate = airDateTimeStamp > 0 ? new Date(airDateTimeStamp) : null;
 
         mPaused = in.readInt() == 1;
-        mTvDbId = in.readInt();
+        mTvDbId = in.readLong();
     }
 
     public String getAirs() {
@@ -76,7 +76,7 @@ public class TVShowSummary implements Parcelable {
         return mStatus;
     }
 
-    public int getTvDbId() {
+    public long getTvDbId() {
         return mTvDbId;
     }
 
@@ -100,7 +100,7 @@ public class TVShowSummary implements Parcelable {
         mStatus = value;
     }
 
-    public void setTvDbId(int value) {
+    public void setTvDbId(long value) {
         mTvDbId = value;
     }
 
@@ -114,7 +114,7 @@ public class TVShowSummary implements Parcelable {
         parcel.writeStringArray(new String[] { mAirs, mName, mNetwork, mStatus });
         parcel.writeLong(mNextAirDate != null ? mNextAirDate.getTime() : 0);
         parcel.writeInt(mPaused ? 1 : 0);
-        parcel.writeInt(mTvDbId);
+        parcel.writeLong(mTvDbId);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
