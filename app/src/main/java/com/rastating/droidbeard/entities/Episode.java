@@ -39,7 +39,7 @@ public class Episode {
     private String mQuality;
     private int mSeasonNumber;
     private EpisodeStatus mStatus;
-    private int mTVDBID;
+    private long mTVDBID;
 
     public Date getAirdate() {
         return mAirdate;
@@ -65,7 +65,7 @@ public class Episode {
         return mSeasonNumber;
     }
 
-    public int getTVDBID() {
+    public long getTVDBID() {
         return mTVDBID;
     }
 
@@ -164,7 +164,7 @@ public class Episode {
         }
     }
 
-    public void setTVDBID(int value) {
+    public void setTVDBID(long value) {
         mTVDBID = value;
     }
 }

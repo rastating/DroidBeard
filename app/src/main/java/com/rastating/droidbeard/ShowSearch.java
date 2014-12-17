@@ -75,7 +75,7 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView idView = (TextView) view.findViewById(R.id.id);
-                int id = Integer.valueOf(idView.getText().toString());
+                long id = Long.valueOf(idView.getText().toString());
                 showProgressDialog("Adding Show", "Please wait...");
 
                 AddShowTask task = new AddShowTask(ShowSearch.this);

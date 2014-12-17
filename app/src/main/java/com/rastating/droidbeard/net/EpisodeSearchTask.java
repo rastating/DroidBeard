@@ -29,14 +29,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class EpisodeSearchTask extends SickbeardAsyncTask<Void, Void, Boolean> {
-    private int mTvDBId;
+    private long mTvDBId;
     private int mSeason;
     private int mEpisode;
 
     protected static BlockingQueue BLOCKING_QUEUE = new ArrayBlockingQueue(100);
     protected static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(10, 100, 5, TimeUnit.SECONDS, BLOCKING_QUEUE);
 
-    public EpisodeSearchTask(Context context, int tvdbid, int season, int episode) {
+    public EpisodeSearchTask(Context context, long tvdbid, int season, int episode) {
         super(context);
 
         mTvDBId = tvdbid;

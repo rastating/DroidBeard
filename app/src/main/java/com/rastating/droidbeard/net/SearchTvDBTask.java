@@ -57,7 +57,7 @@ public class SearchTvDBTask extends SickbeardAsyncTask<String, Void, TvDBResult[
                     TvDBResult tvDBResult = new TvDBResult();
                     tvDBResult.setFirstAired(result.getString("first_aired"));
                     tvDBResult.setName(result.getString("name"));
-                    tvDBResult.setId(result.getInt("tvdbid"));
+                    tvDBResult.setId(result.getLong("tvdbid"));
                     list.add(tvDBResult);
                 }
 

@@ -264,7 +264,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         }
     }
 
-    private SetEpisodeStatusTask buildEpisodeStatusTask(SeasonTable seasonTable, EpisodeItem episodeItem, int tvdbid, int season, int episode, String status) {
+    private SetEpisodeStatusTask buildEpisodeStatusTask(SeasonTable seasonTable, EpisodeItem episodeItem, long tvdbid, int season, int episode, String status) {
         // Create finals for use in callback...
         final EpisodeItem finalEpisodeItem = episodeItem;
         final SeasonTable finalSeasonTable = seasonTable;

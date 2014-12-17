@@ -20,14 +20,14 @@ package com.rastating.droidbeard.entities;
 
 public class TvDBResult {
     private String mName;
-    private int mTvDbId;
+    private long mTvDbId;
     private String mFirstAired;
 
     public String getFirstAired() {
         return (mFirstAired == null || mFirstAired.equalsIgnoreCase("null")) ? "N/A" : mFirstAired;
     }
 
-    public int getId() {
+    public long getId() {
         return mTvDbId;
     }
 
@@ -39,7 +39,7 @@ public class TvDBResult {
         mFirstAired = value;
     }
 
-    public void setId(int value) {
+    public void setId(long value) {
         mTvDbId = value;
     }
 

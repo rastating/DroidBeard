@@ -53,7 +53,13 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                     String key = keys.next();
                     JSONObject show = data.getJSONObject(key);
 
-                    int tvdbid = Integer.valueOf(key);
+                    long tvdbid = 0;
+                    if (show.has("tvdbid")) {
+                        tvdbid = show.getLong("tvdbid");
+                    }
+                    else {
+                        tvdbid = Long.valueOf(key);
+                    }
 
                     TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
                     tvShowSummary.setNetwork(show.getString("network"));

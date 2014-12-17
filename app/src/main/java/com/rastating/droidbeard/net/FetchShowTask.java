@@ -39,19 +39,19 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
+public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
 
     public FetchShowTask(Context context) {
         super(context);
     }
 
-    private Bitmap getBanner(int tvdbid) {
+    private Bitmap getBanner(long tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
         return getBitmap("show.getbanner", params);
     }
 
-    private List<Season> getSeasons(int tvdbid) {
+    private List<Season> getSeasons(long tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
 
@@ -98,7 +98,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
         }
     }
 
-    private TVShow getTVShow(int tvdbid) {
+    private TVShow getTVShow(long tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
 
@@ -152,8 +152,8 @@ public class FetchShowTask extends SickbeardAsyncTask<Integer, Void, TVShow> {
     }
 
     @Override
-    protected TVShow doInBackground(Integer... integers) {
-        int tvdbid = integers[0];
+    protected TVShow doInBackground(Long... longs) {
+        long tvdbid = longs[0];
         TVShow show = getTVShow(tvdbid);
 
         if (show != null) {
