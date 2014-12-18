@@ -44,10 +44,10 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
             String json = getJson("future", null);
             if (json != null) {
                 JSONObject data = new JSONObject(json).getJSONObject("data");
-                JSONArray missed = data.getJSONArray("missed");
-                JSONArray today = data.getJSONArray("today");
-                JSONArray soon = data.getJSONArray("soon");
-                JSONArray later = data.getJSONArray("later");
+                JSONArray missed = data.optJSONArray("missed");
+                JSONArray today = data.optJSONArray("today");
+                JSONArray soon = data.optJSONArray("soon");
+                JSONArray later = data.optJSONArray("later");
 
                 processEpisodes(missed, UpcomingEpisode.UpcomingEpisodeStatus.PAST, episodes);
                 processEpisodes(today, UpcomingEpisode.UpcomingEpisodeStatus.CURRENT, episodes);
@@ -69,17 +69,19 @@ public class FetchUpcomingEpisodesTask extends SickbeardAsyncTask<Void, Void, Up
     }
 
     private void processEpisodes(JSONArray data, UpcomingEpisode.UpcomingEpisodeStatus status, List<UpcomingEpisode> episodes) throws JSONException {
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject episodeData = data.getJSONObject(i);
-            UpcomingEpisode episode = new UpcomingEpisode();
-            episode.setAirdate(episodeData.getString("airdate"));
-            episode.setName(episodeData.getString("ep_name"));
-            episode.setEpisodeNumber(episodeData.getInt("episode"));
-            episode.setSeasonNumber(episodeData.getInt("season"));
-            episode.setShowName(episodeData.getString("show_name"));
-            episode.setTVDBID(episodeData.getInt("tvdbid"));
-            episode.setUpcomingStatus(status);
-            episodes.add(episode);
+        if (data != null) {
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject episodeData = data.getJSONObject(i);
+                UpcomingEpisode episode = new UpcomingEpisode();
+                episode.setAirdate(episodeData.getString("airdate"));
+                episode.setName(episodeData.getString("ep_name"));
+                episode.setEpisodeNumber(episodeData.getInt("episode"));
+                episode.setSeasonNumber(episodeData.getInt("season"));
+                episode.setShowName(episodeData.getString("show_name"));
+                episode.setTVDBID(episodeData.getInt("tvdbid"));
+                episode.setUpcomingStatus(status);
+                episodes.add(episode);
+            }
         }
     }
 }
