@@ -41,18 +41,21 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
         try {
             String json = getJson("history", null);
             if (json != null) {
-                JSONArray results = new JSONObject(json).getJSONArray("data");
-                for (int i = 0; i < results.length(); i++) {
-                    JSONObject data = results.getJSONObject(i);
-                    HistoricalEvent event = new HistoricalEvent();
-                    event.setDate(data.getString("date"));
-                    event.setEpisodeNumber(data.getInt("episode"));
-                    event.setProvider(data.getString("provider"));
-                    event.setQuality(data.getString("quality"));
-                    event.setSeason(data.getInt("season"));
-                    event.setShowName(data.getString("show_name"));
-                    event.setStatus(data.getString("status"));
-                    events.add(event);
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray results = jsonObject.optJSONArray("data");
+                if (results != null) {
+                    for (int i = 0; i < results.length(); i++) {
+                        JSONObject data = results.getJSONObject(i);
+                        HistoricalEvent event = new HistoricalEvent();
+                        event.setDate(data.getString("date"));
+                        event.setEpisodeNumber(data.getInt("episode"));
+                        event.setProvider(data.getString("provider"));
+                        event.setQuality(data.getString("quality"));
+                        event.setSeason(data.getInt("season"));
+                        event.setShowName(data.getString("show_name"));
+                        event.setStatus(data.getString("status"));
+                        events.add(event);
+                    }
                 }
             }
             else {
