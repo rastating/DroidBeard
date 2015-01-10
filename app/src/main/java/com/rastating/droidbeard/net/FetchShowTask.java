@@ -163,10 +163,12 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
             List<Season> seasons = getSeasons(tvdbid);
 
             // Sort the seasons in reverse order.
-            Collections.sort(seasons, new SeasonComparator());
-            Collections.reverse(seasons);
+            if (seasons != null) {
+                Collections.sort(seasons, new SeasonComparator());
+                Collections.reverse(seasons);
 
-            show.setSeasons(seasons);
+                show.setSeasons(seasons);
+            }
         }
 
         return show;

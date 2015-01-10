@@ -225,21 +225,24 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mAirByDate.setImageResource(mShow.getAirByDate() ? R.drawable.yes16 : R.drawable.no16);
 
         mSeasonContainer.removeAllViews();
-        for (Season season : mShow.getSeasons()) {
-            SeasonTable table = new SeasonTable(getActivity(), season);
-            table.setTitle(season.getTitle());
+        List<Season> seasons = mShow.getSeasons();
+        if (seasons != null) {
+            for (Season season : seasons) {
+                SeasonTable table = new SeasonTable(getActivity(), season);
+                table.setTitle(season.getTitle());
 
-            List<Episode> episodes = season.getEpisodes();
-            Collections.sort(episodes, new EpisodeComparator());
-            Collections.reverse(episodes);
+                List<Episode> episodes = season.getEpisodes();
+                Collections.sort(episodes, new EpisodeComparator());
+                Collections.reverse(episodes);
 
-            for (Episode episode : episodes) {
-                EpisodeItem item = table.addEpisode(episode);
-                item.setOnItemClickListener(this);
-                item.setOnCreateContextMenuListener(this);
+                for (Episode episode : episodes) {
+                    EpisodeItem item = table.addEpisode(episode);
+                    item.setOnItemClickListener(this);
+                    item.setOnCreateContextMenuListener(this);
+                }
+
+                mSeasonContainer.addView(table);
             }
-
-            mSeasonContainer.addView(table);
         }
     }
 
