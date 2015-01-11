@@ -1,6 +1,6 @@
 /*
      DroidBeard - a free, open-source Android app for managing SickBeard
-     Copyright (C) 2014 Robert Carr
+     Copyright (C) 2014-2015 Robert Carr
 
      This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
     @Override
     protected HistoricalEvent[] doInBackground(Void... voids) {
         List<HistoricalEvent> events = new ArrayList<HistoricalEvent>();
+        String json = getJson("history", null);
 
         try {
-            String json = getJson("history", null);
             if (json != null) {
                 JSONObject jsonObject = new JSONObject(json);
                 JSONArray results = jsonObject.optJSONArray("data");
@@ -63,7 +63,7 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
             }
         }
         catch (Exception e) {
-            setLastException(e);
+            setLastException(json, e);
             e.printStackTrace();
             return null;
         }
