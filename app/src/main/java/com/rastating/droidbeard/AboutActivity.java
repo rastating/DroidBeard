@@ -28,23 +28,6 @@ import android.view.View;
 import android.widget.TextView;
 
 public class AboutActivity extends Activity implements View.OnClickListener {
-
-    private String getVersionName() {
-        Context context = getApplicationContext();
-        PackageManager packageManager = context.getPackageManager();
-        String packageName = context.getPackageName();
-
-        String versionName = "Unknown";
-
-        try {
-            versionName = packageManager.getPackageInfo(packageName, 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return versionName;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +42,7 @@ public class AboutActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.facebook_link).setOnClickListener(this);
         findViewById(R.id.google_link).setOnClickListener(this);
 
-        ((TextView) findViewById(R.id.version_number)).setText("Version " + getVersionName());
+        ((TextView) findViewById(R.id.version_number)).setText("Version " + Application.getVersionName());
     }
 
     @Override

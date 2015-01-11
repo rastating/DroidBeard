@@ -33,8 +33,8 @@ public class FetchLogsTask extends SickbeardAsyncTask<Void, Void, String[]> {
 
     @Override
     protected String[] doInBackground(Void... voids) {
+        String json = getJson("logs", "min_level", "info");
         try {
-            String json = getJson("logs", "min_level", "info");
             if (json != null) {
                 List<String> logs = new ArrayList<String>();
                 JSONArray data = new JSONObject(json).getJSONArray("data");
@@ -49,7 +49,7 @@ public class FetchLogsTask extends SickbeardAsyncTask<Void, Void, String[]> {
             }
         }
         catch (Exception e) {
-            setLastException(e);
+            setLastException(json, e);
             e.printStackTrace();
             return null;
         }

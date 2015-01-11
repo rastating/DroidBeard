@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchLogsTask;
+import com.rastating.droidbeard.net.SickBeardException;
 import com.rastating.droidbeard.net.SickbeardAsyncTask;
 import com.rastating.droidbeard.ui.CrossFader;
 import com.rastating.droidbeard.ui.LoadingAnimation;
@@ -93,7 +94,7 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
         task.start();
     }
 
-    protected void showError(String message, Exception e) {
+    protected void showError(String message, SickBeardException e) {
         mErrorMessage.setText(message);
         mErrorContainer.setVisibility(View.VISIBLE);
         mWebView.setVisibility(View.GONE);

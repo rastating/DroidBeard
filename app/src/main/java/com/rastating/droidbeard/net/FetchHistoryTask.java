@@ -37,9 +37,9 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
     @Override
     protected HistoricalEvent[] doInBackground(Void... voids) {
         List<HistoricalEvent> events = new ArrayList<HistoricalEvent>();
+        String json = getJson("history", null);
 
         try {
-            String json = getJson("history", null);
             if (json != null) {
                 JSONObject jsonObject = new JSONObject(json);
                 JSONArray results = jsonObject.optJSONArray("data");
@@ -63,7 +63,7 @@ public class FetchHistoryTask extends SickbeardAsyncTask<Void, Void, HistoricalE
             }
         }
         catch (Exception e) {
-            setLastException(e);
+            setLastException(json, e);
             e.printStackTrace();
             return null;
         }

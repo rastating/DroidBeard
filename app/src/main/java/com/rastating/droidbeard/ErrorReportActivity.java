@@ -40,8 +40,11 @@ public class ErrorReportActivity extends Activity implements View.OnClickListene
         try {
             if (savedInstanceState == null) {
                 Bundle extras = getIntent().getExtras();
-                mReport.put("exception", extras.getString("exception"));
+                String exception = extras.getString("exception");
+                mReport.put("exception", exception == null ? "" : exception);
                 mReport.put("stackTrace", extras.getString("stackTrace"));
+                mReport.put("version", Application.getVersionName());
+                mReport.put("data", extras.getString("data"));
             }
         }
         catch (Exception e) {

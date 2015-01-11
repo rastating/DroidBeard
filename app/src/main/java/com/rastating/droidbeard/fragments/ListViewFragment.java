@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.rastating.droidbeard.AboutActivity;
 import com.rastating.droidbeard.ErrorReportActivity;
 import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.net.SickBeardException;
 import com.rastating.droidbeard.ui.CrossFader;
 import com.rastating.droidbeard.ui.LoadingAnimation;
 
@@ -44,7 +45,7 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
     private View mErrorContainer;
     private ImageView mLoadingImage;
     private TextView mErrorMessage;
-    private Exception mLastException;
+    private SickBeardException mLastException;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,8 +59,9 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ListViewFragment.this.getActivity(), ErrorReportActivity.class);
-                intent.putExtra("exception", mLastException.getMessage());
-                intent.putExtra("stackTrace", Log.getStackTraceString(mLastException));
+                intent.putExtra("exception", mLastException.getException().getMessage());
+                intent.putExtra("stackTrace", Log.getStackTraceString(mLastException.getException()));
+                intent.putExtra("data", mLastException.getData());
                 startActivity(intent);
             }
         });
@@ -93,7 +95,7 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
         mListView.setSelector(selector);
     }
 
-    protected void showError(String message, Exception e) {
+    protected void showError(String message, SickBeardException e) {
         mErrorMessage.setText(message);
         mErrorContainer.setVisibility(View.VISIBLE);
         mListView.setVisibility(View.GONE);

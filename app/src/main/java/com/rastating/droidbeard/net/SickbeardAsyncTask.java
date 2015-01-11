@@ -49,7 +49,7 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
     private Context mContext;
     private List<ApiResponseListener<Result>> mResponseListeners;
     private List<AsyncTaskCompleteListener> mCompleteListeners;
-    private Exception mLastException;
+    private SickBeardException mLastException;
 
     public SickbeardAsyncTask(Context context) {
         mContext = context;
@@ -88,10 +88,10 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
             bitmap = BitmapFactory.decodeStream(stream);
             stream.close();
         } catch (MalformedURLException e) {
-            mLastException = e;
+            mLastException = new SickBeardException("", e);
             e.printStackTrace();
         } catch (IOException e) {
-            mLastException = e;
+            mLastException = new SickBeardException("", e);
             e.printStackTrace();
         }
 
@@ -106,13 +106,13 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         return getJson(cmd, null);
     }
 
-    protected String getJson(String cmd, String paramKey, Object paramValue) throws SSLHandshakeException {
+    protected String getJson(String cmd, String paramKey, Object paramValue) {
         List<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>(paramKey, paramValue));
         return getJson(cmd, params);
     }
 
-    protected String getJson(String cmd, List<Pair<String, Object>> params) throws SSLHandshakeException {
+    protected String getJson(String cmd, List<Pair<String, Object>> params) {
         String uri = null;
         String body = null;
         String format = "%sapi/%s/?cmd=%s";
@@ -147,11 +147,11 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
             }
         }
         catch (SSLHandshakeException e) {
-            mLastException = e;
-            throw(e);
+            setLastException("", e);
+            return null;
         }
         catch (Exception e) {
-            mLastException = e;
+            setLastException("", e);
             e.printStackTrace();
             return null;
         }
@@ -188,11 +188,11 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         this.start(AsyncTask.THREAD_POOL_EXECUTOR, args);
     }
 
-    protected void setLastException(Exception value) {
-        mLastException = value;
+    protected void setLastException(String data, Exception e) {
+        mLastException = new SickBeardException(data, e);
     }
 
-    public Exception getLastException() {
+    public SickBeardException getLastException() {
         return mLastException;
     }
 }

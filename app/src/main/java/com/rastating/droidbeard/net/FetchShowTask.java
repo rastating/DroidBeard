@@ -101,9 +101,9 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
     private TVShow getTVShow(long tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
+        String json = getJson("show", params);
 
         try {
-            String json = getJson("show", params);
             if (json != null && !json.equals("")) {
                 JSONObject data = new JSONObject(json).getJSONObject("data");
                 TVShow show = new TVShow();
@@ -145,7 +145,7 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
             }
         }
         catch (Exception e) {
-            setLastException(e);
+            setLastException(json, e);
             e.printStackTrace();
             return null;
         }
