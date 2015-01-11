@@ -117,6 +117,11 @@ public class Preferences {
         return Integer.valueOf(port);
     }
 
+    public boolean getHttpsEnabled() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return preferences.getBoolean(Preferences.USE_HTTPS, false);
+    }
+
     public String getSickbeardUrl() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String address = preferences.getString(Preferences.ADDRESS, "");

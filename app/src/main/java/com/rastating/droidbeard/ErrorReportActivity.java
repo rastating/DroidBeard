@@ -38,10 +38,13 @@ public class ErrorReportActivity extends Activity implements View.OnClickListene
 
         mReport = new JSONObject();
         try {
+            Preferences preferences = new Preferences(this);
             if (savedInstanceState == null) {
                 Bundle extras = getIntent().getExtras();
                 mReport.put("exception", extras.getString("exception"));
                 mReport.put("stackTrace", extras.getString("stackTrace"));
+                mReport.put("https_enabled", preferences.getHttpsEnabled());
+                mReport.put("trust_all_certificates", preferences.getTrustAllCertificatesFlag());
             }
         }
         catch (Exception e) {
