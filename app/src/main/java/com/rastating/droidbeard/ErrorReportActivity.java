@@ -1,6 +1,6 @@
 /*
      DroidBeard - a free, open-source Android app for managing SickBeard
-     Copyright (C) 2014 Robert Carr
+     Copyright (C) 2014-2015 Robert Carr
 
      This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -40,8 +40,11 @@ public class ErrorReportActivity extends Activity implements View.OnClickListene
         try {
             if (savedInstanceState == null) {
                 Bundle extras = getIntent().getExtras();
-                mReport.put("exception", extras.getString("exception"));
+                String exception = extras.getString("exception");
+                mReport.put("exception", exception == null ? "" : exception);
                 mReport.put("stackTrace", extras.getString("stackTrace"));
+                mReport.put("version", Application.getVersionName());
+                mReport.put("data", extras.getString("data"));
             }
         }
         catch (Exception e) {

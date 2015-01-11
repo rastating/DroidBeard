@@ -1,6 +1,6 @@
 /*
      DroidBeard - a free, open-source Android app for managing SickBeard
-     Copyright (C) 2014 Robert Carr
+     Copyright (C) 2014-2015 Robert Carr
 
      This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 package com.rastating.droidbeard;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 
 public class Application extends android.app.Application{
     private static Application mInstance;
@@ -29,6 +30,22 @@ public class Application extends android.app.Application{
 
     public static Context getContext() {
         return mInstance;
+    }
+
+    public static String getVersionName() {
+        Context context = getContext();
+        PackageManager packageManager = context.getPackageManager();
+        String packageName = context.getPackageName();
+
+        String versionName = "Unknown";
+
+        try {
+            versionName = packageManager.getPackageInfo(packageName, 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return versionName;
     }
 
     @Override

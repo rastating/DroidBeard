@@ -16,15 +16,22 @@
      along with this program.  If not, see http://www.gnu.org/licenses/.
 */
 
-package com.rastating.droidbeard.comparators;
+package com.rastating.droidbeard.net;
 
-import com.rastating.droidbeard.entities.Season;
+public class SickBeardException {
+    private Exception mException;
+    private String mData;
 
-import java.util.Comparator;
+    public SickBeardException(String data, Exception exception) {
+        mException = exception;
+        mData = data;
+    }
 
-public class SeasonComparator implements Comparator<Season> {
-    @Override
-    public int compare(Season season, Season season2) {
-        return ((Integer) season.getSeasonNumber()).compareTo(season2.getSeasonNumber());
+    public Exception getException() {
+        return mException;
+    }
+
+    public String getData() {
+        return mData;
     }
 }
