@@ -38,6 +38,7 @@ public class Preferences {
     public final static String HTTP_USERNAME = "http_username";
     public final static String HTTP_PASSWORD = "http_password";
     public final static String GROUP_INACTIVE_SHOWS = "group_inactive_shows";
+    public final static String SHOW_BANNERS = "show_banners_in_show_list";
 
     private Context mContext;
 
@@ -120,6 +121,11 @@ public class Preferences {
     public boolean getHttpsEnabled() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         return preferences.getBoolean(Preferences.USE_HTTPS, false);
+    }
+
+    public boolean getShowBannersInShowList() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return preferences.getBoolean(Preferences.SHOW_BANNERS, false);
     }
 
     public String getSickbeardUrl() {

@@ -22,6 +22,8 @@ import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.comparators.TVShowSummaryComparator;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Pair;
 
 import org.json.JSONObject;
 
@@ -37,6 +39,12 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
 
     public FetchShowSummariesTask(Context context) {
         super(context);
+    }
+
+    private Bitmap getBanner(long tvdbid) {
+        ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
+        params.add(new Pair<String, Object>("tvdbid", tvdbid));
+        return getBitmap("show.getbanner", params);
     }
 
     @Override
@@ -61,7 +69,9 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                         tvdbid = Long.valueOf(key);
                     }
 
+                    Bitmap banner = getBanner(tvdbid);
                     TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
+                    tvShowSummary.setBanner(banner);
                     tvShowSummary.setNetwork(show.getString("network"));
                     tvShowSummary.setTvDbId(tvdbid);
                     tvShowSummary.setStatus(show.getString("status"));

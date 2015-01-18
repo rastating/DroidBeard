@@ -64,6 +64,11 @@
         android:password="true" />
 
     <CheckBoxPreference
+        android:key="show_banners_in_show_list"
+        android:summary="Display the show's banner in the show listing screen."
+        android:title="Display Show Banners" />
+
+    <CheckBoxPreference
         android:key="group_inactive_shows"
         android:summary="Group shows by their active status in the shows screen."
         android:title="Group Shows by Active Status" />

@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.adapters.TVShowSummaryAdapter;
@@ -73,8 +74,10 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             mLoading = false;
 
             if (objects != null) {
+                Preferences preferences = new Preferences(getActivity());
                 LayoutInflater inflater = getActivity().getLayoutInflater();
-                mAdapter = TVShowSummaryAdapter.createInstance(this.getActivity(), inflater, R.layout.tv_show_list_item, objects);
+                int layoutID = preferences.getShowBannersInShowList() ? R.layout.tv_show_list_banner_item : R.layout.tv_show_list_item;
+                mAdapter = TVShowSummaryAdapter.createInstance(this.getActivity(), inflater, layoutID, objects);
                 setAdapter(mAdapter);
                 showListView();
             } else {
