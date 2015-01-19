@@ -23,10 +23,13 @@ import com.rastating.droidbeard.comparators.TVShowSummaryComparator;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Pair;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,7 +72,22 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                         tvdbid = Long.valueOf(key);
                     }
 
-                    Bitmap banner = getBanner(tvdbid);
+                    Bitmap banner;
+                    JSONObject cacheInfo = show.optJSONObject("cache");
+                    File cachedBanner = new File(getContext().getCacheDir(), String.valueOf(tvdbid) + ".png");
+                    if (cachedBanner.exists() && !cachedBanner.isDirectory()) {
+                        banner = BitmapFactory.decodeFile(cachedBanner.getAbsolutePath());
+                    }
+                    else {
+                        banner = getBanner(tvdbid);
+                        if (cacheInfo == null || cacheInfo.optInt("banner", 0) == 1) {
+                            FileOutputStream stream = new FileOutputStream(cachedBanner);
+                            banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            stream.flush();
+                            stream.close();
+                        }
+                    }
+
                     TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
                     tvShowSummary.setBanner(banner);
                     tvShowSummary.setNetwork(show.getString("network"));
