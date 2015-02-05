@@ -44,12 +44,6 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
         super(context);
     }
 
-    private Bitmap getBanner(long tvdbid) {
-        ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
-        params.add(new Pair<String, Object>("tvdbid", tvdbid));
-        return getBitmap("show.getbanner", params);
-    }
-
     @Override
     protected TVShowSummary[] doInBackground(Void... voids) {
         List<TVShowSummary> shows = new ArrayList<TVShowSummary>();
@@ -72,21 +66,8 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                         tvdbid = Long.valueOf(key);
                     }
 
-                    Bitmap banner;
                     JSONObject cacheInfo = show.optJSONObject("cache");
-                    File cachedBanner = new File(getContext().getCacheDir(), String.valueOf(tvdbid) + ".png");
-                    if (cachedBanner.exists() && !cachedBanner.isDirectory()) {
-                        banner = BitmapFactory.decodeFile(cachedBanner.getAbsolutePath());
-                    }
-                    else {
-                        banner = getBanner(tvdbid);
-                        if (cacheInfo == null || cacheInfo.optInt("banner", 0) == 1) {
-                            FileOutputStream stream = new FileOutputStream(cachedBanner);
-                            banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            stream.flush();
-                            stream.close();
-                        }
-                    }
+                    Bitmap banner = getShowBanner(tvdbid, cacheInfo != null ? cacheInfo.optInt("banner", 0) : 0);
 
                     TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
                     tvShowSummary.setBanner(banner);

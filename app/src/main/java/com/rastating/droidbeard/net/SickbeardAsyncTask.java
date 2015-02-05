@@ -25,7 +25,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Pair;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
+import com.rastating.droidbeard.R;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,8 +35,13 @@ import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -71,6 +78,43 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         mResponseListeners.remove(listener);
     }
 
+    protected Bitmap getDefaultBanner() {
+        return BitmapFactory.decodeResource(Application.getContext().getResources(), R.drawable.banner);
+    }
+
+    protected Bitmap getShowBanner(long tvdbid, int cachedInSB) {
+        Bitmap banner;
+        File cachedBanner = new File(getContext().getCacheDir(), String.valueOf(tvdbid) + ".png");
+        if (cachedBanner.exists() && !cachedBanner.isDirectory()) {
+            banner = BitmapFactory.decodeFile(cachedBanner.getAbsolutePath());
+        }
+        else {
+            ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
+            params.add(new Pair<String, Object>("tvdbid", tvdbid));
+            banner = getBitmap("show.getbanner", params);
+
+            if (cachedInSB == 1) {
+                if (banner != null) {
+                    try {
+                        FileOutputStream stream = new FileOutputStream(cachedBanner);
+                        banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        stream.flush();
+                        stream.close();
+                    }
+                    catch (Exception e) {
+                        banner = getDefaultBanner();
+                    }
+                }
+            }
+
+            if (banner == null) {
+                banner = getDefaultBanner();
+            }
+        }
+
+        return banner;
+    }
+
     protected Bitmap getBitmap(String cmd, List<Pair<String, Object>> params) {
         Bitmap bitmap = null;
         Preferences preferences = new Preferences(mContext);
@@ -84,9 +128,16 @@ public abstract class SickbeardAsyncTask<Params, Progress, Result> extends Async
         }
 
         try {
-            InputStream stream = new URL(uri).openStream();
-            bitmap = BitmapFactory.decodeStream(stream);
-            stream.close();
+            HttpClient client = HttpClientManager.INSTANCE.getClient();
+            HttpGet request = new HttpGet(uri);
+            HttpResponse response = client.execute(request);
+            StatusLine status = response.getStatusLine();
+
+            if (status.getStatusCode() == 200) {
+                HttpEntity entity = response.getEntity();
+                byte[] bytes = EntityUtils.toByteArray(entity);
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            }
         } catch (MalformedURLException e) {
             mLastException = new SickBeardException("", e);
             e.printStackTrace();

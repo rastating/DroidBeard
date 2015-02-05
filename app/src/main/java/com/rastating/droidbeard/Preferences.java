@@ -140,7 +140,7 @@ public class Preferences {
             return null;
         }
         else {
-            String url = useHTTPS ? "https://" : "http://";
+            String url = !address.toLowerCase().startsWith("https://") && !address.toLowerCase().startsWith("http://") ?  (useHTTPS ? "https://" : "http://") : "";
             url += address.trim();
 
             if (port != null) {
