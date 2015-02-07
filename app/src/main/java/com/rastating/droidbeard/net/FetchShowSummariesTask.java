@@ -18,6 +18,7 @@
 
 package com.rastating.droidbeard.net;
 
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.comparators.TVShowSummaryComparator;
 
@@ -66,14 +67,17 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                         tvdbid = Long.valueOf(key);
                     }
 
-                    JSONObject cacheInfo = show.optJSONObject("cache");
-                    Bitmap banner = getShowBanner(tvdbid, cacheInfo != null ? cacheInfo.optInt("banner", 0) : 0);
-
                     TVShowSummary tvShowSummary = new TVShowSummary(show.getString("show_name"));
-                    tvShowSummary.setBanner(banner);
                     tvShowSummary.setNetwork(show.getString("network"));
                     tvShowSummary.setTvDbId(tvdbid);
                     tvShowSummary.setStatus(show.getString("status"));
+
+                    Preferences preferences = new Preferences(getContext());
+                    if (preferences.getShowBannersInShowList()) {
+                        JSONObject cacheInfo = show.optJSONObject("cache");
+                        Bitmap banner = getShowBanner(tvdbid, cacheInfo != null ? cacheInfo.optInt("banner", 0) : 0);
+                        tvShowSummary.setBanner(banner);
+                    }
 
                     Object pausedState = show.get("paused");
                     if (pausedState instanceof Boolean) {
