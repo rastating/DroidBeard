@@ -39,6 +39,7 @@ import com.rastating.droidbeard.fragments.HistoryFragment;
 import com.rastating.droidbeard.fragments.LogFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
+import com.rastating.droidbeard.fragments.ProfilesFragment;
 import com.rastating.droidbeard.fragments.SetupFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
 import com.rastating.droidbeard.fragments.ShowsFragment;
@@ -67,7 +68,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     public void onBackPressed() {
         if (getCurrentFragment() == null || !(getCurrentFragment() instanceof DroidbeardFragment)) {
             if (getCurrentFragment() instanceof PreferencesFragment) {
-                onNavigationDrawerItemSelected(0);
+                mNavigationDrawerFragment.selectItem(0, true);
             }
             else {
                 super.onBackPressed();
@@ -78,10 +79,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             if (fragment.onBackPressed()) {
                 if (fragment instanceof ShowFragment) {
                     if (((ShowFragment) fragment).shouldReturnToUpcomingEpisodes()) {
-                        onNavigationDrawerItemSelected(1);
+                        mNavigationDrawerFragment.selectItem(1, true);
                     }
                     else {
-                        onNavigationDrawerItemSelected(0);
+                        mNavigationDrawerFragment.selectItem(0, true);
                     }
                 }
                 else {
@@ -113,7 +114,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         boolean hasUrl = preferences.getSickbeardUrl() != null && preferences.getSickbeardUrl().length() > 0;
         boolean hasApiKey = preferences.getApiKey() != null && preferences.getApiKey().length() > 0;
 
-        if ((!hasUrl || !hasApiKey) && position != 4) {
+        if ((!hasUrl || !hasApiKey) && position != 99) {
             fragment = new SetupFragment();
         }
         else if (position == 0) {
@@ -137,6 +138,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             fragment = new LogFragment();
         }
         else if (position == 4) {
+            fragment = new ProfilesFragment();
+        }
+        else if (position == 99) {
             fragment = new PreferencesFragment();
         }
 
@@ -259,7 +263,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            onNavigationDrawerItemSelected(4);
+            onNavigationDrawerItemSelected(99);
             setTitle(getString(R.string.action_settings));
         }
         else if (id == R.id.action_power) {
@@ -286,5 +290,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         mShowsFragment = null;
+    }
+
+    public void invalidateFragmentCache() {
+        mShowsFragment = null;
+        mComingEpisodesFragment = null;
     }
 }

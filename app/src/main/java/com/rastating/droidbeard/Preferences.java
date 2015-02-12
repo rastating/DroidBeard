@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,18 +35,33 @@ public class Preferences {
     public final static String EXTENSION_PATH = "extension_path";
     public final static String ADDRESS = "address";
     public final static String V1_SICKBEARD_URL = "sickbeard_url";
-    public final static String ACKNOWLEDGED_EPISODE_HELP = "acknowledged_episode_help";
     public final static String ACKNOWLEDGED_SHOW_ADDING_HELP = "acknowledged_show_adding_help";
     public final static String HTTP_USERNAME = "http_username";
     public final static String HTTP_PASSWORD = "http_password";
     public final static String GROUP_INACTIVE_SHOWS = "group_inactive_shows";
     public final static String SHOW_BANNERS = "show_banners_in_show_list";
+    public final static String PROFILE_NAME = "profile_name";
+    public final static String DEFAULT_PROFILE_NAME = "Default";
 
     private Context mContext;
 
     public Preferences(Context context) {
         mContext = context;
+        update(); // Migrate old user's preferences
+    }
 
+    public SharedPreferences getSharedPreferences() {
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String profileName = defaultPreferences.getString(Preferences.PROFILE_NAME, Preferences.DEFAULT_PROFILE_NAME);
+        if (profileName.equalsIgnoreCase(Preferences.DEFAULT_PROFILE_NAME)) {
+            return defaultPreferences;
+        }
+        else {
+            return mContext.getSharedPreferences(profileName, Context.MODE_PRIVATE);
+        }
+    }
+
+    private void update() {
         // Ensure any users from version 1.0 have their preferences updated.
         String url = getV1Url();
         if (url != null && url.trim().length() > 0) {
@@ -84,57 +101,56 @@ public class Preferences {
     }
 
     public String getAddress() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String address = preferences.getString(ADDRESS, "");
         return address;
     }
 
     public String getApiKey() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String key = preferences.getString(API_KEY, null);
         return key != null ? key.trim() : null;
     }
 
     public boolean getGroupInactiveShows() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(Preferences.GROUP_INACTIVE_SHOWS, true);
     }
 
     public String getHttpUsername() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String username = preferences.getString(HTTP_USERNAME, "");
         return username;
     }
 
     public String getHttpPassword() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String password = preferences.getString(HTTP_PASSWORD, "");
         return password;
     }
 
     public int getPort() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String port = preferences.getString(PORT_NUMBER, "");
         return Integer.valueOf(port);
     }
 
     public boolean getHttpsEnabled() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(Preferences.USE_HTTPS, false);
     }
 
     public boolean getShowBannersInShowList() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(Preferences.SHOW_BANNERS, false);
     }
 
     public String getSickbeardUrl() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String address = preferences.getString(Preferences.ADDRESS, "");
         String port = preferences.getString(Preferences.PORT_NUMBER, null);
         String path = preferences.getString(Preferences.EXTENSION_PATH, "/");
         boolean useHTTPS = preferences.getBoolean(Preferences.USE_HTTPS, false);
-        boolean trustAllCertificates = preferences.getBoolean(Preferences.TRUST_ALL_CERTIFICATES, true);
 
         if (address == null || address.trim().equals("")) {
             return null;
@@ -159,12 +175,12 @@ public class Preferences {
     }
 
     public boolean getTrustAllCertificatesFlag() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(Preferences.TRUST_ALL_CERTIFICATES, true);
     }
 
     public String getV1Url() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         String url = preferences.getString(V1_SICKBEARD_URL, null);
 
         if (url != null && !url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://")) {
@@ -178,34 +194,62 @@ public class Preferences {
         return url != null ? url.trim() : null;
     }
 
-    public boolean hasAcknowledgedEpisodeHelp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        return preferences.getBoolean(ACKNOWLEDGED_EPISODE_HELP, false);
-    }
-
     public boolean hasAcknowledgedShowAddingHelp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(ACKNOWLEDGED_SHOW_ADDING_HELP, false);
     }
 
     public void putBoolean(String key, boolean value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key, value);
         editor.commit();
     }
 
     public void putInt(String key, int value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
     public void putString(String key, String value) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences preferences = getSharedPreferences();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
+        editor.commit();
+    }
+
+    public String getSelectedProfileName() {
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return defaultPreferences.getString(Preferences.PROFILE_NAME, Preferences.DEFAULT_PROFILE_NAME);
+    }
+
+    public Set<String> getProfileSet() {
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return defaultPreferences.getStringSet("profiles", new HashSet<String>());
+    }
+
+    public void selectProfile(String name) {
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = defaultPreferences.edit();
+        editor.putString(Preferences.PROFILE_NAME, name);
+        editor.commit();
+    }
+
+    public void deleteProfile(String name) {
+        Set<String> profiles = getProfileSet();
+        profiles.remove(name);
+        updateProfileSet(profiles);
+        if (getSelectedProfileName().equals(name)) {
+            selectProfile(Preferences.DEFAULT_PROFILE_NAME);
+        }
+    }
+
+    public void updateProfileSet(Set<String> names) {
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = defaultPreferences.edit();
+        editor.putStringSet("profiles", names);
         editor.commit();
     }
 }
