@@ -159,6 +159,11 @@ public class Preferences {
             String url = !address.toLowerCase().startsWith("https://") && !address.toLowerCase().startsWith("http://") ?  (useHTTPS ? "https://" : "http://") : "";
             url += address.trim();
 
+            // Remove trailing slashes to avoid URLs such as 127.0.0.1/:8081/api/ once fully built
+            if (url.endsWith("/")) {
+                url = url.substring(0, url.length() - 1);
+            }
+
             if (port != null) {
                 url += ":" + port.trim();
             }
