@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         boolean hasUrl = preferences.getSickbeardUrl() != null && preferences.getSickbeardUrl().length() > 0;
         boolean hasApiKey = preferences.getApiKey() != null && preferences.getApiKey().length() > 0;
 
-        if ((!hasUrl || !hasApiKey) && position != 99) {
+        if ((!hasUrl || !hasApiKey) && position != 4 && position != 99) {
             fragment = new SetupFragment();
         }
         else if (position == 0) {
