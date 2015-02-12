@@ -18,17 +18,18 @@
 
 package com.rastating.droidbeard.entities;
 
-public class TvDBResult {
+public class ShowSearchResult {
     private String mName;
-    private long mTvDbId;
+    private long mID;
     private String mFirstAired;
+    private boolean mIsTVRageResult;
 
     public String getFirstAired() {
         return (mFirstAired == null || mFirstAired.equalsIgnoreCase("null")) ? "N/A" : mFirstAired;
     }
 
     public long getId() {
-        return mTvDbId;
+        return mID;
     }
 
     public String getName() {
@@ -40,10 +41,18 @@ public class TvDBResult {
     }
 
     public void setId(long value) {
-        mTvDbId = value;
+        mID = value;
     }
 
     public void setName(String value) {
         mName = value;
+    }
+
+    public void setIsTVRageResult(boolean value) {
+        mIsTVRageResult = value;
+    }
+
+    public boolean getIsTVRageResult() {
+        return mIsTVRageResult;
     }
 }
