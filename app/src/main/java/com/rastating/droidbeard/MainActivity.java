@@ -32,10 +32,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.webkit.URLUtil;
 
 import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
 import com.rastating.droidbeard.fragments.HistoryFragment;
+import com.rastating.droidbeard.fragments.InvalidAddressFragment;
 import com.rastating.droidbeard.fragments.LogFragment;
 import com.rastating.droidbeard.fragments.NavigationDrawerFragment;
 import com.rastating.droidbeard.fragments.PreferencesFragment;
@@ -47,6 +49,9 @@ import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.RestartTask;
 import com.rastating.droidbeard.net.ShutdownTask;
 import com.rastating.droidbeard.net.SickbeardAsyncTask;
+
+import java.net.URI;
+import java.net.URL;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -106,16 +111,30 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
+    private boolean isUrlValid(String url) {
+        try {
+            URI uri = URI.create(url);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
         Preferences preferences = new Preferences(this);
 
-        boolean hasUrl = preferences.getSickbeardUrl() != null && preferences.getSickbeardUrl().length() > 0;
+        String sickbeardUrl = preferences.getSickbeardUrl();
+        boolean hasUrl = sickbeardUrl != null && sickbeardUrl.length() > 0;
         boolean hasApiKey = preferences.getApiKey() != null && preferences.getApiKey().length() > 0;
 
         if ((!hasUrl || !hasApiKey) && position != 4 && position != 99) {
             fragment = new SetupFragment();
+        }
+        else if (!isUrlValid(sickbeardUrl) && position != 99 && position != 4) {
+            fragment = new InvalidAddressFragment();
         }
         else if (position == 0) {
             if (mShowsFragment == null) {

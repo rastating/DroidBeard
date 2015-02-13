@@ -67,4 +67,6 @@
     <string name="send_error_report">Send Error Report</string>
     <string name="profile">Profile</string>
     <string name="default_text">Default</string>
+    <string name="invalid_url_title">Invalid Address</string>
+    <string name="invalid_url_body">The address you have specified in the DroidBeard settings appears to be invalid. Please double check and make sure there are no excess spaces or typos.</string>
 </resources>
