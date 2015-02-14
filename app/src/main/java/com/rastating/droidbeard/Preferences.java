@@ -168,6 +168,11 @@ public class Preferences {
                 url += ":" + port.trim();
             }
 
+            // Ensure the path starts with a forward slash if the user entered a folder name on its own.
+            if (!path.startsWith("/")) {
+                path = "/" + path;
+            }
+
             url += path.trim().equals("") ? "/" : path;
             url = url.trim();
 
