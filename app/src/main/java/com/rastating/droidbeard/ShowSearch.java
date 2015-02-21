@@ -35,7 +35,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.rastating.droidbeard.entities.TvDBResult;
+import com.rastating.droidbeard.entities.ShowSearchResult;
 import com.rastating.droidbeard.net.AddShowTask;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.SearchTvDBTask;
@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShowSearch extends Activity implements ApiResponseListener<TvDBResult[]> {
+public class ShowSearch extends Activity implements ApiResponseListener<ShowSearchResult[]> {
     private EditText mCriteria;
     private ProgressDialog mDialog;
     private ListView mListView;
@@ -75,10 +75,11 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView idView = (TextView) view.findViewById(R.id.id);
+                boolean isTVRageResult = ((TextView) view.findViewById(R.id.tvrage_result)).getText().toString().equals("1");
                 long id = Long.valueOf(idView.getText().toString());
                 showProgressDialog("Adding Show", "Please wait...");
 
-                AddShowTask task = new AddShowTask(ShowSearch.this);
+                AddShowTask task = new AddShowTask(ShowSearch.this, isTVRageResult);
                 task.addResponseListener(new ApiResponseListener<Boolean>() {
                     @Override
                     public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
@@ -117,22 +118,23 @@ public class ShowSearch extends Activity implements ApiResponseListener<TvDBResu
     }
 
     @Override
-    public void onApiRequestFinished(SickbeardAsyncTask sender, TvDBResult[] results) {
+    public void onApiRequestFinished(SickbeardAsyncTask sender, ShowSearchResult[] results) {
         mTask = null;
         mDialog.dismiss();
 
         if (results != null) {
             ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>(results.length);
-            for (TvDBResult result : results) {
+            for (ShowSearchResult result : results) {
                 HashMap<String, String> item = new HashMap<String, String>();
                 item.put("name", result.getName());
                 item.put("first_aired", result.getFirstAired());
                 item.put("id", String.valueOf(result.getId()));
+                item.put("tvrage_result", result.getIsTVRageResult() ? "1" : "0");
                 data.add(item);
             }
 
-            String[] from = new String[] { "name", "first_aired", "id" };
-            int[] to = new int[] { R.id.name, R.id.first_aired, R.id.id };
+            String[] from = new String[] { "name", "first_aired", "id", "tvrage_result" };
+            int[] to = new int[] { R.id.name, R.id.first_aired, R.id.id, R.id.tvrage_result };
             SimpleAdapter adapter = new SimpleAdapter(this, data, R.layout.tvdb_result_item, from, to) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {

@@ -45,12 +45,6 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
         super(context);
     }
 
-    private Bitmap getBanner(long tvdbid) {
-        ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
-        params.add(new Pair<String, Object>("tvdbid", tvdbid));
-        return getBitmap("show.getbanner", params);
-    }
-
     private List<Season> getSeasons(long tvdbid) {
         ArrayList<Pair<String, Object>> params = new ArrayList<Pair<String, Object>>();
         params.add(new Pair<String, Object>("tvdbid", tvdbid));
@@ -108,6 +102,10 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
                 JSONObject data = new JSONObject(json).getJSONObject("data");
                 TVShow show = new TVShow();
 
+                JSONObject cacheInfo = data.optJSONObject("cache");
+                Bitmap banner = getShowBanner(tvdbid, cacheInfo != null ? cacheInfo.optInt("banner", 0) : 0);
+                show.setBanner(banner);
+
                 show.setAirByDate(data.getInt("air_by_date") == 1);
                 show.setAirs(data.getString("airs"));
                 show.setFlattenFolders(data.getInt("flatten_folders") == 1);
@@ -157,9 +155,6 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
         TVShow show = getTVShow(tvdbid);
 
         if (show != null) {
-            Bitmap banner = getBanner(tvdbid);
-            show.setBanner(banner);
-
             List<Season> seasons = getSeasons(tvdbid);
 
             // Sort the seasons in reverse order.

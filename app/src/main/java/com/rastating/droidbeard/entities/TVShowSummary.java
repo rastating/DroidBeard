@@ -18,6 +18,7 @@
 
 package com.rastating.droidbeard.entities;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -31,6 +32,7 @@ public class TVShowSummary implements Parcelable {
     private boolean mPaused;
     private String mStatus;
     private long mTvDbId;
+    private Bitmap mBanner;
 
     public TVShowSummary(String name) {
         mName = name;
@@ -50,6 +52,10 @@ public class TVShowSummary implements Parcelable {
 
         mPaused = in.readInt() == 1;
         mTvDbId = in.readLong();
+    }
+
+    public Bitmap getBanner() {
+        return mBanner;
     }
 
     public String getAirs() {
@@ -82,6 +88,10 @@ public class TVShowSummary implements Parcelable {
 
     public void setAirs(String value) {
         mAirs = value;
+    }
+
+    public void setBanner(Bitmap value) {
+        mBanner = value;
     }
 
     public void setNetwork(String value) {

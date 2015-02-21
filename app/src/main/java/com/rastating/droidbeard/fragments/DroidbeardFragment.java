@@ -27,6 +27,7 @@ import com.rastating.droidbeard.MainActivity;
 public abstract class DroidbeardFragment extends Fragment {
     private int mTitleResId;
     private String mTitle;
+    private MainActivity mMainActivity;
 
     protected boolean activityStillExists() {
         return getActivity() != null;
@@ -47,9 +48,9 @@ public abstract class DroidbeardFragment extends Fragment {
                 mTitle = getString(mTitleResId);
             }
 
-            MainActivity mainActivity = (MainActivity) activity;
-            mainActivity.setCurrentFragment(this);
-            mainActivity.setTitle(mTitle);
+            mMainActivity = (MainActivity) activity;
+            mMainActivity.setCurrentFragment(this);
+            mMainActivity.setTitle(mTitle);
         }
     }
 
@@ -67,5 +68,9 @@ public abstract class DroidbeardFragment extends Fragment {
     protected void setTitle(String value) {
         mTitle = value;
         mTitleResId = 0;
+    }
+
+    protected MainActivity getMainActivity() {
+        return mMainActivity;
     }
 }

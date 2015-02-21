@@ -18,9 +18,12 @@
 
 package com.rastating.droidbeard.fragments;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.ActionMode;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -132,6 +135,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
             mSelectedEpisodes.clear();
             mDisposingActionMode = false;
+            getActivity().setTheme(R.style.SickBeardTheme);
         }
     };
     private boolean mReturnToUpcomingEpisodes;
@@ -148,7 +152,9 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_show, container, false);
+        final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.SickBeardTheme_LightActionBar);
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+        View root = localInflater.inflate(R.layout.fragment_show, container, false);
 
         if (savedInstanceState != null) {
             mShowSummary = (TVShowSummary) savedInstanceState.getParcelable("summary");
@@ -256,6 +262,7 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
             }
 
             if (mActionMode == null && mSelectedEpisodes.size() > 0) {
+                getActivity().setTheme(R.style.SickBeardTheme_LightActionBar);
                 mActionMode = getActivity().startActionMode(mActionModeCallback);
             } else if (mActionMode != null && mSelectedEpisodes.size() == 0) {
                 mActionMode.finish();

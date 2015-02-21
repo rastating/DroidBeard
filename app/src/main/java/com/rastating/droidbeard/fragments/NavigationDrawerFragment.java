@@ -125,7 +125,8 @@ public class NavigationDrawerFragment extends Fragment {
             new NavigationAction(R.drawable.glyph_video_camera_333333_64, R.drawable.glyph_video_camera_838383_64, getString(R.string.title_shows)),
             new NavigationAction(R.drawable.glyph_calendar_333333_64, R.drawable.glyph_calendar_838383_64, getString(R.string.title_coming_episodes)),
             new NavigationAction(R.drawable.glyph_history_333333_64, R.drawable.glyph_history_838383_64, getString(R.string.title_history)),
-            new NavigationAction(R.drawable.glyph_file_text_o_333333_64, R.drawable.glyph_file_text_o_838383_64, getString(R.string.title_logs))
+            new NavigationAction(R.drawable.glyph_file_text_o_333333_64, R.drawable.glyph_file_text_o_838383_64, getString(R.string.title_logs)),
+            new NavigationAction(R.drawable.glyph_users_333333_64, R.drawable.glyph_users_838383_64, "Profiles")
         };
     }
 
@@ -233,7 +234,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position, boolean triggerCallback) {
+    public void selectItem(int position, boolean triggerCallback) {
         setSelectedPosition(position);
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
@@ -273,17 +274,6 @@ public class NavigationDrawerFragment extends Fragment {
         super.onConfigurationChanged(newConfig);
         // Forward the new configuration the drawer toggle component.
         mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
-            showGlobalContextActionBar();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

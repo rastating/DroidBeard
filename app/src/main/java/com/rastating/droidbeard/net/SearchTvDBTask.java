@@ -20,7 +20,7 @@ package com.rastating.droidbeard.net;
 
 import android.content.Context;
 
-import com.rastating.droidbeard.entities.TvDBResult;
+import com.rastating.droidbeard.entities.ShowSearchResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,13 +30,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchTvDBTask extends SickbeardAsyncTask<String, Void, TvDBResult[]> {
+public class SearchTvDBTask extends SickbeardAsyncTask<String, Void, ShowSearchResult[]> {
     public SearchTvDBTask(Context context) {
         super(context);
     }
 
     @Override
-    protected TvDBResult[] doInBackground(String... strings) {
+    protected ShowSearchResult[] doInBackground(String... strings) {
         String name = null;
         try {
             name = URLEncoder.encode(strings[0], "UTF-8");
@@ -48,20 +48,28 @@ public class SearchTvDBTask extends SickbeardAsyncTask<String, Void, TvDBResult[
 
         try {
             String json = getJson("sb.searchtvdb", "name", name);
-            List<TvDBResult> list = new ArrayList<TvDBResult>();
+            List<ShowSearchResult> list = new ArrayList<ShowSearchResult>();
 
             if (json != null && !json.equals("")) {
                 JSONArray results = new JSONObject(json).getJSONObject("data").getJSONArray("results");
                 for (int i = 0; i < results.length(); i++) {
                     JSONObject result = results.getJSONObject(i);
-                    TvDBResult tvDBResult = new TvDBResult();
-                    tvDBResult.setFirstAired(result.getString("first_aired"));
-                    tvDBResult.setName(result.getString("name"));
-                    tvDBResult.setId(result.getLong("tvdbid"));
-                    list.add(tvDBResult);
+                    ShowSearchResult showSearchResult = new ShowSearchResult();
+                    showSearchResult.setFirstAired(result.getString("first_aired"));
+                    showSearchResult.setName(result.getString("name"));
+
+                    if (result.has("tvdbid")) {
+                        showSearchResult.setId(result.getLong("tvdbid"));
+                        list.add(showSearchResult);
+                    }
+                    else if (result.has("tvrageid")) {
+                        showSearchResult.setId(result.getLong("tvrageid"));
+                        showSearchResult.setIsTVRageResult(true);
+                        list.add(showSearchResult);
+                    }
                 }
 
-                return list.toArray(new TvDBResult[list.size()]);
+                return list.toArray(new ShowSearchResult[list.size()]);
             } else {
                 return null;
             }

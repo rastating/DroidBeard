@@ -21,14 +21,23 @@ package com.rastating.droidbeard.net;
 import android.content.Context;
 
 public class AddShowTask extends SickbeardAsyncTask<Long, Void, Boolean> {
-    public AddShowTask(Context context) {
+    private boolean mIsTVRageResult;
+
+    public AddShowTask(Context context, boolean isTVRageResult) {
         super(context);
+
+        mIsTVRageResult = isTVRageResult;
     }
 
     @Override
     protected Boolean doInBackground(Long... longs) {
         try {
-            return getJson("show.addnew", "tvdbid", String.valueOf(longs[0])).contains("success");
+            if (mIsTVRageResult) {
+                return getJson("show.addnew", "tvrageid", String.valueOf(longs[0])).contains("success");
+            }
+            else {
+                return getJson("show.addnew", "tvdbid", String.valueOf(longs[0])).contains("success");
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

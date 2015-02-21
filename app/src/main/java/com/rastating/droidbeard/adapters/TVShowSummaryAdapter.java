@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
+import com.rastating.droidbeard.ui.ExpandableImageView;
 import com.rastating.droidbeard.ui.ListViewSectionHeader;
 
 import java.util.ArrayList;
@@ -105,6 +106,12 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
             holder = new TVShowHolder();
             holder.showName = (TextView) row.findViewById(R.id.show_name);
             holder.airs = (TextView) row.findViewById(R.id.airs);
+
+            View bannerView = row.findViewById(R.id.banner);
+            if (bannerView != null) {
+                holder.banner = (ExpandableImageView) bannerView;
+            }
+
             row.setTag(holder);
         }
         else {
@@ -126,6 +133,10 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
         }
         else {
             holder.airs.setText("No upcoming episodes scheduled");
+        }
+
+        if (holder.banner != null) {
+            holder.banner.setImageBitmap(show.getBanner());
         }
 
         return row;
@@ -152,5 +163,6 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
     private class TVShowHolder {
         public TextView showName;
         public TextView airs;
+        public ExpandableImageView banner;
     }
 }

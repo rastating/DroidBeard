@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +39,16 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Preferences droidbeardPreferences = new Preferences(getActivity());
+        if (!droidbeardPreferences.getSelectedProfileName().equals(Preferences.DEFAULT_PROFILE_NAME)) {
+            PreferenceManager manager = getPreferenceManager();
+            manager.setSharedPreferencesName(droidbeardPreferences.getSelectedProfileName());
+        }
+
         addPreferencesFromResource(R.xml.preferences);
 
-        SharedPreferences preferences = getPreferenceScreen().getSharedPreferences();
-
+        SharedPreferences preferences = droidbeardPreferences.getSharedPreferences();
         EditTextPreference preference = (EditTextPreference) findPreference("address");
         String value = preferences.getString("address", null);
         if (value != null && !value.equals("")) {

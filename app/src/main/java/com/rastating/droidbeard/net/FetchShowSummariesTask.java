@@ -18,13 +18,19 @@
 
 package com.rastating.droidbeard.net;
 
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.comparators.TVShowSummaryComparator;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Pair;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +71,13 @@ public class FetchShowSummariesTask extends SickbeardAsyncTask<Void, Void, TVSho
                     tvShowSummary.setNetwork(show.getString("network"));
                     tvShowSummary.setTvDbId(tvdbid);
                     tvShowSummary.setStatus(show.getString("status"));
+
+                    Preferences preferences = new Preferences(getContext());
+                    if (preferences.getShowBannersInShowList()) {
+                        JSONObject cacheInfo = show.optJSONObject("cache");
+                        Bitmap banner = getShowBanner(tvdbid, cacheInfo != null ? cacheInfo.optInt("banner", 0) : 0);
+                        tvShowSummary.setBanner(banner);
+                    }
 
                     Object pausedState = show.get("paused");
                     if (pausedState instanceof Boolean) {
