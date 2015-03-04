@@ -199,6 +199,24 @@
                         />
                 </TableRow>
 
+                <TableRow android:layout_marginTop="5dp">
+                    <Button android:id="@+id/toggle_pause"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_span="2"
+                        android:text="@string/pause" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="5dp">
+                    <Button android:id="@+id/delete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_span="2"
+                        android:background="@drawable/redbutton_btn_default_holo_light"
+                        android:textColor="#ffffff"
+                        android:text="Delete" />
+                </TableRow>
+
             </TableLayout>
 
             <LinearLayout android:id="@+id/season_container"

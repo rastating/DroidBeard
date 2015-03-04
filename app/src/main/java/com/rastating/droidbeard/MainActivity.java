@@ -315,4 +315,16 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         mShowsFragment = null;
         mComingEpisodesFragment = null;
     }
+
+    public void displayAndRefreshShowsFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("resetAdapter", true);
+
+        mShowsFragment = new ShowsFragment();
+        mShowsFragment.setArguments(bundle);
+
+        FragmentManager manager = this.getFragmentManager();
+        manager.beginTransaction().replace(R.id.container, mShowsFragment).commit();
+        setCurrentFragment(mShowsFragment);
+    }
 }
