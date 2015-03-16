@@ -19,8 +19,10 @@
 package com.rastating.droidbeard.fragments;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
@@ -30,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,9 +44,11 @@ import com.rastating.droidbeard.entities.Season;
 import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.net.ApiResponseListener;
+import com.rastating.droidbeard.net.DeleteShowTask;
 import com.rastating.droidbeard.net.EpisodeSearchTask;
 import com.rastating.droidbeard.net.FetchShowTask;
 import com.rastating.droidbeard.net.SetEpisodeStatusTask;
+import com.rastating.droidbeard.net.SetPausedTask;
 import com.rastating.droidbeard.net.SickbeardAsyncTask;
 import com.rastating.droidbeard.net.SickbeardTaskPool;
 import com.rastating.droidbeard.net.TaskPoolSubscriber;
@@ -57,7 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow>,EpisodeItemClickListener {
+public class ShowFragment extends DroidbeardFragment implements ApiResponseListener<TVShow>, EpisodeItemClickListener, View.OnClickListener {
     private TVShowSummary mShowSummary;
     private ImageView mBanner;
     private ImageView mLoadingImage;
@@ -73,6 +78,8 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     private ImageView mPaused;
     private ImageView mAirByDate;
     private LinearLayout mSeasonContainer;
+    private Button mPauseButton;
+    private Button mDeleteButton;
 
     private ArrayList<EpisodeItem> mSelectedEpisodes;
 
@@ -174,6 +181,11 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mPaused = (ImageView) root.findViewById(R.id.paused);
         mAirByDate = (ImageView) root.findViewById(R.id.air_by_date);
         mSeasonContainer = (LinearLayout) root.findViewById(R.id.season_container);
+        mPauseButton = (Button) root.findViewById(R.id.toggle_pause);
+        mDeleteButton = (Button) root.findViewById(R.id.delete);
+
+        mPauseButton.setOnClickListener(this);
+        mDeleteButton.setOnClickListener(this);
 
         onRefreshButtonPressed();
 
@@ -227,8 +239,9 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mLanguage.setText(mShow.getLanguage().getCode());
         mLanguageIcon.setImageResource(mShow.getLanguage().getIconResId());
         mFlattenFolders.setImageResource(mShow.getFlattenFolders() ? R.drawable.yes16 : R.drawable.no16);
-        mPaused.setImageResource(mShow.getPaused() ? R.drawable.yes16 : R.drawable.no16);
         mAirByDate.setImageResource(mShow.getAirByDate() ? R.drawable.yes16 : R.drawable.no16);
+
+        setupPauseViews(mShow.getPaused());
 
         mSeasonContainer.removeAllViews();
         List<Season> seasons = mShow.getSeasons();
@@ -250,6 +263,11 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
                 mSeasonContainer.addView(table);
             }
         }
+    }
+
+    private void setupPauseViews(boolean paused) {
+        mPaused.setImageResource(paused ? R.drawable.yes16 : R.drawable.no16);
+        mPauseButton.setText(paused ? getString(R.string.unpause) : getString(R.string.pause));
     }
 
     @Override
@@ -399,5 +417,39 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
 
     public boolean shouldReturnToUpcomingEpisodes() {
         return mReturnToUpcomingEpisodes;
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        if (v == mPauseButton) {
+            mShow.setPaused(!mShow.getPaused());
+            setupPauseViews(mShow.getPaused());
+            new SetPausedTask(ShowFragment.this.getActivity(), mShowSummary.getTvDbId()).start(mShow.getPaused());
+        }
+        else if (v == mDeleteButton) {
+            new AlertDialog.Builder(ShowFragment.this.getActivity())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to delete this show?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface d, int whichButton) {
+                        final ProgressDialog dialog = createProgressDialog("Deleting Show", "Please wait...");
+                        dialog.show();
+
+                        DeleteShowTask task = new DeleteShowTask(ShowFragment.this.getActivity());
+                        task.addResponseListener(new ApiResponseListener<Boolean>() {
+                            @Override
+                            public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
+                                dialog.dismiss();
+                                getMainActivity().displayAndRefreshShowsFragment();
+                            }
+                        });
+                        task.start(mShowSummary.getTvDbId());
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+        }
     }
 }

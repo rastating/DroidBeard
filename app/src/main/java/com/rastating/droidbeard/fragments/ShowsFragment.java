@@ -36,6 +36,7 @@ import com.rastating.droidbeard.net.SickbeardAsyncTask;
 public class ShowsFragment extends ListViewFragment implements ApiResponseListener<TVShowSummary[]> {
     private TVShowSummaryAdapter mAdapter;
     private boolean mLoading;
+    private boolean mArgumentsRead;
 
     public ShowsFragment() {
         setTitle(R.string.title_shows);
@@ -44,6 +45,12 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null && !mArgumentsRead && args.getBoolean("resetAdapter", false)) {
+            mAdapter = null;
+            mArgumentsRead = true;
+        }
 
         if (mAdapter != null) {
             setAdapter(mAdapter);
@@ -91,7 +98,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
         if (!mLoading) {
             mLoading = true;
             showLoadingAnimation();
-            FetchShowSummariesTask task = new FetchShowSummariesTask(getActivity());
+            FetchShowSummariesTask task = new FetchShowSummariesTask(getMainActivity());
             task.addResponseListener(this);
             task.start();
         }
