@@ -72,4 +72,9 @@
         android:key="group_inactive_shows"
         android:summary="Group shows by their active status in the shows screen."
         android:title="Group Shows by Active Status" />
+
+    <CheckBoxPreference
+        android:key="emphasize_show_name"
+        android:summary="Emphasize the show name in the 'Coming Episodes' view, instead of the episode name."
+        android:title="Emphasize Show Name" />
 </PreferenceScreen>

@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
 import com.rastating.droidbeard.entities.UpcomingEpisode;
@@ -84,11 +85,23 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
             if (result != null) {
                 mEpisodes = result;
                 ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
-                for (UpcomingEpisode episode : result) {
-                    HashMap<String, String> item = new HashMap<String, String>();
-                    item.put("name", episode.getName());
-                    item.put("desc", String.format("%s - %dx%d - %s", episode.getShowName(), episode.getSeasonNumber(), episode.getEpisodeNumber(), episode.getAirdateString("yyyy-MM-dd")));
-                    data.add(item);
+                Preferences preferences = new Preferences(getActivity());
+
+                if (preferences.getEmphasizeShowNameFlag()) {
+                    for (UpcomingEpisode episode : result) {
+                        HashMap<String, String> item = new HashMap<String, String>();
+                        item.put("name", episode.getShowName());
+                        item.put("desc", String.format("%s - %dx%d - %s", episode.getAirdateString("yyyy-MM-dd"), episode.getSeasonNumber(), episode.getEpisodeNumber(), episode.getName()));
+                        data.add(item);
+                    }
+                }
+                else {
+                    for (UpcomingEpisode episode : result) {
+                        HashMap<String, String> item = new HashMap<String, String>();
+                        item.put("name", episode.getName());
+                        item.put("desc", String.format("%s - %dx%d - %s", episode.getShowName(), episode.getSeasonNumber(), episode.getEpisodeNumber(), episode.getAirdateString("yyyy-MM-dd")));
+                        data.add(item);
+                    }
                 }
 
                 String[] from = new String[]{"name", "desc"};

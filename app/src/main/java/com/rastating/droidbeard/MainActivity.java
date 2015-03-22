@@ -306,7 +306,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        mShowsFragment = null;
+        invalidateFragmentCache();
     }
 
     public void invalidateFragmentCache() {

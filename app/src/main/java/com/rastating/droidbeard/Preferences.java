@@ -42,6 +42,7 @@ public class Preferences {
     public final static String SHOW_BANNERS = "show_banners_in_show_list";
     public final static String PROFILE_NAME = "profile_name";
     public final static String DEFAULT_PROFILE_NAME = "Default";
+    public final static String EMPHASIZE_SHOW_NAME = "emphasize_show_name";
 
     private Context mContext;
 
@@ -187,6 +188,11 @@ public class Preferences {
     public boolean getTrustAllCertificatesFlag() {
         SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(Preferences.TRUST_ALL_CERTIFICATES, true);
+    }
+
+    public boolean getEmphasizeShowNameFlag() {
+        SharedPreferences preferences = getSharedPreferences();
+        return preferences.getBoolean(Preferences.EMPHASIZE_SHOW_NAME, true);
     }
 
     public String getV1Url() {
