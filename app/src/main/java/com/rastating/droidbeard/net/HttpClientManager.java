@@ -18,8 +18,6 @@
 
 package com.rastating.droidbeard.net;
 
-import android.content.Context;
-
 import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
 

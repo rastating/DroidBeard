@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
-import android.webkit.URLUtil;
 
 import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
@@ -51,7 +50,6 @@ import com.rastating.droidbeard.net.ShutdownTask;
 import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 import java.net.URI;
-import java.net.URL;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks, SharedPreferences.OnSharedPreferenceChangeListener {
 

@@ -24,13 +24,9 @@ import com.rastating.droidbeard.comparators.TVShowSummaryComparator;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Pair;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
