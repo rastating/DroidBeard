@@ -108,8 +108,7 @@ public class Preferences {
 
     public String getAddress() {
         SharedPreferences preferences = getSharedPreferences();
-        String address = preferences.getString(ADDRESS, "");
-        return address;
+        return preferences.getString(ADDRESS, "");
     }
 
     public String getApiKey() {
@@ -125,14 +124,12 @@ public class Preferences {
 
     public String getHttpUsername() {
         SharedPreferences preferences = getSharedPreferences();
-        String username = preferences.getString(HTTP_USERNAME, "");
-        return username;
+        return preferences.getString(HTTP_USERNAME, "");
     }
 
     public String getHttpPassword() {
         SharedPreferences preferences = getSharedPreferences();
-        String password = preferences.getString(HTTP_PASSWORD, "");
-        return password;
+        return preferences.getString(HTTP_PASSWORD, "");
     }
 
     public int getPort() {
