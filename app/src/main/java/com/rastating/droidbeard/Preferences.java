@@ -99,6 +99,11 @@ public class Preferences {
         if (!preferences.contains(Preferences.GROUP_INACTIVE_SHOWS)) {
             putBoolean(Preferences.GROUP_INACTIVE_SHOWS, true);
         }
+
+        // Set show name emphasis to be true by default
+        if (!preferences.contains(Preferences.EMPHASIZE_SHOW_NAME)) {
+            putBoolean(Preferences.EMPHASIZE_SHOW_NAME, true);
+        }
     }
 
     public String getAddress() {
