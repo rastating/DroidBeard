@@ -19,6 +19,9 @@
 -->
 
 <resources>
-    <style name="AppTheme" parent="android:Theme.Black">
+    <style name="SickBeardTheme" parent="android:Theme.Material.Light.DarkActionBar">
+
+        <item name="android:colorPrimary">#624F36</item>
+        <item name="android:colorPrimaryDark">#624F36</item>
     </style>
 </resources>
