@@ -22,6 +22,6 @@
     <style name="SickBeardTheme" parent="android:Theme.Material.Light.DarkActionBar">
 
         <item name="android:colorPrimary">#624F36</item>
-        <item name="android:colorPrimaryDark">#624F36</item>
+        <item name="android:colorPrimaryDark">#ff4c3c26</item>
     </style>
 </resources>
