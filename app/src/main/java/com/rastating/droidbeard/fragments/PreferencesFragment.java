@@ -104,7 +104,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
             }
         }
 
-        executePreference = findPreference("shutdown");
+        /*executePreference = findPreference("shutdown");
         executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -129,84 +129,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 return false;
             }
-        });
-    }
-
-    private void shutdownSickbeard() {
-        shutdownSickbeard(true);
-    }
-
-    private void shutdownSickbeard(boolean prompt) {
-        if (prompt) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Confirmation")
-                    .setMessage("Are you sure you want to shutdown SickBeard?")
-                    .setCancelable(true)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            shutdownSickbeard(false);
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
-        }
-        else {
-            ShutdownTask task = new ShutdownTask(getActivity());
-            task.addResponseListener(new ApiResponseListener<Boolean>() {
-                @Override
-                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
-                    getActivity().finish();
-                }
-            });
-            task.start();
-        }
-    }
-
-    private void restartSickbeard(boolean prompt) {
-        if (prompt) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Confirmation")
-                    .setMessage("Are you sure you want to restart SickBeard?")
-                    .setCancelable(true)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            restartSickbeard(false);
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .create()
-                    .show();
-        }
-        else {
-            final ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setTitle("Restarting");
-            dialog.setMessage("Please wait...");
-            dialog.setCancelable(false);
-            dialog.setIndeterminate(true);
-            dialog.show();
-
-            RestartTask task = new RestartTask(getActivity());
-            task.addResponseListener(new ApiResponseListener<Boolean>() {
-                @Override
-                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
-                    dialog.dismiss();
-                }
-            });
-            task.start();
-        }
+        });*/
     }
 
     @Override

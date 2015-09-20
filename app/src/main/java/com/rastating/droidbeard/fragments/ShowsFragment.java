@@ -77,7 +77,6 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             onRefreshButtonPressed();
         }
 
-        setBackgroundColor(Color.WHITE);
         setDivider(R.color.divider,1);
 
         return root;

@@ -21,8 +21,11 @@ package com.rastating.droidbeard;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,6 +45,10 @@ import com.rastating.droidbeard.fragments.ProfilesFragment;
 import com.rastating.droidbeard.fragments.SetupFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
 import com.rastating.droidbeard.fragments.ShowsFragment;
+import com.rastating.droidbeard.net.ApiResponseListener;
+import com.rastating.droidbeard.net.RestartTask;
+import com.rastating.droidbeard.net.ShutdownTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 import java.net.URI;
 
@@ -205,8 +212,93 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        if (id == R.id.action_power) {
+            shutdownSickbeard();
+        }
+        else if (id == R.id.action_restart) {
+            restartSickbeard(true);
+        }
+        else if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shutdownSickbeard() {
+        shutdownSickbeard(true);
+    }
+
+    private void shutdownSickbeard(boolean prompt) {
+        if (prompt) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation")
+                    .setMessage("Are you sure you want to shutdown SickBeard?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            shutdownSickbeard(false);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+        else {
+            ShutdownTask task = new ShutdownTask(this);
+            task.addResponseListener(new ApiResponseListener<Boolean>() {
+                @Override
+                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
+                    finish();
+                }
+            });
+            task.start();
+        }
+    }
+
+    private void restartSickbeard(boolean prompt) {
+        if (prompt) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation")
+                    .setMessage("Are you sure you want to restart SickBeard?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            restartSickbeard(false);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+        else {
+            final ProgressDialog dialog = new ProgressDialog(this);
+            dialog.setTitle("Restarting");
+            dialog.setMessage("Please wait...");
+            dialog.setCancelable(false);
+            dialog.setIndeterminate(true);
+            dialog.show();
+
+            RestartTask task = new RestartTask(this);
+            task.addResponseListener(new ApiResponseListener<Boolean>() {
+                @Override
+                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
+                    dialog.dismiss();
+                }
+            });
+            task.start();
+        }
     }
 
     @Override

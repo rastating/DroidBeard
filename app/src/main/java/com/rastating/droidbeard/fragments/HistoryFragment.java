@@ -66,7 +66,6 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
         setChoiceMode(ListView.CHOICE_MODE_NONE);
         setListSelector(android.R.color.transparent);
 
-        setBackgroundColor(Color.WHITE);
         setDivider(R.color.divider, 1);
 
         showLoadingAnimation();
@@ -93,11 +92,11 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View view = super.getView(position, convertView, parent);
-                        /*if (position % 2 == 0) {
+                        if (position % 2 == 0) {
                             view.setBackgroundResource(R.drawable.alternate_list_item_bg);
                         } else {
                             view.setBackgroundColor(Color.TRANSPARENT);
-                        }*/
+                        }
 
                         return view;
                     }

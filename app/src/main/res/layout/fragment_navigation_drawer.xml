@@ -21,7 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:choiceMode="singleChoice"
-    android:background="#FFFFFF"
+    android:background="#f5f1e4"
     android:divider="@color/divider"
     android:dividerHeight="1dp"
     android:listSelector="#dfdacf"
