@@ -21,7 +21,13 @@
 <resources>
     <style name="SickBeardTheme" parent="android:Theme.Material.Light.DarkActionBar">
 
-        <item name="android:colorPrimary">#624F36</item>
-        <item name="android:colorPrimaryDark">#ff4c3c26</item>
+        <item name="android:colorPrimary">@color/materialColorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/materialColorPrimaryDark</item>
+        <item name="android:actionModeStyle">@style/SickBeardActionMode</item>
+    </style>
+
+    <style name="SickBeardActionMode" parent="@android:style/Widget.Holo.Light.ActionMode">
+        <item name="android:background">@color/materialColorPrimary</item>
+        <item name="android:actionBarItemBackground">@android:color/transparent</item>
     </style>
 </resources>
