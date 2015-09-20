@@ -118,12 +118,12 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
             holder = (TVShowHolder) row.getTag();
         }
 
-        if (position % 2 == 0) {
+        /*if (position % 2 == 0) {
             row.setBackgroundResource(R.drawable.alternate_list_item_bg);
         }
         else {
             row.setBackgroundColor(Color.TRANSPARENT);
-        }
+        }*/
 
         TVShowSummary show = (TVShowSummary) mObjects[position];
         holder.showName.setText(show.getName());
