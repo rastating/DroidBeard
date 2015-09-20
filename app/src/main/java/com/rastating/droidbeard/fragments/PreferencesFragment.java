@@ -19,26 +19,39 @@
 package com.rastating.droidbeard.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.rastating.droidbeard.AboutActivity;
 import com.rastating.droidbeard.MainActivity;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
+import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.HttpClientManager;
+import com.rastating.droidbeard.net.RestartTask;
+import com.rastating.droidbeard.net.ShutdownTask;
+import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     MainActivity mMainActivity;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Preference executePreference;
 
         Preferences droidbeardPreferences = new Preferences(getActivity());
         if (!droidbeardPreferences.getSelectedProfileName().equals(Preferences.DEFAULT_PROFILE_NAME)) {
@@ -89,6 +102,110 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
             else {
                 preference.setSummary("");
             }
+        }
+
+        executePreference = findPreference("shutdown");
+        executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                shutdownSickbeard();
+                return false;
+            }
+        });
+
+        executePreference = findPreference("restart");
+        executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                restartSickbeard(true);
+                return false;
+            }
+        });
+
+        executePreference = findPreference("about");
+        executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getActivity(), AboutActivity.class));
+                return false;
+            }
+        });
+    }
+
+    private void shutdownSickbeard() {
+        shutdownSickbeard(true);
+    }
+
+    private void shutdownSickbeard(boolean prompt) {
+        if (prompt) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Confirmation")
+                    .setMessage("Are you sure you want to shutdown SickBeard?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            shutdownSickbeard(false);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+        else {
+            ShutdownTask task = new ShutdownTask(getActivity());
+            task.addResponseListener(new ApiResponseListener<Boolean>() {
+                @Override
+                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
+                    getActivity().finish();
+                }
+            });
+            task.start();
+        }
+    }
+
+    private void restartSickbeard(boolean prompt) {
+        if (prompt) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Confirmation")
+                    .setMessage("Are you sure you want to restart SickBeard?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            restartSickbeard(false);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
+        else {
+            final ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setTitle("Restarting");
+            dialog.setMessage("Please wait...");
+            dialog.setCancelable(false);
+            dialog.setIndeterminate(true);
+            dialog.show();
+
+            RestartTask task = new RestartTask(getActivity());
+            task.addResponseListener(new ApiResponseListener<Boolean>() {
+                @Override
+                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
+                    dialog.dismiss();
+                }
+            });
+            task.start();
         }
     }
 

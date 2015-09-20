@@ -21,8 +21,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:choiceMode="singleChoice"
-    android:divider="#dfdacf"
+    android:background="#FFFFFF"
+    android:divider="@color/divider"
     android:dividerHeight="1dp"
-    android:background="#f5f1e4"
     android:listSelector="#dfdacf"
     tools:context=".NavigationDrawerFragment" />

@@ -20,6 +20,7 @@ package com.rastating.droidbeard.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ import java.util.Map;
 
 public class HistoryFragment extends ListViewFragment implements ApiResponseListener<HistoricalEvent[]> {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     public HistoryFragment() {
         setTitle(R.string.title_history);
     }
@@ -46,9 +49,27 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                onRefreshButtonPressed();
+
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+
         setChoiceMode(ListView.CHOICE_MODE_NONE);
         setListSelector(android.R.color.transparent);
 
+        setBackgroundColor(Color.WHITE);
+        setDivider(R.color.divider, 1);
+
+        showLoadingAnimation();
         onRefreshButtonPressed();
 
         return root;
@@ -72,11 +93,11 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View view = super.getView(position, convertView, parent);
-                        if (position % 2 == 0) {
+                        /*if (position % 2 == 0) {
                             view.setBackgroundResource(R.drawable.alternate_list_item_bg);
                         } else {
                             view.setBackgroundColor(Color.TRANSPARENT);
-                        }
+                        }*/
 
                         return view;
                     }
@@ -101,9 +122,18 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
 
     @Override
     public void onRefreshButtonPressed() {
-        showLoadingAnimation();
+        //showLoadingAnimation();
         FetchHistoryTask task = new FetchHistoryTask(getActivity());
         task.addResponseListener(this);
         task.start();
+
+        if(swipeRefreshLayout != null) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 }

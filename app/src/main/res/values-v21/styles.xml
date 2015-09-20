@@ -20,7 +20,6 @@
 
 <resources>
     <style name="SickBeardTheme" parent="android:Theme.Material.Light.DarkActionBar">
-
         <item name="android:colorPrimary">@color/materialColorPrimary</item>
         <item name="android:colorPrimaryDark">@color/materialColorPrimaryDark</item>
         <item name="android:actionModeStyle">@style/SickBeardActionMode</item>

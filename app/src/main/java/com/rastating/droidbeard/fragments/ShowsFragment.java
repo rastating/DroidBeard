@@ -19,7 +19,9 @@
 package com.rastating.droidbeard.fragments;
 
 import android.app.FragmentManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,8 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     private boolean mLoading;
     private boolean mArgumentsRead;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     public ShowsFragment() {
         setTitle(R.string.app_name);
     }
@@ -45,6 +49,19 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                onRefreshButtonPressed();
+
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
 
         Bundle args = getArguments();
         if (args != null && !mArgumentsRead && args.getBoolean("resetAdapter", false)) {
@@ -59,6 +76,9 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
         else {
             onRefreshButtonPressed();
         }
+
+        setBackgroundColor(Color.WHITE);
+        setDivider(R.color.divider,1);
 
         return root;
     }
@@ -97,10 +117,19 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     public void onRefreshButtonPressed() {
         if (!mLoading) {
             mLoading = true;
-            showLoadingAnimation();
+            //showLoadingAnimation();
             FetchShowSummariesTask task = new FetchShowSummariesTask(getMainActivity());
             task.addResponseListener(this);
             task.start();
+
+            if(swipeRefreshLayout != null) {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
         }
     }
 }

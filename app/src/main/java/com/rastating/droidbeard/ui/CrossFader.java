@@ -42,7 +42,12 @@ public class CrossFader {
      * Start the cross-fade animation.
      */
     public void start() {
-        mView2.setAlpha(0f);
+        mView1.setAlpha(0.0f);
+        mView1.setVisibility(View.GONE);
+        mView2.setAlpha(1.0f);
+        mView2.setVisibility(View.VISIBLE);
+
+        /*mView2.setAlpha(0f);
         mView2.setVisibility(View.VISIBLE);
         mView1.animate()
             .alpha(0f)
@@ -56,6 +61,6 @@ public class CrossFader {
                         .setDuration(mDuration)
                         .setListener(null);
                 }
-            });
+            });*/
     }
 }

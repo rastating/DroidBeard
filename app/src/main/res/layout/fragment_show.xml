@@ -32,200 +32,205 @@
         android:scaleY="0.5"
         android:src="@drawable/animation_loading"/>
 
-    <ScrollView  android:id="@+id/data"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <LinearLayout android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <ScrollView  android:id="@+id/data"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-            <com.rastating.droidbeard.ui.ExpandableImageView
+            <LinearLayout android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:id="@+id/banner"
-                android:background="#cccccc"
-            />
+                android:background="#FFFFFF">
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/summary_box_background"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:stretchColumns="1">
+                <com.rastating.droidbeard.ui.ExpandableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:id="@+id/banner"
+                    android:background="#cccccc"
+                />
 
-                <TableRow>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/airs" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/summary_box_background"
+                    android:layout_margin="10dp"
+                    android:padding="10dp"
+                    android:stretchColumns="1">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/airs" />
-                </TableRow>
+                    <TableRow>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/airs" />
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/status"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/airs" />
+                    </TableRow>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/status"
-                        android:layout_marginLeft="10dp"
-                        />
-                </TableRow>
+                    <TableRow android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/status"/>
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/location"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/status"
+                            android:layout_marginLeft="10dp"
+                            />
+                    </TableRow>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/location"
-                        android:layout_marginLeft="10dp"
-                        />
-                </TableRow>
+                    <TableRow android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/location"/>
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/quality"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/location"
+                            android:layout_marginLeft="10dp"
+                            />
+                    </TableRow>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/quality"
-                        android:layout_marginLeft="10dp"
-                        />
-                </TableRow>
+                    <TableRow android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/quality"/>
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/language"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/quality"
+                            android:layout_marginLeft="10dp"
+                            />
+                    </TableRow>
 
-                    <LinearLayout android:orientation="horizontal"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginLeft="10dp">
+                    <TableRow android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/language"/>
+
+                        <LinearLayout android:orientation="horizontal"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_marginLeft="10dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/en"
+                                android:id="@+id/language_icon"
+                                android:layout_gravity="center_vertical"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/language"
+                                android:layout_marginLeft="5dp"
+                                />
+
+                        </LinearLayout>
+                    </TableRow>
+
+                    <TableRow android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/flatten_folders"/>
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/en"
-                            android:id="@+id/language_icon"
-                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/no16"
+                            android:id="@+id/flatten_folders"
+                            android:layout_gravity="center_vertical|left"
+                            android:layout_marginLeft="10dp"
                             />
+                    </TableRow>
 
+                    <TableRow android:layout_marginTop="5dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/language"
-                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/paused"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/no16"
+                            android:id="@+id/paused"
+                            android:layout_gravity="center_vertical|left"
+                            android:layout_marginLeft="10dp"
                             />
+                    </TableRow>
 
-                    </LinearLayout>
-                </TableRow>
+                    <TableRow android:layout_marginTop="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="@string/air_by_date"/>
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/flatten_folders"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/no16"
+                            android:id="@+id/air_by_date"
+                            android:layout_gravity="center_vertical|left"
+                            android:layout_marginLeft="10dp"
+                            />
+                    </TableRow>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/no16"
-                        android:id="@+id/flatten_folders"
-                        android:layout_gravity="center_vertical|left"
-                        android:layout_marginLeft="10dp"
-                        />
-                </TableRow>
+                    <TableRow android:layout_marginTop="5dp">
+                        <Button android:id="@+id/toggle_pause"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_span="2"
+                            android:text="@string/pause" />
+                    </TableRow>
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/paused"/>
+                    <TableRow android:layout_marginTop="5dp">
+                        <Button android:id="@+id/delete"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_span="2"
+                            android:background="@drawable/redbutton_btn_default_holo_light"
+                            android:textColor="#ffffff"
+                            android:text="Delete" />
+                    </TableRow>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/no16"
-                        android:id="@+id/paused"
-                        android:layout_gravity="center_vertical|left"
-                        android:layout_marginLeft="10dp"
-                        />
-                </TableRow>
+                </TableLayout>
 
-                <TableRow android:layout_marginTop="5dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="@string/air_by_date"/>
+                <LinearLayout android:id="@+id/season_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/no16"
-                        android:id="@+id/air_by_date"
-                        android:layout_gravity="center_vertical|left"
-                        android:layout_marginLeft="10dp"
-                        />
-                </TableRow>
-
-                <TableRow android:layout_marginTop="5dp">
-                    <Button android:id="@+id/toggle_pause"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:text="@string/pause" />
-                </TableRow>
-
-                <TableRow android:layout_marginTop="5dp">
-                    <Button android:id="@+id/delete"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_span="2"
-                        android:background="@drawable/redbutton_btn_default_holo_light"
-                        android:textColor="#ffffff"
-                        android:text="Delete" />
-                </TableRow>
-
-            </TableLayout>
-
-            <LinearLayout android:id="@+id/season_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

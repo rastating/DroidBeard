@@ -21,11 +21,8 @@ package com.rastating.droidbeard;
 import android.app.Activity;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
 import com.rastating.droidbeard.fragments.HistoryFragment;
@@ -44,10 +42,6 @@ import com.rastating.droidbeard.fragments.ProfilesFragment;
 import com.rastating.droidbeard.fragments.SetupFragment;
 import com.rastating.droidbeard.fragments.ShowFragment;
 import com.rastating.droidbeard.fragments.ShowsFragment;
-import com.rastating.droidbeard.net.ApiResponseListener;
-import com.rastating.droidbeard.net.RestartTask;
-import com.rastating.droidbeard.net.ShutdownTask;
-import com.rastating.droidbeard.net.SickbeardAsyncTask;
 
 import java.net.URI;
 
@@ -58,6 +52,8 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     private ShowsFragment mShowsFragment;
     private ComingEpisodesFragment mComingEpisodesFragment;
     private CharSequence mTitle;
+
+    private FloatingActionMenu floatingActionsMenu;
 
     private Fragment getCurrentFragment() {
         return mCurrentFragment;
@@ -100,6 +96,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        setFloatingActionButton();
+
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         if (mTitle == null) {
             mTitle = getTitle();
@@ -157,6 +156,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         else if (position == 4) {
             fragment = new ProfilesFragment();
         }
+        else if (position == 5) {
+            onNavigationDrawerItemSelected(99);
+            setTitle(getString(R.string.action_settings));
+        }
         else if (position == 99) {
             fragment = new PreferencesFragment();
         }
@@ -196,110 +199,12 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void shutdownSickbeard() {
-        shutdownSickbeard(true);
-    }
-
-    private void shutdownSickbeard(boolean prompt) {
-        if (prompt) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to shutdown SickBeard?")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        shutdownSickbeard(false);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .create()
-                .show();
-        }
-        else {
-            ShutdownTask task = new ShutdownTask(this);
-            task.addResponseListener(new ApiResponseListener<Boolean>() {
-                @Override
-                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
-                    finish();
-                }
-            });
-            task.start();
-        }
-    }
-
-    private void restartSickbeard(boolean prompt) {
-        if (prompt) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to restart SickBeard?")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        restartSickbeard(false);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .create()
-                .show();
-        }
-        else {
-            final ProgressDialog dialog = new ProgressDialog(this);
-            dialog.setTitle("Restarting");
-            dialog.setMessage("Please wait...");
-            dialog.setCancelable(false);
-            dialog.setIndeterminate(true);
-            dialog.show();
-
-            RestartTask task = new RestartTask(this);
-            task.addResponseListener(new ApiResponseListener<Boolean>() {
-                @Override
-                public void onApiRequestFinished(SickbeardAsyncTask sender, Boolean result) {
-                    dialog.dismiss();
-                }
-            });
-            task.start();
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            onNavigationDrawerItemSelected(99);
-            setTitle(getString(R.string.action_settings));
-        }
-        else if (id == R.id.action_power) {
-            shutdownSickbeard();
-        }
-        else if (id == R.id.action_restart) {
-            restartSickbeard(true);
-        }
-        else if (id == R.id.action_new) {
-            startActivity(new Intent(this, ShowSearch.class));
-        }
-        else if (id == R.id.action_refresh) {
-            if (mCurrentFragment instanceof DroidbeardFragment) {
-                ((DroidbeardFragment) mCurrentFragment).onRefreshButtonPressed();
-            }
-        }
-        else if (id == R.id.action_about) {
-            startActivity(new Intent(this, AboutActivity.class));
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -313,6 +218,21 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         mShowsFragment = null;
         mComingEpisodesFragment = null;
     }
+
+
+    public void setFloatingActionButton() {
+        floatingActionsMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
+        floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean b) {
+                floatingActionsMenu.close(true);
+                if(b) {
+                    startActivity(new Intent(getApplicationContext(), ShowSearch.class));
+                }
+            }
+        });
+    }
+
 
     public void displayAndRefreshShowsFragment() {
         Bundle bundle = new Bundle();
