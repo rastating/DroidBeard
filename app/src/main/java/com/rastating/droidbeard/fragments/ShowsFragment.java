@@ -39,7 +39,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     private boolean mArgumentsRead;
 
     public ShowsFragment() {
-        setTitle(R.string.title_shows);
+        setTitle(R.string.app_name);
     }
 
     @Override
