@@ -21,7 +21,7 @@
     tools:context=".MainActivity" >
 
     <item android:title="@string/menu"
-        android:icon="@drawable/ic_dots_vertical_white"
+        android:icon="@drawable/ic_dots_vertical_white_24dp"
         android:orderInCategory="120"
         android:showAsAction="always">
         <menu>
