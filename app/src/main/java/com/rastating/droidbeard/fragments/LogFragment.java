@@ -19,6 +19,7 @@
 package com.rastating.droidbeard.fragments;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
     private View mErrorContainer;
     private ImageView mLoadingImage;
     private TextView mErrorMessage;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public LogFragment() {
         setTitle(R.string.title_logs);
@@ -53,7 +55,20 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
         mErrorContainer = root.findViewById(R.id.error_container);
         mLoadingImage = (ImageView) root.findViewById(R.id.loading);
         mErrorMessage = (TextView) root.findViewById(R.id.error_message);
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                onRefreshButtonPressed();
+
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+
+        showLoadingAnimation();
         onRefreshButtonPressed();
 
         return root;
@@ -88,10 +103,19 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
 
     @Override
     public void onRefreshButtonPressed() {
-        showLoadingAnimation();
+        //showLoadingAnimation();
         FetchLogsTask task = new FetchLogsTask(getActivity());
         task.addResponseListener(this);
         task.start();
+
+        if(swipeRefreshLayout != null) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 
     protected void showError(String message, SickBeardException e) {

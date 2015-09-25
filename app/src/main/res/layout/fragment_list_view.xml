@@ -76,14 +76,20 @@
             />
     </LinearLayout>
 
-    <ListView android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#f5f1e4"
-        android:listSelector="#cfcfcf"
-        android:id="@+id/list_view"
-        android:visibility="gone" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <ListView android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
+                android:divider="@color/divider"
+                android:listSelector="#cfcfcf"
+                android:background="#f5f1e4"
+                android:id="@+id/list_view"
+                android:visibility="gone" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

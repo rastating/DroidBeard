@@ -35,9 +35,7 @@
     <color name="header">#333333</color>
     <color name="about_link">#ed5153</color>
     <color name="popup_background_color">#f2f2f2</color>
-    <color name="materialPrimaryDark">#ff4c3c26</color>
-    <color name="materialPrimary">#624F36</color>
-    <color name="white">#FFFFFF</color>
-    <color name="opaque_white">#CCFFFFFF</color>
-    <color name="divider">#CCCCCC</color>
+
+    <color name="materialColorPrimary">#624F36</color>
+    <color name="materialColorPrimaryDark">#ff4c3c26</color>
 </resources>

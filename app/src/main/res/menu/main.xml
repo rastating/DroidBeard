@@ -20,29 +20,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
 
-    <item android:id="@+id/action_new"
-        android:title="@string/add_new_show"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_plus_white_24dp" />
-
-    <item android:id="@+id/action_refresh"
-        android:title="@string/action_refresh"
-        android:orderInCategory="110"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_sync_white_24dp" />
-
     <item android:title="@string/menu"
         android:icon="@drawable/ic_dots_vertical_white_24dp"
         android:orderInCategory="120"
         android:showAsAction="always">
         <menu>
-            <item android:id="@+id/action_settings"
-                android:title="@string/action_settings"
-                android:orderInCategory="100"
-                android:showAsAction="never"
-                android:icon="@drawable/ic_action_settings" />
-
             <item android:id="@+id/action_restart"
                 android:title="@string/title_restart"
                 android:orderInCategory="110"

@@ -23,6 +23,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -79,6 +80,8 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     private LinearLayout mSeasonContainer;
     private Button mPauseButton;
     private Button mDeleteButton;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private ArrayList<EpisodeItem> mSelectedEpisodes;
 
@@ -162,6 +165,20 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         View root = localInflater.inflate(R.layout.fragment_show, container, false);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                onRefreshButtonPressed();
+
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+
+
         if (savedInstanceState != null) {
             mShowSummary = (TVShowSummary) savedInstanceState.getParcelable("summary");
         }
@@ -186,6 +203,9 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
         mPauseButton.setOnClickListener(this);
         mDeleteButton.setOnClickListener(this);
 
+        mDataContainer.setAlpha(0.0f);
+        mLoadingImage.setAlpha(1.0f);
+        mLoadingImage.startAnimation(new LoadingAnimation());
         onRefreshButtonPressed();
 
         return root;
@@ -210,14 +230,23 @@ public class ShowFragment extends DroidbeardFragment implements ApiResponseListe
     @Override
     public void onRefreshButtonPressed() {
         // Start loading animation.
-        mDataContainer.setAlpha(0.0f);
-        mLoadingImage.setAlpha(1.0f);
-        mLoadingImage.startAnimation(new LoadingAnimation());
+        //mDataContainer.setAlpha(0.0f);
+        //mLoadingImage.setAlpha(1.0f);
+        //mLoadingImage.startAnimation(new LoadingAnimation());
 
         // Start fetching the show information.
         FetchShowTask task = new FetchShowTask(getActivity());
         task.addResponseListener(this);
         task.start(mShowSummary.getTvDbId());
+
+        if(swipeRefreshLayout != null) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 
     @Override
