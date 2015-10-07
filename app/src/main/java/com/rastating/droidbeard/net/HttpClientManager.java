@@ -25,10 +25,13 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.HttpParams;
 
 public class HttpClientManager {
     private HttpClient mClient;
@@ -54,10 +57,18 @@ public class HttpClientManager {
         }
     }
 
+    private DefaultHttpClient createThreadSafeClient() {
+        DefaultHttpClient client = new DefaultHttpClient();
+        ClientConnectionManager manager = client.getConnectionManager();
+        HttpParams params = client.getParams();
+        ThreadSafeClientConnManager threadSafeManager = new ThreadSafeClientConnManager(params, manager.getSchemeRegistry());
+        return new DefaultHttpClient(threadSafeManager, params);
+    }
+
     public void invalidateClient() {
         Preferences preferences = new Preferences(com.rastating.droidbeard.Application.getContext());
         boolean trustAllCertificates = preferences.getTrustAllCertificatesFlag();
-        mClient = new DefaultHttpClient();
+        mClient = createThreadSafeClient();
         SchemeRegistry schemeRegistry = mClient.getConnectionManager().getSchemeRegistry();
         schemeRegistry.register(new Scheme("https", new TlsSocketFactory(trustAllCertificates), 443));
 
