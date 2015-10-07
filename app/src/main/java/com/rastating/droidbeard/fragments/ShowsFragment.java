@@ -127,7 +127,12 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     public void onRefreshButtonPressed() {
         if (!mLoading) {
             mLoading = true;
-            //showLoadingAnimation();
+
+            // Show the loading animation during the initial loading of the fragment.
+            if (mAdapter == null) {
+                showLoadingAnimation();
+            }
+
             FetchShowSummariesTask task = new FetchShowSummariesTask(getMainActivity());
             task.addResponseListener(this);
             task.start();
