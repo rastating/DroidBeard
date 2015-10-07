@@ -19,7 +19,6 @@
 package com.rastating.droidbeard.fragments;
 
 import android.app.FragmentManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -60,7 +59,6 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
         swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
             @Override
             public void onRefresh() {
                 onRefreshButtonPressed();
@@ -100,7 +98,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             manager.beginTransaction().replace(R.id.container, fragment).commit();
         }
 
-        if(floatingActionsMenu != null) {
+        if (floatingActionsMenu != null) {
             floatingActionsMenu.setVisibility(View.INVISIBLE);
         }
     }

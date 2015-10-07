@@ -18,8 +18,6 @@
 
 package com.rastating.droidbeard.ui;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
 public class CrossFader {
