@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
@@ -42,8 +43,14 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    FloatingActionMenu floatingActionsMenu;
+
     public ShowsFragment() {
         setTitle(R.string.app_name);
+    }
+
+    public void setFloatingActionMenu(FloatingActionMenu floatingActionsMenu) {
+        this.floatingActionsMenu = floatingActionsMenu;
     }
 
     @Override
@@ -77,7 +84,7 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             onRefreshButtonPressed();
         }
 
-        setDivider(R.color.divider,1);
+        setDivider(R.color.divider, 1);
 
         return root;
     }
@@ -91,6 +98,10 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             ShowFragment fragment = new ShowFragment();
             fragment.setTvShowSummary(show);
             manager.beginTransaction().replace(R.id.container, fragment).commit();
+        }
+
+        if(floatingActionsMenu != null) {
+            floatingActionsMenu.setVisibility(View.INVISIBLE);
         }
     }
 

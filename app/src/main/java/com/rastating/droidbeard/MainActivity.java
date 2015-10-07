@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
@@ -113,6 +114,15 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        if(floatingActionsMenu != null) {
+            if (mCurrentFragment instanceof ShowsFragment) {
+                floatingActionsMenu.setVisibility(View.VISIBLE);
+                ((ShowsFragment) mCurrentFragment).setFloatingActionMenu(floatingActionsMenu);
+            } else {
+                floatingActionsMenu.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     private boolean isUrlValid(String url) {
@@ -175,6 +185,15 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             FragmentManager manager = this.getFragmentManager();
             manager.beginTransaction().replace(R.id.container, fragment).commit();
             setCurrentFragment(fragment);
+
+            if(floatingActionsMenu != null) {
+                if (fragment instanceof ShowsFragment) {
+                    floatingActionsMenu.setVisibility(View.VISIBLE);
+                    ((ShowsFragment) fragment).setFloatingActionMenu(floatingActionsMenu);
+                } else {
+                    floatingActionsMenu.setVisibility(View.INVISIBLE);
+                }
+            }
         }
     }
 
