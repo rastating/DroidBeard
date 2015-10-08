@@ -83,6 +83,13 @@
             android:textColor="@color/about_link"
             android:gravity="center_horizontal"/>
 
+        <TextView android:id="@+id/dventurino_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\@dventurino"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
         <TextView android:id="@+id/reddit_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,6 +101,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="\@Phyushin"
+            android:textColor="@color/about_link"
+            android:gravity="center_horizontal"/>
+
+        <TextView android:id="@+id/serramat_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="\@serramat"
             android:textColor="@color/about_link"
             android:gravity="center_horizontal"/>
 
