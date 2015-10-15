@@ -40,6 +40,8 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Preference executePreference;
+
         Preferences droidbeardPreferences = new Preferences(getActivity());
         if (!droidbeardPreferences.getSelectedProfileName().equals(Preferences.DEFAULT_PROFILE_NAME)) {
             PreferenceManager manager = getPreferenceManager();
@@ -90,6 +92,33 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
                 preference.setSummary("");
             }
         }
+
+        /*executePreference = findPreference("shutdown");
+        executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                shutdownSickbeard();
+                return false;
+            }
+        });
+
+        executePreference = findPreference("restart");
+        executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                restartSickbeard(true);
+                return false;
+            }
+        });
+
+        executePreference = findPreference("about");
+        executePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getActivity(), AboutActivity.class));
+                return false;
+            }
+        });*/
     }
 
     @Override

@@ -32,7 +32,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.rastating.droidbeard.fragments.ComingEpisodesFragment;
 import com.rastating.droidbeard.fragments.DroidbeardFragment;
 import com.rastating.droidbeard.fragments.HistoryFragment;
@@ -58,6 +60,8 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     private ShowsFragment mShowsFragment;
     private ComingEpisodesFragment mComingEpisodesFragment;
     private CharSequence mTitle;
+
+    private FloatingActionMenu floatingActionsMenu;
 
     private Fragment getCurrentFragment() {
         return mCurrentFragment;
@@ -100,6 +104,9 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        setFloatingActionButton();
+
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.navigation_drawer);
         if (mTitle == null) {
             mTitle = getTitle();
@@ -107,6 +114,15 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        if(floatingActionsMenu != null) {
+            if (mCurrentFragment instanceof ShowsFragment) {
+                floatingActionsMenu.setVisibility(View.VISIBLE);
+                ((ShowsFragment) mCurrentFragment).setFloatingActionMenu(floatingActionsMenu);
+            } else {
+                floatingActionsMenu.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     private boolean isUrlValid(String url) {
@@ -157,6 +173,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         else if (position == 4) {
             fragment = new ProfilesFragment();
         }
+        else if (position == 5) {
+            onNavigationDrawerItemSelected(99);
+            setTitle(getString(R.string.action_settings));
+        }
         else if (position == 99) {
             fragment = new PreferencesFragment();
         }
@@ -165,6 +185,15 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
             FragmentManager manager = this.getFragmentManager();
             manager.beginTransaction().replace(R.id.container, fragment).commit();
             setCurrentFragment(fragment);
+
+            if(floatingActionsMenu != null) {
+                if (fragment instanceof ShowsFragment) {
+                    floatingActionsMenu.setVisibility(View.VISIBLE);
+                    ((ShowsFragment) fragment).setFloatingActionMenu(floatingActionsMenu);
+                } else {
+                    floatingActionsMenu.setVisibility(View.INVISIBLE);
+                }
+            }
         }
     }
 
@@ -196,6 +225,24 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_power) {
+            shutdownSickbeard();
+        }
+        else if (id == R.id.action_restart) {
+            restartSickbeard(true);
+        }
+        else if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void shutdownSickbeard() {
         shutdownSickbeard(true);
     }
@@ -204,22 +251,22 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         if (prompt) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to shutdown SickBeard?")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        shutdownSickbeard(false);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .create()
-                .show();
+                    .setMessage("Are you sure you want to shutdown SickBeard?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            shutdownSickbeard(false);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
         }
         else {
             ShutdownTask task = new ShutdownTask(this);
@@ -237,22 +284,22 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         if (prompt) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation")
-                .setMessage("Are you sure you want to restart SickBeard?")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        restartSickbeard(false);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                .create()
-                .show();
+                    .setMessage("Are you sure you want to restart SickBeard?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            restartSickbeard(false);
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
         }
         else {
             final ProgressDialog dialog = new ProgressDialog(this);
@@ -274,37 +321,6 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            onNavigationDrawerItemSelected(99);
-            setTitle(getString(R.string.action_settings));
-        }
-        else if (id == R.id.action_power) {
-            shutdownSickbeard();
-        }
-        else if (id == R.id.action_restart) {
-            restartSickbeard(true);
-        }
-        else if (id == R.id.action_new) {
-            startActivity(new Intent(this, ShowSearch.class));
-        }
-        else if (id == R.id.action_refresh) {
-            if (mCurrentFragment instanceof DroidbeardFragment) {
-                ((DroidbeardFragment) mCurrentFragment).onRefreshButtonPressed();
-            }
-        }
-        else if (id == R.id.action_about) {
-            startActivity(new Intent(this, AboutActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         invalidateFragmentCache();
     }
@@ -313,6 +329,21 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         mShowsFragment = null;
         mComingEpisodesFragment = null;
     }
+
+
+    public void setFloatingActionButton() {
+        floatingActionsMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
+        floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean b) {
+                floatingActionsMenu.close(true);
+                if(b) {
+                    startActivity(new Intent(getApplicationContext(), ShowSearch.class));
+                }
+            }
+        });
+    }
+
 
     public void displayAndRefreshShowsFragment() {
         Bundle bundle = new Bundle();

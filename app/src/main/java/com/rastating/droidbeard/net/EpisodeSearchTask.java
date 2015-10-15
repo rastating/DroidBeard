@@ -53,11 +53,7 @@ public class EpisodeSearchTask extends SickbeardAsyncTask<Void, Void, Boolean> {
 
         String json = getJson("episode.search", params);
         try {
-            if (json != null) {
-                return json.contains("success");
-            } else {
-                return false;
-            }
+            return json != null && json.contains("success");
         }
         catch (Exception e) {
             setLastException(json, e);

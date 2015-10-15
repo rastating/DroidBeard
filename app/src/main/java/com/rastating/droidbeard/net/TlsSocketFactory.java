@@ -60,9 +60,7 @@ public class TlsSocketFactory implements LayeredSocketFactory {
 
     @Override
     public boolean isSecure(Socket s) throws IllegalArgumentException {
-        if (s instanceof SSLSocket)
-            return ((SSLSocket)s).isConnected();
-        return false;
+        return s instanceof SSLSocket && ((SSLSocket) s).isConnected();
     }
 
     @Override

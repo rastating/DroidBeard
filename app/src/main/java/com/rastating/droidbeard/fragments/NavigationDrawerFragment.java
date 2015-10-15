@@ -124,7 +124,8 @@ public class NavigationDrawerFragment extends Fragment {
             new NavigationAction(R.drawable.glyph_calendar_333333_64, R.drawable.glyph_calendar_838383_64, getString(R.string.title_coming_episodes)),
             new NavigationAction(R.drawable.glyph_history_333333_64, R.drawable.glyph_history_838383_64, getString(R.string.title_history)),
             new NavigationAction(R.drawable.glyph_file_text_o_333333_64, R.drawable.glyph_file_text_o_838383_64, getString(R.string.title_logs)),
-            new NavigationAction(R.drawable.glyph_users_333333_64, R.drawable.glyph_users_838383_64, "Profiles")
+            new NavigationAction(R.drawable.glyph_users_333333_64, R.drawable.glyph_users_838383_64, "Profiles"),
+            new NavigationAction(R.drawable.glyph_cog_333333_64, R.drawable.glyph_cog_838383_64, getString(R.string.action_settings)),
         };
     }
 
@@ -182,7 +183,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                    /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.drawable.ic_menu_white_24dp,             /* nav drawer image to replace 'Up' caret */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -276,11 +277,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     /**

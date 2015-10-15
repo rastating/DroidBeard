@@ -19,8 +19,8 @@
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/search" android:title="@string/search_for_episode" android:icon="@drawable/ic_action_search" />
-    <item android:id="@+id/set_status" android:title="@string/set_status" android:icon="@drawable/ic_action_labels">
+    <item android:id="@+id/search" android:title="@string/search_for_episode" android:icon="@drawable/ic_magnify_white_24dp" />
+    <item android:id="@+id/set_status" android:title="@string/set_status" android:icon="@drawable/ic_tag_multiple_white_24dp">
         <menu>
             <item android:id="@+id/set_archived" android:title="@string/archived"/>
             <item android:id="@+id/set_ignored" android:title="@string/ignored"/>

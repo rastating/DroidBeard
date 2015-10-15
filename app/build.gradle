@@ -7,8 +7,8 @@ android {
         applicationId 'com.rastating.droidbeard'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1409
-        versionName '1.4.9'
+        versionCode 1500
+        versionName '1.5.0'
     }
     buildTypes {
         release {
@@ -24,4 +24,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:21.+'
+    compile 'com.github.clans:fab:1.5.0'
 }

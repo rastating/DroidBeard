@@ -74,6 +74,14 @@ public class AboutActivity extends Activity implements View.OnClickListener {
             case R.id.google_link:
                 uri = "https://plus.google.com/u/0/communities/109361186281608237451";
                 break;
+
+            case R.id.dventurino_link:
+                uri = "https://github.com/dventurino";
+                break;
+
+            case R.id.serramat_link:
+                uri = "https://github.com/serramat";
+                break;
         }
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));

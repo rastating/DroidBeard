@@ -116,7 +116,7 @@ public abstract class ListViewFragment extends DroidbeardFragment implements Ada
     }
 
     protected void showListView() {
-        showListView(false);
+        showListView(true);
     }
 
     protected void showLoadingAnimation() {

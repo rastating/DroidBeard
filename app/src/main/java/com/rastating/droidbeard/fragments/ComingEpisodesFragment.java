@@ -20,6 +20,7 @@ package com.rastating.droidbeard.fragments;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
     private UpcomingEpisode[] mEpisodes;
     SimpleAdapter mAdapter;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     public ComingEpisodesFragment() {
         setTitle("Coming Episodes");
     }
@@ -50,11 +53,26 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                onRefreshButtonPressed();
+
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+
         setChoiceMode(ListView.CHOICE_MODE_NONE);
         setListSelector(android.R.color.transparent);
         setBackgroundColor(getResources().getColor(android.R.color.white));
-        setDivider(android.R.color.white, 3);
+        setDivider(R.color.divider,1);
 
+        showLoadingAnimation();
         if (mAdapter == null) {
             onRefreshButtonPressed();
         }
@@ -143,9 +161,18 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
 
     @Override
     public void onRefreshButtonPressed() {
-        showLoadingAnimation();
+        //showLoadingAnimation();
         FetchUpcomingEpisodesTask task = new FetchUpcomingEpisodesTask(getActivity());
         task.addResponseListener(this);
         task.start();
+
+        if(swipeRefreshLayout != null) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 }

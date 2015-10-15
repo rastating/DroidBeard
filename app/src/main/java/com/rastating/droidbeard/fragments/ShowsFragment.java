@@ -20,11 +20,13 @@ package com.rastating.droidbeard.fragments;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
@@ -38,13 +40,33 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     private boolean mLoading;
     private boolean mArgumentsRead;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    FloatingActionMenu floatingActionsMenu;
+
     public ShowsFragment() {
-        setTitle(R.string.title_shows);
+        setTitle(R.string.app_name);
+    }
+
+    public void setFloatingActionMenu(FloatingActionMenu floatingActionsMenu) {
+        this.floatingActionsMenu = floatingActionsMenu;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                onRefreshButtonPressed();
+
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
 
         Bundle args = getArguments();
         if (args != null && !mArgumentsRead && args.getBoolean("resetAdapter", false)) {
@@ -60,6 +82,8 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             onRefreshButtonPressed();
         }
 
+        setDivider(R.color.divider, 1);
+
         return root;
     }
 
@@ -72,6 +96,10 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
             ShowFragment fragment = new ShowFragment();
             fragment.setTvShowSummary(show);
             manager.beginTransaction().replace(R.id.container, fragment).commit();
+        }
+
+        if (floatingActionsMenu != null) {
+            floatingActionsMenu.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -97,10 +125,24 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
     public void onRefreshButtonPressed() {
         if (!mLoading) {
             mLoading = true;
-            showLoadingAnimation();
+
+            // Show the loading animation during the initial loading of the fragment.
+            if (mAdapter == null) {
+                showLoadingAnimation();
+            }
+
             FetchShowSummariesTask task = new FetchShowSummariesTask(getMainActivity());
             task.addResponseListener(this);
             task.start();
+
+            if(swipeRefreshLayout != null) {
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
         }
     }
 }
