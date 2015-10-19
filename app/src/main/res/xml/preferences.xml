@@ -81,7 +81,7 @@
     <CheckBoxPreference
         android:key="color_app"
         android:summary="Use Modern color scheme"
-        android:title="App Colors" />
+        android:title="Application Theme" />
 <!--
     <Preference
         android:key="shutdown"

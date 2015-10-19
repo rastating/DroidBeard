@@ -21,6 +21,7 @@ package com.rastating.droidbeard;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -41,6 +42,16 @@ public class AboutActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.google_link).setOnClickListener(this);
 
         ((TextView) findViewById(R.id.version_number)).setText("Version " + Application.getVersionName());
+
+        if(!((Application) getApplication()).isModernColor) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.materialColorPrimaryDarkBrown));
+            }
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.materialColorPrimaryDarkGreen));
+            }
+        }
     }
 
     @Override
