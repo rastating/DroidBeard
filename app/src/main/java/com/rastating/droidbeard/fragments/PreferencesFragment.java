@@ -20,7 +20,11 @@ package com.rastating.droidbeard.fragments;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -28,7 +32,9 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ListView;
+import android.widget.Toast;
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.MainActivity;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
@@ -123,7 +129,17 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_preferences, container, false);
+        ListView root = (ListView) inflater.inflate(R.layout.fragment_preferences, container, false);
+
+
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            root.setBackgroundColor(Color.parseColor("#f5f1e4"));
+            root.setSelector(R.color.list_selector);
+        } else {
+            root.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            root.setSelector(R.color.downloaded_episode_background);
+        }
+
         return root;
     }
 
@@ -161,6 +177,12 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
             }
             else {
                 preference.setSummary(editTextPreference.getText());
+            }
+        }
+
+        if(preference instanceof CheckBoxPreference) {
+            if(key.equals(Preferences.COLOR_APP)) {
+                Toast.makeText(mMainActivity.getApplicationContext(), "Restart the App to refresh the color scheme", Toast.LENGTH_SHORT).show();
             }
         }
 

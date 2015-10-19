@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
@@ -66,7 +67,12 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkBrown, R.color.materialPrimaryBrown, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+        } else {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkGreen, R.color.materialPrimaryGreen);
+        }
 
         Bundle args = getArguments();
         if (args != null && !mArgumentsRead && args.getBoolean("resetAdapter", false)) {
@@ -80,6 +86,12 @@ public class ShowsFragment extends ListViewFragment implements ApiResponseListen
         }
         else {
             onRefreshButtonPressed();
+        }
+
+        if(((Application) getActivity().getApplication()).isModernColor) {
+            setBackgroundColor(Color.WHITE);
+        } else {
+            setBackgroundColor(R.color.unaired_episode_background);
         }
 
         setDivider(R.color.divider, 1);

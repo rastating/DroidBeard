@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -35,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.entities.NavigationAction;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.adapters.NavigationActionAdapter;
@@ -151,6 +153,14 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (savedInstanceState != null) {
             selectItem(getSelectedPosition(), false);
+        }
+
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            mDrawerListView.setBackgroundColor(Color.parseColor("#f5f1e4"));
+            mDrawerListView.setSelector(R.color.list_selector);
+        } else {
+            mDrawerListView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            mDrawerListView.setSelector(R.color.downloaded_episode_background);
         }
 
         return mDrawerListView;

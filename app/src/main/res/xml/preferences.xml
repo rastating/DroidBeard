@@ -77,6 +77,11 @@
         android:key="emphasize_show_name"
         android:summary="Emphasize the show name in the 'Coming Episodes' view, instead of the episode name."
         android:title="Emphasize Show Name" />
+
+    <CheckBoxPreference
+        android:key="color_app"
+        android:summary="Use Modern color scheme"
+        android:title="App Colors" />
 <!--
     <Preference
         android:key="shutdown"

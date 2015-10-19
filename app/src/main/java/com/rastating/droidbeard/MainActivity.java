@@ -28,6 +28,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -102,6 +105,19 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Preferences preferences = new Preferences(this);
+        ((Application) getApplication()).isModernColor = preferences.getColorApp();
+
+        if(!((Application) getApplication()).isModernColor) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.materialColorPrimaryDarkBrown));
+            }
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.materialColorPrimaryDarkGreen));
+            }
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -201,6 +217,20 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+
+        if(!((Application) getApplication()).isModernColor) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                actionBar.setBackgroundDrawable(getDrawable(R.color.materialColorPrimaryBrown));
+            } else {
+                actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#624F36")));
+            }
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                actionBar.setBackgroundDrawable(getDrawable(R.color.materialColorPrimaryGreen));
+            } else {
+                actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#205E2F")));
+            }
+        }
 
         if (mTitle != null) {
             actionBar.setTitle(mTitle);
@@ -333,6 +363,13 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 
     public void setFloatingActionButton() {
         floatingActionsMenu = (FloatingActionMenu) findViewById(R.id.floating_action_menu);
+        if(!((Application) getApplication()).isModernColor) {
+            floatingActionsMenu.setMenuButtonColorNormalResId(R.color.materialPrimaryBrown);
+            floatingActionsMenu.setMenuButtonColorPressedResId(R.color.materialPrimaryDarkBrown);
+        } else {
+            floatingActionsMenu.setMenuButtonColorNormalResId(R.color.materialPrimaryGreen);
+            floatingActionsMenu.setMenuButtonColorPressedResId(R.color.materialPrimaryDarkGreen);
+        }
         floatingActionsMenu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean b) {

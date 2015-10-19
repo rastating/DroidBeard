@@ -27,6 +27,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.net.ApiResponseListener;
 import com.rastating.droidbeard.net.FetchLogsTask;
@@ -66,7 +67,12 @@ public class LogFragment extends DroidbeardFragment implements ApiResponseListen
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkBrown, R.color.materialPrimaryBrown, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+        } else {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkGreen, R.color.materialPrimaryGreen);
+        }
 
         showLoadingAnimation();
         onRefreshButtonPressed();

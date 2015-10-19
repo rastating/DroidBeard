@@ -20,6 +20,7 @@ package com.rastating.droidbeard.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.ui.ProfileListItem;
@@ -47,6 +49,13 @@ public class ProfilesFragment extends DroidbeardFragment implements ProfileState
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profiles, null, false);
+
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            root.setBackgroundColor(Color.parseColor("#f5f1e4"));
+        } else {
+            root.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
+
         mContainer = (LinearLayout) root.findViewById(R.id.profile_list);
 
         loadProfileItems();

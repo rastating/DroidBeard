@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.entities.NavigationAction;
 import com.rastating.droidbeard.R;
 
@@ -81,7 +82,11 @@ public class NavigationActionAdapter extends ArrayAdapter<NavigationAction> {
         holder.text.setText(action.getText());
 
         if (position == mSelectedPosition) {
-            row.setBackgroundColor(mContext.getResources().getColor(R.color.navigation_list_item_selected));
+            if(!((Application) mContext.getApplicationContext()).isModernColor) {
+                row.setBackgroundColor(mContext.getResources().getColor(R.color.navigation_list_item_selected));
+            } else {
+                row.setBackgroundColor(mContext.getResources().getColor(R.color.downloaded_episode_background));
+            }
             holder.text.setTextColor(mActiveTextColor);
             holder.icon.setImageResource(action.getActiveIconResourceId());
         }
