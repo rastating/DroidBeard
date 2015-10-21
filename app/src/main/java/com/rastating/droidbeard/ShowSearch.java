@@ -23,6 +23,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,21 +88,39 @@ public class ShowSearch extends Activity implements ApiResponseListener<ShowSear
                         mDialog.dismiss();
                         AlertDialog.Builder builder = new AlertDialog.Builder(ShowSearch.this);
                         builder.setTitle("Show Queued")
-                            .setMessage("The show has been queued to be added in Sickbeard.")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    ShowSearch.this.finish();
-                                }
-                            })
-                            .create()
-                            .show();
+                                .setMessage("The show has been queued to be added in Sickbeard.")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        ShowSearch.this.finish();
+                                    }
+                                })
+                                .create()
+                                .show();
                     }
                 });
 
                 task.start(id);
             }
         });
+
+        if(!((Application) getApplication()).isModernColor) {
+            mListView.setBackgroundColor(getResources().getColor(R.color.unaired_episode_background));
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.materialColorPrimaryDarkBrown));
+                getActionBar().setBackgroundDrawable(getDrawable(R.color.materialColorPrimaryBrown));
+            } else {
+                getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#624F36")));
+            }
+        } else {
+            mListView.setBackgroundColor(getResources().getColor(R.color.white));
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setStatusBarColor(getResources().getColor(R.color.materialColorPrimaryDarkGreen));
+                getActionBar().setBackgroundDrawable(getDrawable(R.color.materialColorPrimaryGreen));
+            } else {
+                getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#205E2F")));
+            }
+        }
 
         Preferences preferences = new Preferences(this);
         if (!preferences.hasAcknowledgedShowAddingHelp()) {
@@ -139,10 +159,14 @@ public class ShowSearch extends Activity implements ApiResponseListener<ShowSear
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     View view = super.getView(position, convertView, parent);
-                    if (position % 2 == 0) {
-                        view.setBackgroundResource(R.drawable.alternate_list_item_bg);
+                    if(!((Application) getApplication()).isModernColor) {
+                        if (position % 2 == 0) {
+                            view.setBackgroundResource(R.drawable.alternate_list_item_bg);
+                        } else {
+                            view.setBackgroundColor(Color.TRANSPARENT);
+                        }
                     } else {
-                        view.setBackgroundColor(Color.TRANSPARENT);
+                        view.setBackgroundColor(Color.WHITE);
                     }
 
                     return view;
