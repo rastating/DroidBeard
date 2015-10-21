@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
@@ -118,11 +119,15 @@ public class TVShowSummaryAdapter extends ArrayAdapter<Object> {
             holder = (TVShowHolder) row.getTag();
         }
 
-        if (position % 2 == 0) {
-            row.setBackgroundResource(R.drawable.alternate_list_item_bg);
-        }
-        else {
-            row.setBackgroundColor(Color.TRANSPARENT);
+
+        if(!((Application) mContext.getApplicationContext()).isModernColor) {
+            if (position % 2 == 0) {
+                row.setBackgroundResource(R.drawable.alternate_list_item_bg);
+            } else {
+                row.setBackgroundResource(R.color.upcoming_episode_future);
+            }
+        } else {
+            row.setBackgroundResource(R.color.white);
         }
 
         TVShowSummary show = (TVShowSummary) mObjects[position];

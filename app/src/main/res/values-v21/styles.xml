@@ -20,8 +20,8 @@
 
 <resources>
     <style name="SickBeardTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:colorPrimary">@color/materialColorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/materialColorPrimaryDark</item>
+        <item name="android:colorPrimary">@color/materialColorPrimaryBrown</item>
+        <item name="android:colorPrimaryDark">@color/materialColorPrimaryDarkBrown</item>
         <item name="android:actionModeStyle">@style/SickBeardActionMode</item>
 
         <item name="android:buttonStyle">@style/ButtonDroidBeard</item>
@@ -29,7 +29,7 @@
     </style>
 
     <style name="SickBeardActionMode" parent="@android:style/Widget.Holo.Light.ActionMode">
-        <item name="android:background">@color/materialColorPrimary</item>
+        <item name="android:background">@color/materialColorPrimaryBrown</item>
         <item name="android:actionBarItemBackground">@android:color/transparent</item>
     </style>
 

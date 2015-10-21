@@ -28,6 +28,8 @@ public class Application extends android.app.Application{
         return mInstance;
     }
 
+    public boolean isModernColor = false;
+
     public static Context getContext() {
         return mInstance;
     }

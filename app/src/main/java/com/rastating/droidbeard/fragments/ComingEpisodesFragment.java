@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.Preferences;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.TVShowSummary;
@@ -65,7 +66,11 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkBrown, R.color.materialPrimaryBrown, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+        } else {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkGreen, R.color.materialPrimaryGreen);
+        }
 
         setChoiceMode(ListView.CHOICE_MODE_NONE);
         setListSelector(android.R.color.transparent);
@@ -139,7 +144,11 @@ public class ComingEpisodesFragment extends ListViewFragment implements ApiRespo
                                 break;
 
                             case FUTURE:
-                                view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_future));
+                                if(!((Application) getActivity().getApplication()).isModernColor) {
+                                    view.setBackgroundColor(getResources().getColor(R.color.upcoming_episode_future));
+                                } else {
+                                    view.setBackgroundColor(getResources().getColor(R.color.white));
+                                }
                                 break;
 
                             case PAST:

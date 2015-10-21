@@ -20,7 +20,10 @@ package com.rastating.droidbeard;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +46,7 @@ public class Preferences {
     public final static String PROFILE_NAME = "profile_name";
     public final static String DEFAULT_PROFILE_NAME = "Default";
     public final static String EMPHASIZE_SHOW_NAME = "emphasize_show_name";
+    public final static String COLOR_APP = "color_app";
 
     private Context mContext;
 
@@ -60,6 +64,8 @@ public class Preferences {
         else {
             return mContext.getSharedPreferences(profileName, Context.MODE_PRIVATE);
         }
+
+
     }
 
     private void update() {
@@ -103,6 +109,10 @@ public class Preferences {
         // Set show name emphasis to be true by default
         if (!preferences.contains(Preferences.EMPHASIZE_SHOW_NAME)) {
             putBoolean(Preferences.EMPHASIZE_SHOW_NAME, true);
+        }
+
+        if(!preferences.contains(Preferences.COLOR_APP)) {
+            setColorApp(Preferences.COLOR_APP, ((Application) mContext.getApplicationContext()).isModernColor);
         }
     }
 
@@ -212,6 +222,11 @@ public class Preferences {
         return url != null ? url.trim() : null;
     }
 
+    public boolean getColorApp() {
+        SharedPreferences preferences = getSharedPreferences();
+        return preferences.getBoolean(Preferences.COLOR_APP, false);
+    }
+
     public boolean hasAcknowledgedShowAddingHelp() {
         SharedPreferences preferences = getSharedPreferences();
         return preferences.getBoolean(ACKNOWLEDGED_SHOW_ADDING_HELP, false);
@@ -269,5 +284,15 @@ public class Preferences {
         SharedPreferences.Editor editor = defaultPreferences.edit();
         editor.putStringSet("profiles", names);
         editor.commit();
+    }
+
+    public boolean setColorApp(String key, boolean value) {
+        ((Application) mContext.getApplicationContext()).isModernColor = value;
+        SharedPreferences preferences = getSharedPreferences();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+
+        return value;
     }
 }

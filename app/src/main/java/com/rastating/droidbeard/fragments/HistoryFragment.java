@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.rastating.droidbeard.Application;
 import com.rastating.droidbeard.R;
 import com.rastating.droidbeard.entities.HistoricalEvent;
 import com.rastating.droidbeard.net.ApiResponseListener;
@@ -61,10 +62,20 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-        swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDark, R.color.materialPrimary, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+        if(!((Application) getActivity().getApplication()).isModernColor) {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkBrown, R.color.materialPrimaryBrown, R.color.navigation_list_item_selected, R.color.unaired_episode_background);
+        } else {
+            swipeRefreshLayout.setColorSchemeResources(R.color.materialPrimaryDarkGreen, R.color.materialPrimaryGreen);
+        }
 
         setChoiceMode(ListView.CHOICE_MODE_NONE);
         setListSelector(android.R.color.transparent);
+
+        if(((Application) getActivity().getApplication()).isModernColor) {
+            setBackgroundColor(Color.WHITE);
+        } else {
+            setBackgroundColor(R.color.unaired_episode_background);
+        }
 
         setDivider(R.color.divider, 1);
 
@@ -92,10 +103,14 @@ public class HistoryFragment extends ListViewFragment implements ApiResponseList
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View view = super.getView(position, convertView, parent);
-                        if (position % 2 == 0) {
-                            view.setBackgroundResource(R.drawable.alternate_list_item_bg);
+                        if(!((Application) getActivity().getApplication()).isModernColor) {
+                            if (position % 2 == 0) {
+                                view.setBackgroundResource(R.drawable.alternate_list_item_bg);
+                            } else {
+                                view.setBackgroundResource(R.color.upcoming_episode_future);
+                            }
                         } else {
-                            view.setBackgroundColor(Color.TRANSPARENT);
+                            view.setBackgroundResource(R.color.white);
                         }
 
                         return view;
