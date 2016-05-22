@@ -32,10 +32,10 @@
         android:gravity="top"
     />
 
-    <Button android:id="@+id/send"
+    <Button android:id="@+id/copy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submit_report" />
+        android:text="@string/copy_error_log" />
 
 
 </LinearLayout>

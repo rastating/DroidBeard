@@ -19,9 +19,12 @@
 package com.rastating.droidbeard;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.rastating.droidbeard.net.ErrorReportTask;
 
@@ -55,12 +58,15 @@ public class ErrorReportActivity extends Activity implements View.OnClickListene
         }
 
         ((EditText) findViewById(R.id.exception)).setText(mReport.toString());
-        findViewById(R.id.send).setOnClickListener(this);
+        findViewById(R.id.copy).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        new ErrorReportTask().execute(mReport);
-        finish();
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("DroidBeard error log", mReport.toString());
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(this, "Error log copied to clipboard", Toast.LENGTH_LONG).show();
     }
 }
