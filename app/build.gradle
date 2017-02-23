@@ -7,8 +7,8 @@ android {
         applicationId 'com.rastating.droidbeard'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1501
-        versionName '1.5.1'
+        versionCode 1502
+        versionName '1.5.2'
     }
     buildTypes {
         release {

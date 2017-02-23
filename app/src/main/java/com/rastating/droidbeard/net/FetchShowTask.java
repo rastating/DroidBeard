@@ -29,6 +29,7 @@ import com.rastating.droidbeard.entities.TVShow;
 import com.rastating.droidbeard.entities.Language;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -108,7 +109,13 @@ public class FetchShowTask extends SickbeardAsyncTask<Long, Void, TVShow> {
 
                 show.setAirByDate(data.getInt("air_by_date") == 1);
                 show.setAirs(data.getString("airs"));
-                show.setFlattenFolders(data.getInt("flatten_folders") == 1);
+
+                try {
+                    show.setFlattenFolders(data.getInt("flatten_folders") == 1);
+                }
+                catch (JSONException e) {
+                    show.setFlattenFolders(false);
+                }
 
                 JSONArray genresJsonArray = data.getJSONArray("genre");
                 String[] genres = new String[genresJsonArray.length()];
