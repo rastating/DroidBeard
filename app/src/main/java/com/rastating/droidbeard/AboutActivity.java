@@ -37,8 +37,6 @@ public class AboutActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.reddit_link).setOnClickListener(this);
         findViewById(R.id.phyushin_link).setOnClickListener(this);
         findViewById(R.id.official_website_link).setOnClickListener(this);
-        findViewById(R.id.facebook_link).setOnClickListener(this);
-        findViewById(R.id.google_link).setOnClickListener(this);
 
         ((TextView) findViewById(R.id.version_number)).setText("Version " + Application.getVersionName());
     }
@@ -64,15 +62,7 @@ public class AboutActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.official_website_link:
-                uri = "http://www.droidbeard.com/";
-                break;
-
-            case R.id.facebook_link:
-                uri = "https://www.facebook.com/droidbeard";
-                break;
-
-            case R.id.google_link:
-                uri = "https://plus.google.com/u/0/communities/109361186281608237451";
+                uri = "https://rastating.github.io/DroidBeard";
                 break;
 
             case R.id.dventurino_link:

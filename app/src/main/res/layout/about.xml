@@ -126,19 +126,5 @@
             android:text="Official Website"
             android:textColor="@color/about_link"
             android:gravity="center_horizontal"/>
-
-        <TextView android:id="@+id/facebook_link"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Facebook"
-            android:textColor="@color/about_link"
-            android:gravity="center_horizontal"/>
-
-        <TextView android:id="@+id/google_link"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Google+"
-            android:textColor="@color/about_link"
-            android:gravity="center_horizontal"/>
     </LinearLayout>
 </ScrollView>
