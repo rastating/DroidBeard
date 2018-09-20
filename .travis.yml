@@ -6,7 +6,7 @@ env:
 
 android:
   components:
-    - build-tools-25.2.5
+    - build-tools-28.0.2
 
 before_install:
  - chmod +x gradlew
